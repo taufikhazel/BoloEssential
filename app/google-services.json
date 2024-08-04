@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "976644991372",
+    "firebase_url": "https://bololoyalitycard-default-rtdb.firebaseio.com",
+    "project_id": "bololoyalitycard",
+    "storage_bucket": "bololoyalitycard.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976644991372:android:5c3ac525b1a8233f674ea9",
+        "android_client_info": {
+          "package_name": "loyality.member.cafe.boloessentials"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976644991372-qo5nt57e3n3ec85khjuu9cbt73mgu732.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe0GItBr85ArwNTVAG3rKXlyrMgzdjA1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976644991372-qo5nt57e3n3ec85khjuu9cbt73mgu732.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

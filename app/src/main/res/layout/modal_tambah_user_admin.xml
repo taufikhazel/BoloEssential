@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_gravity="center">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="750dp"
+            android:layout_height="600dp"
+            android:backgroundTint="#ECECEC"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <TextView
+                android:id="@+id/tvTambahUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="210dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Tambah User"
+                android:textColor="@color/brownAdmin"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="200dp">
+
+                <TextView
+                    android:id="@+id/tvNomorID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="No ID"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etNomorID"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvNomorID"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="number"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="100dp">
+
+                <TextView
+                    android:id="@+id/tvNama"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Nama"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etNama"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvNama"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp">
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Email"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvEmail"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp">
+
+                <TextView
+                    android:id="@+id/tvTelpon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="No Telfon"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etTelpon"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTelpon"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="phone"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="110dp">
+
+                <TextView
+                    android:id="@+id/tvTanggalLahir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Tanggal Lahir"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etTanggalLahir"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTanggalLahir"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="datetime"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="200dp"
+                android:layout_gravity="center"
+                android:text="Submit"
+                android:fontFamily="@font/poppins_regular"
+                android:background="@color/brownAdmin"
+                android:textColor="@color/white"
+                android:textAllCaps="false"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+
+</ScrollView>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="loyality.member.cafe.boloessentials.MainActivity"
+    android:background="@drawable/background_mainapp"
+    android:gravity="center">
+
+    <Button
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_buttonmainapp"
+        android:text="Absen"
+        android:textColor="#C09B75"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/roboto_black"
+        android:id="@+id/btnAbsen">
+    </Button>
+
+    <Button
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_buttonmainapp"
+        android:text="Cek Point"
+        android:textColor="#C09B75"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/roboto_black"
+        android:id="@+id/btnCekPoint"
+        android:layout_below="@+id/btnAbsen"
+        android:layout_marginTop="20dp">
+    </Button>
+
+    <Button
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_buttonmainapp"
+        android:text="Tambah Point"
+        android:textColor="#C09B75"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/roboto_black"
+        android:id="@+id/btnTambahPoint"
+        android:layout_below="@+id/btnCekPoint"
+        android:layout_marginTop="20dp">
+    </Button>
+
+    <Button
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_buttonmainapp"
+        android:text="Tukar Point"
+        android:textColor="#C09B75"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/roboto_black"
+        android:id="@+id/btnTukarPoint"
+        android:layout_below="@+id/btnTambahPoint"
+        android:layout_marginTop="20dp">
+    </Button>
+
+</RelativeLayout>

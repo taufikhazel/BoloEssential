@@ -1,0 +1,14 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <!-- Warna latar belakang saat diklik -->
+            <solid android:color="@color/brownAdmin" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Warna latar belakang saat tidak diklik -->
+            <solid android:color="#F8F9FA" />
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".halaman_admin.TukarHadiahAdminActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="200dp"
+        android:layout_height="450dp"
+        android:backgroundTint="#F8F9FA"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivLogo2"
+                android:layout_width="78dp"
+                android:layout_height="74dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logo2" />
+
+            <TextView
+                android:id="@+id/tvDashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivLogo2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:drawableStart="@drawable/ic_dashboard"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="left"
+                android:textColor="#6C757D"
+                android:text="Dashboard"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDashboard"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:drawableStart="@drawable/ic_user"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="left"
+                android:textColor="#6C757D"
+                android:textSize="12sp"
+                android:text="User" />
+
+            <TextView
+                android:id="@+id/tvTukarPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvUser"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:drawableStart="@drawable/ic_tukarpoint"
+                android:drawablePadding="10dp"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="left"
+                android:textColor="#6C757D"
+                android:text="Tukar Point" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTukarPoint"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:drawableStart="@drawable/ic_tukarhadiah"
+                android:textSize="12sp"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="left"
+                android:text="Tukar Hadiah"
+                android:textColor="#6C757D"
+                android:id="@+id/tvTukarHadiah"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTukarHadiah"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:drawableStart="@drawable/ic_admin"
+                android:drawablePadding="10dp"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="left"
+                android:textColor="#6C757D"
+                android:text="Administrator"
+                android:id="@+id/tvAdministrator"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAdministrator"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:textSize="12sp"
+                android:drawableStart="@drawable/ic_absen"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="#6C757D"
+                android:gravity="left"
+                android:text="Absen"
+                android:id="@+id/tvAbsen"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="760dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="200dp"
+        android:backgroundTint="#F8F9FA"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnLogout"
+            android:layout_gravity="end">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingTop="10dp"
+                android:paddingRight="17dp"
+                android:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/tvProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="40dp"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingTop="20dp"
+                android:text="Administrator"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="90dp"
+        android:id="@+id/tvTukarHadiah2"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Tukar Hadiah"
+        android:textAlignment="center"
+        android:textColor="#C09A75"
+        android:textSize="24sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="240dp"
+        android:text="Baru"
+        android:layout_below="@+id/tvTukarHadiah2"
+        android:textAllCaps="false"
+        app:cornerRadius="20dp"
+        android:textSize="12sp"
+        android:id="@+id/btnBaru"
+        android:textColor="#A0A0A0"
+        android:backgroundTint="#F8F9FA"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="340dp"
+        android:text="Berhasil"
+        android:layout_below="@+id/tvTukarHadiah2"
+        android:textAllCaps="false"
+        app:cornerRadius="20dp"
+        android:textSize="12sp"
+        android:id="@+id/btnBerhasil"
+        android:textColor="#A0A0A0"
+        android:backgroundTint="#F8F9FA"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="440dp"
+        android:text="Pending"
+        android:layout_below="@+id/tvTukarHadiah2"
+        android:textAllCaps="false"
+        app:cornerRadius="20dp"
+        android:textSize="12sp"
+        android:id="@+id/btnPending"
+        android:textColor="#A0A0A0"
+        android:backgroundTint="#F8F9FA"/>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btnBaru"
+        android:layout_marginLeft="220dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp" />
+
+
+</RelativeLayout>

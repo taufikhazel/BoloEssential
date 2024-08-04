@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item android:id="@+id/navDashboard" android:title="Dashboard" android:icon="@drawable/ic_dashboard" />
+        <item android:id="@+id/navUser" android:title="User" android:icon="@drawable/ic_user" />
+        <item android:id="@+id/navTukarPoint" android:title="Tukar Point" android:icon="@drawable/ic_tukarpoint" />
+        <item android:id="@+id/navTukarHadiah" android:title="Tukar Hadiah" android:icon="@drawable/ic_tukarhadiah" />
+        <item android:id="@+id/navAdministrator" android:title="Administrator" android:icon="@drawable/ic_admin" />
+        <item android:id="@+id/navAbsen" android:title="Absen" android:icon="@drawable/ic_absen" />
+    </group>
+
+    <group>
+        <item android:id="@+id/navKeluar" android:title="Keluar" android:icon="@drawable/ic_logout"/>
+    </group>
+</menu>

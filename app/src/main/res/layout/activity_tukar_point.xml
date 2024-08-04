@@ -1,0 +1,91 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_polos"
+    tools:context="loyality.member.cafe.boloessentials.halaman_userandworker.TukarPointActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="1350dp"
+        android:layout_height="830dp"
+        android:backgroundTint="#D3D3D3"
+        app:cardCornerRadius="60dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
+
+        <!-- Baris 1 -->
+        <RelativeLayout
+            android:id="@+id/row_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="245dp"
+                android:layout_height="245dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                app:cardMaxElevation="12dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true">
+
+                <!-- Kolom 1 -->
+                <RelativeLayout
+                    android:id="@+id/col_1"
+                    android:layout_width="213dp"
+                    android:layout_height="193dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="29dp"
+                        android:layout_height="29dp"
+                        android:layout_gravity="end"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/point" />
+
+                    <TextView
+                        android:id="@+id/point_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="45dp"
+                        android:layout_marginTop="15dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Point"
+                        android:textColor="@color/brown"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/image_1"
+                        android:layout_width="213dp"
+                        android:layout_height="100dp"
+                        android:layout_below="@id/point_1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/kopi2" />
+
+                    <TextView
+                        android:id="@+id/nama_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/image_1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Americano"
+                        android:textColor="@color/brown"
+                        android:textSize="20px" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
