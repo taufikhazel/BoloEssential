@@ -1,65 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="loyality.member.cafe.boloessentials.MainActivity"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
     android:background="@drawable/background_mainapp"
-    android:gravity="center">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <Button
+        android:textSize="20dp"
+        android:textColor="#c09b75"
+        android:id="@+id/btnAbsen"
+        android:background="@drawable/background_buttonmainapp"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_buttonmainapp"
         android:text="Absen"
-        android:textColor="#C09B75"
-        android:textSize="20dp"
         android:layout_centerHorizontal="true"
-        android:fontFamily="@font/roboto_black"
-        android:id="@+id/btnAbsen">
-    </Button>
-
+        android:fontFamily="@font/roboto_black"/>
     <Button
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_buttonmainapp"
-        android:text="Cek Point"
-        android:textColor="#C09B75"
         android:textSize="20dp"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="@font/roboto_black"
+        android:textColor="#c09b75"
         android:id="@+id/btnCekPoint"
+        android:background="@drawable/background_buttonmainapp"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Cek Point"
         android:layout_below="@+id/btnAbsen"
-        android:layout_marginTop="20dp">
-    </Button>
-
-    <Button
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_buttonmainapp"
-        android:text="Tambah Point"
-        android:textColor="#C09B75"
-        android:textSize="20dp"
         android:layout_centerHorizontal="true"
-        android:fontFamily="@font/roboto_black"
+        android:fontFamily="@font/roboto_black"/>
+    <Button
+        android:textSize="20dp"
+        android:textColor="#c09b75"
         android:id="@+id/btnTambahPoint"
-        android:layout_below="@+id/btnCekPoint"
-        android:layout_marginTop="20dp">
-    </Button>
-
-    <Button
+        android:background="@drawable/background_buttonmainapp"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_buttonmainapp"
-        android:text="Tukar Point"
-        android:textColor="#C09B75"
-        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Tambah Point"
+        android:layout_below="@+id/btnCekPoint"
         android:layout_centerHorizontal="true"
-        android:fontFamily="@font/roboto_black"
+        android:fontFamily="@font/roboto_black"/>
+    <Button
+        android:textSize="20dp"
+        android:textColor="#c09b75"
         android:id="@+id/btnTukarPoint"
+        android:background="@drawable/background_buttonmainapp"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Tukar Point"
         android:layout_below="@+id/btnTambahPoint"
-        android:layout_marginTop="20dp">
-    </Button>
-
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/roboto_black"/>
 </RelativeLayout>

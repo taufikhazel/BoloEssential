@@ -1,374 +1,382 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".halaman_admin.DashboardAdminActivity">
-
+    android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
         android:layout_height="450dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#f8f9fa"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:id="@+id/ivLogo2"
                 android:layout_width="78dp"
                 android:layout_height="74dp"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/logo2" />
-
+                android:src="@drawable/logo2"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
                 android:id="@+id/tvDashboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivLogo2"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"
-                android:drawableStart="@drawable/ic_dashboard"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
                 android:text="Dashboard"
-                android:textSize="12sp" />
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/ivLogo2"
+                android:drawableStart="@drawable/ic_dashboard"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
                 android:id="@+id/tvUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvDashboard"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_user"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
                 android:text="User"
-                android:textColor="#6C757D"
-                android:textSize="12sp" />
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvDashboard"
+                android:drawableStart="@drawable/ic_user"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
                 android:id="@+id/tvTukarPoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:text="Tukar Point"
+                android:drawablePadding="10dp"
                 android:layout_below="@+id/tvUser"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
                 android:drawableStart="@drawable/ic_tukarpoint"
-                android:drawablePadding="10dp"
-                android:textSize="12sp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
-                android:text="Tukar Point" />
-
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
+                android:id="@+id/tvTukarHadiah"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTukarPoint"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_tukarhadiah"
-                android:textSize="12sp"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
                 android:text="Tukar Hadiah"
-                android:textColor="#6C757D"
-                android:id="@+id/tvTukarHadiah"/>
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvTukarPoint"
+                android:drawableStart="@drawable/ic_tukarhadiah"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
+                android:id="@+id/tvAdministrator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTukarHadiah"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_admin"
-                android:drawablePadding="10dp"
-                android:textSize="12sp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
                 android:text="Administrator"
-                android:id="@+id/tvAdministrator"/>
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvTukarHadiah"
+                android:drawableStart="@drawable/ic_admin"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
+                android:id="@+id/tvAbsen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvAdministrator"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:textSize="12sp"
-                android:drawableStart="@drawable/ic_absen"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:textColor="#6C757D"
-                android:gravity="left"
                 android:text="Absen"
-                android:id="@+id/tvAbsen"/>
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvAdministrator"
+                android:drawableStart="@drawable/ic_absen"
+                android:fontFamily="@font/poppins_medium"/>
         </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
-
     <androidx.cardview.widget.CardView
-        android:layout_width="760dp"
+        android:layout_width="810dp"
         android:layout_height="60dp"
         android:layout_marginLeft="200dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#f8f9fa"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
-
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:id="@+id/btnLogout"
-            android:layout_gravity="end">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:paddingTop="10dp"
                 android:paddingRight="17dp"
-                android:src="@drawable/ic_profile" />
-
-            <TextView
-                android:id="@+id/tvProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile"/>
+            <TextView
+                android:textSize="14sp"
                 android:layout_gravity="end"
+                android:id="@+id/tvProfile"
+                android:paddingTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="40dp"
-                android:fontFamily="@font/poppins_medium"
-                android:paddingTop="20dp"
                 android:text="Administrator"
-                android:textSize="14sp" />
+                android:fontFamily="@font/poppins_medium"/>
         </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
-
     <TextView
+        android:textSize="24sp"
+        android:textColor="#c09a75"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="230dp"
         android:layout_marginTop="80dp"
-        android:fontFamily="@font/roboto_bold"
         android:text="Dashboard"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="24sp" />
-
+        android:fontFamily="@font/roboto_bold"
+        android:textAlignment="center"/>
     <androidx.cardview.widget.CardView
         android:layout_width="180dp"
         android:layout_height="110dp"
         android:layout_marginLeft="230dp"
         android:layout_marginTop="130dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#f8f9fa"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
-
         <TextView
-            android:id="@+id/tvJumlahUser"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="start"
+            android:paddingTop="23dp"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_gravity="start"
             android:layout_marginLeft="20dp"
-            android:drawableStart="@drawable/ic_jumlahuser"
-            android:drawablePadding="10dp"
-            android:fontFamily="@font/poppins_regular"
-            android:paddingTop="23dp"
             android:text="Jumlah User"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            android:textStyle="bold" />
-
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_jumlahuser"
+            android:fontFamily="@font/poppins_regular"/>
         <TextView
-            android:id="@+id/tvPointJumlahUser"
+            android:textSize="25sp"
+            android:textColor="@color/brownAdmin"
+            android:id="@+id/tvJumlahUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="50dp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="500"
-            android:textColor="@color/brownAdmin"
-            android:textSize="25sp" />
-
+            android:fontFamily="@font/poppins_bold"/>
     </androidx.cardview.widget.CardView>
-
     <androidx.cardview.widget.CardView
         android:layout_width="180dp"
         android:layout_height="110dp"
         android:layout_marginLeft="430dp"
         android:layout_marginTop="130dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#f8f9fa"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
-
         <TextView
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="start"
             android:id="@+id/tvTotalPointUser"
+            android:paddingTop="23dp"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:layout_gravity="start"
             android:layout_marginLeft="20dp"
-            android:drawableStart="@drawable/ic_jumlahuser"
-            android:drawablePadding="10dp"
-            android:fontFamily="@font/poppins_regular"
-            android:paddingTop="23dp"
             android:text="Total Point User"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            android:textStyle="bold" />
-
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_jumlahuser"
+            android:fontFamily="@font/poppins_regular"/>
         <TextView
+            android:textSize="25sp"
+            android:textColor="@color/brownAdmin"
             android:id="@+id/tvPointTotalPointUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="50dp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="500"
-            android:textColor="@color/brownAdmin"
-            android:textSize="25sp" />
-
+            android:fontFamily="@font/poppins_bold"/>
     </androidx.cardview.widget.CardView>
-
     <TextView
+        android:textSize="24sp"
+        android:textColor="#c09a75"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="230dp"
         android:layout_marginTop="260dp"
-        android:fontFamily="@font/roboto_bold"
         android:text="User"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="24sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="305dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="User"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/tvPointJumlahUser2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="305dp"
-        android:background="@color/white"
-        android:fontFamily="@font/roboto_bold"
-        android:text="100"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="15sp" />
-
+        android:textAlignment="center"/>
     <Button
+        android:textSize="12sp"
+        android:textColor="@color/white"
         android:id="@+id/btnExport"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="840dp"
+        android:layout_marginLeft="850dp"
         android:layout_marginTop="300dp"
-        android:backgroundTint="@color/brownAdmin"
-        android:drawableStart="@drawable/ic_export"
-        android:drawablePadding="5dp"
         android:text="Export"
+        android:drawablePadding="5dp"
         android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
-
+        android:drawableStart="@drawable/ic_export"
+        android:backgroundTint="@color/brownAdmin"/>
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="700dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="250dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="25dp"
         android:layout_below="@+id/btnExport">
-
         <TableRow
+            android:background="@color/brownAdmin"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Nama"
+                android:layout_weight="0.7"/>
+            <View
+                android:background="@android:color/black"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Tanggal Bergabung"
+                android:layout_weight="0.8"/>
+            <View
+                android:background="@android:color/black"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:layout_weight="1.3"/>
+            <View
+                android:background="@android:color/black"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="No Telepon"
+                android:layout_weight="1"/>
+            <View
+                android:background="@android:color/black"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Tanggal Lahir"
+                android:layout_weight="1"/>
+            <View
+                android:background="@android:color/black"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Point"
+                android:layout_weight="0.5"/>
+        </TableRow>
+    </TableLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="-50dp"
+        android:layout_below="@+id/tableLayout">
+        <TextView
+            android:textSize="10sp"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/brownAdmin"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="5dp"
-                android:text="Nama User"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
-                android:text="Tanggal Bergabung"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
-                android:text="Email"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="0.8"
-                android:text="No Telfon"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="0.8"
-                android:text="Tanggal Lahir"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="0.5"
-                android:text="Jumlah Point"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </TableRow>
-
-    </TableLayout>
-
+            android:text="View"/>
+        <Spinner
+            android:id="@+id/spinnerPageLength"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:id="@+id/llPagination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="860dp"
+        android:layout_marginTop="-50dp"
+        android:layout_below="@+id/tableLayout">
+        <TextView
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:id="@+id/previousButton"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Previous"/>
+        <TextView
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:id="@+id/nextButton"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"/>
+    </LinearLayout>
 </RelativeLayout>

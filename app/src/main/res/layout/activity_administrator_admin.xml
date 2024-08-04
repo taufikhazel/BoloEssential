@@ -1,222 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".halaman_admin.AdministratorAdminActivity">
-
+    android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
         android:layout_height="450dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#f8f9fa"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:id="@+id/ivLogo2"
                 android:layout_width="78dp"
                 android:layout_height="74dp"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/logo2" />
-
+                android:src="@drawable/logo2"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
                 android:id="@+id/tvDashboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivLogo2"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"
-                android:drawableStart="@drawable/ic_dashboard"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
                 android:text="Dashboard"
-                android:textSize="12sp" />
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/ivLogo2"
+                android:drawableStart="@drawable/ic_dashboard"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
                 android:id="@+id/tvUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvDashboard"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_user"
+                android:text="User"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
-                android:textSize="12sp"
-                android:text="User" />
-
+                android:layout_below="@+id/tvDashboard"
+                android:drawableStart="@drawable/ic_user"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
                 android:id="@+id/tvTukarPoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:text="Tukar Point"
+                android:drawablePadding="10dp"
                 android:layout_below="@+id/tvUser"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
                 android:drawableStart="@drawable/ic_tukarpoint"
-                android:drawablePadding="10dp"
-                android:textSize="12sp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
-                android:text="Tukar Point" />
-
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
+                android:id="@+id/tvTukarHadiah"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTukarPoint"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_tukarhadiah"
-                android:textSize="12sp"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
                 android:text="Tukar Hadiah"
-                android:textColor="#6C757D"
-                android:id="@+id/tvTukarHadiah"/>
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvTukarPoint"
+                android:drawableStart="@drawable/ic_tukarhadiah"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
+                android:id="@+id/tvAdministrator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTukarHadiah"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_admin"
-                android:drawablePadding="10dp"
-                android:textSize="12sp"
-                android:fontFamily="@font/poppins_medium"
-                android:gravity="left"
-                android:textColor="#6C757D"
                 android:text="Administrator"
-                android:id="@+id/tvAdministrator"/>
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvTukarHadiah"
+                android:drawableStart="@drawable/ic_admin"
+                android:fontFamily="@font/poppins_medium"/>
             <TextView
+                android:textSize="12sp"
+                android:textColor="#6c757d"
+                android:gravity="left"
+                android:id="@+id/tvAbsen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvAdministrator"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:textSize="12sp"
-                android:drawableStart="@drawable/ic_absen"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:textColor="#6C757D"
-                android:gravity="left"
                 android:text="Absen"
-                android:id="@+id/tvAbsen"/>
-
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/tvAdministrator"
+                android:drawableStart="@drawable/ic_absen"
+                android:fontFamily="@font/poppins_medium"/>
         </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
-
     <androidx.cardview.widget.CardView
-        android:layout_width="760dp"
+        android:layout_width="810dp"
         android:layout_height="60dp"
         android:layout_marginLeft="200dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#f8f9fa"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
-
-       <RelativeLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:id="@+id/btnLogout"
-           android:layout_gravity="end">
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="end"
-               android:paddingTop="10dp"
-               android:paddingRight="17dp"
-               android:src="@drawable/ic_profile" />
-
-           <TextView
-               android:id="@+id/tvProfile"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="end"
-               android:layout_marginLeft="50dp"
-               android:layout_marginRight="40dp"
-               android:fontFamily="@font/poppins_medium"
-               android:paddingTop="20dp"
-               android:text="Administrator"
-               android:textSize="14sp" />
-       </RelativeLayout>
-
-
+        <RelativeLayout
+            android:layout_gravity="end"
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="end"
+                android:paddingTop="10dp"
+                android:paddingRight="17dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile"/>
+            <TextView
+                android:textSize="14sp"
+                android:layout_gravity="end"
+                android:id="@+id/tvProfile"
+                android:paddingTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="40dp"
+                android:text="Administrator"
+                android:fontFamily="@font/poppins_medium"/>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
     <TextView
+        android:textSize="24sp"
+        android:textColor="#c09a75"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="240dp"
         android:layout_marginTop="90dp"
-        android:fontFamily="@font/roboto_bold"
         android:text="Administrator"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="24sp" />
-
+        android:fontFamily="@font/roboto_bold"
+        android:textAlignment="center"/>
     <androidx.cardview.widget.CardView
         android:layout_width="660dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="250dp"
         android:layout_marginTop="140dp"
-        android:backgroundTint="#F8F9FA"
-        app:cardPreventCornerOverlap="true"
-        app:cardCornerRadius="10dp">
-
+        android:backgroundTint="#f8f9fa"
+        app:cardCornerRadius="10dp"
+        app:cardPreventCornerOverlap="true">
         <TextView
+            android:textSize="15sp"
+            android:textColor="#c09a75"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/roboto_bold"
             android:text="Administrator"
-            android:textAlignment="center"
-            android:textColor="#C09A75"
-            android:textSize="15sp" />
-
+            android:fontFamily="@font/roboto_bold"
+            android:textAlignment="center"/>
         <TextView
+            android:textSize="15sp"
+            android:textColor="#c09a75"
+            android:id="@+id/tvPointAdmin"
+            android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="130dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/roboto_bold"
-            android:background="@color/white"
-            android:text="100"
-            android:id="@+id/tvPointAdmin"
-            android:textAlignment="center"
-            android:textColor="#C09A75"
-            android:textSize="15sp" />
-
-
+            android:textAlignment="center"/>
         <Button
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="450dp"
-            android:text="Tambah Administrator"
-            android:textAllCaps="false"
-            app:cornerRadius="20dp"
-            android:id="@+id/btnTambahAdministrator"
             android:textSize="12sp"
             android:textColor="@color/white"
+            android:id="@+id/btnTambahAdministrator"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="460dp"
+            android:layout_marginTop="15dp"
+            android:text="Tambah Administrator"
+            android:textAllCaps="false"
             android:drawableEnd="@drawable/ic_tambah"
-            android:backgroundTint="@color/brownAdmin"/>
-
+            android:backgroundTint="@color/brownAdmin"
+            app:cornerRadius="20dp"/>
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
@@ -224,98 +197,47 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="70dp"
             android:layout_marginRight="20dp">
-
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:background="@color/brownAdmin"
-                android:padding="5dp">
-
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:paddingLeft="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:text="Nama"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
+                    android:layout_weight="1"/>
+                <View
+                    android:background="@android:color/black"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"/>
                 <TextView
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="1.5"
                     android:text="Email"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
+                    android:layout_weight="1.5"/>
+                <View
+                    android:background="@android:color/black"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"/>
                 <TextView
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:text="Tanggal Request"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="0.5"
-                    android:text="ID Menu"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="0.5"
-                    android:text="Total"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
                     android:text="No Telepon"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:text="Status"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:text="Aksi"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
+                    android:layout_weight="1"/>
             </TableRow>
-
         </TableLayout>
-
     </androidx.cardview.widget.CardView>
-
-
 </RelativeLayout>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center">
-
+    android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:layout_width="700dp"
         android:layout_height="300dp"
@@ -14,52 +12,44 @@
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
-
         <TextView
+            android:textSize="20dp"
+            android:textColor="@color/brown"
             android:id="@+id/tvKehadiran"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/roboto_medium"
             android:text="Waktu Kehadiran: "
-            android:textAlignment="center"
-            android:textColor="@color/brown"
-            android:textSize="20dp" />
-
+            android:fontFamily="@font/roboto_medium"
+            android:textAlignment="center"/>
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_gravity="center"
             android:id="@+id/profile_image"
             android:layout_width="103dp"
             android:layout_height="103dp"
-            android:layout_gravity="center"
             android:layout_marginTop="-10dp"
             android:src="@drawable/kopi1"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
+            app:civ_border_color="#ff000000"
+            app:civ_border_width="2dp"/>
         <TextView
-            android:id="@+id/tvNama"
+            android:textSize="24px"
+            android:textColor="@color/brown"
+            android:id="@+id/tvNamaKaryawan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="180dp"
             android:layout_below="@+id/ivAbsen"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="180dp"
-            android:text="Nama Lengkap"
             android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/brown"
-            android:textAlignment="center"
-            android:textSize="24px" />
-
+            android:textAlignment="center"/>
         <TextView
-            android:id="@+id/nimTextView"
+            android:textSize="26px"
+            android:textColor="@color/brown"
+            android:id="@+id/tvTanggalJam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="205dp"
             android:fontFamily="@font/roboto_black"
-            android:textColor="@color/brown"
-            android:textSize="26px"
-            android:textAlignment="center"
-            android:text="Karyawan" />
-
+            android:textAlignment="center"/>
     </androidx.cardview.widget.CardView>
-
 </RelativeLayout>
