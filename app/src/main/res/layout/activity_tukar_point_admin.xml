@@ -121,7 +121,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="760dp"
+        android:layout_width="810dp"
         android:layout_height="60dp"
         android:layout_marginLeft="200dp"
         android:backgroundTint="#F8F9FA"
@@ -221,5 +221,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -7,13 +7,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenActivity;
@@ -21,12 +24,17 @@ import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenAc
 public class TukarPointAdminActivity extends AppCompatActivity {
     private TextView tvUser, tvAbsen, tvTukarHadiah, tvAdministrator, tvDashboard, tvTukarPoint;
     private RelativeLayout logout;
+    private ProgressBar progressBar;
     private Button btnBerhasil, btnBaru, btnPending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tukar_point_admin);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
 
         int textColor = getIntent().getIntExtra("textColorTukarPoint", R.color.brownAdmin);
         tvTukarPoint = findViewById(R.id.tvTukarPoint);
@@ -66,62 +74,43 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         });
 
         tvUser = findViewById(R.id.tvUser);
-
         tvUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvUser.setTextColor(getResources().getColor(R.color.brownAdmin));
-                Intent intent = new Intent(TukarPointAdminActivity.this, UserAdminActivity.class);
-                intent.putExtra("textColorUser",R.color.brownAdmin);
-                startActivity(intent);
+                showLoaderAndStartActivity(UserAdminActivity.class);
             }
         });
 
         tvDashboard = findViewById(R.id.tvDashboard);
-
         tvDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvDashboard.setTextColor(getResources().getColor(R.color.brownAdmin));
-                Intent intent = new Intent(TukarPointAdminActivity.this, DashboardAdminActivity.class);
-                intent.putExtra("textColorDashboard",R.color.brownAdmin);
-                startActivity(intent);
+                showLoaderAndStartActivity(DashboardAdminActivity.class);
             }
         });
 
-        tvAbsen = findViewById(R.id.tvAbsen);
 
+        tvAbsen = findViewById(R.id.tvAbsen);
         tvAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvAbsen.setTextColor(getResources().getColor(R.color.brownAdmin));
-                Intent intent = new Intent(TukarPointAdminActivity.this, KaryawanAdminActivity.class);
-                intent.putExtra("textColorKaryawan",R.color.brownAdmin);
-                startActivity(intent);
+                showLoaderAndStartActivity(KaryawanAdminActivity.class);
             }
         });
 
         tvTukarHadiah = findViewById(R.id.tvTukarHadiah);
-
         tvTukarHadiah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvTukarHadiah.setTextColor(getResources().getColor(R.color.brownAdmin));
-                Intent intent = new Intent(TukarPointAdminActivity.this, TukarHadiahAdminActivity.class);
-                intent.putExtra("textColorTukarHadiah",R.color.brownAdmin);
-                startActivity(intent);
+                showLoaderAndStartActivity(TukarHadiahAdminActivity.class);
             }
         });
 
         tvAdministrator = findViewById(R.id.tvAdministrator);
-
         tvAdministrator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvAdministrator.setTextColor(getResources().getColor(R.color.brownAdmin));
-                Intent intent = new Intent(TukarPointAdminActivity.this, AdministratorAdminActivity.class);
-                intent.putExtra("textColorAdministrator",R.color.brownAdmin);
-                startActivity(intent);
+                showLoaderAndStartActivity(AdministratorAdminActivity.class);
             }
         });
     }
@@ -146,5 +135,17 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void showLoaderAndStartActivity(final Class<?> targetActivity) {
+        progressBar.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(TukarPointAdminActivity.this, targetActivity);
+                startActivity(intent);
+                progressBar.setVisibility(View.GONE);
+            }
+        }, 1000);
     }
 }

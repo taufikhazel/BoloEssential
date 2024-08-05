@@ -5,17 +5,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.ChildEventListener;
@@ -23,23 +27,42 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenActivity;
+import loyality.member.cafe.boloessentials.model.Karyawan;
+import loyality.member.cafe.boloessentials.model.User;
 
 public class KaryawanAdminActivity extends AppCompatActivity {
     private Button btnTambahKaryawan;
     private Dialog mDialog;
-    private DatabaseReference mDatabase;
+    private ProgressBar progressBar;
     private TableLayout tableLayout;
+
     private TextView tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen;
+
     private RelativeLayout logout;
-
-
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_karyawan_admin);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+
+        tableLayout = findViewById(R.id.tableLayoutKaryawan);
+        tableLayout.setVisibility(View.GONE);
 
         int textColor = getIntent().getIntExtra("textColorKaryawan", R.color.brownAdmin);
         tvAbsen = findViewById(R.id.tvAbsen);
@@ -53,38 +76,36 @@ public class KaryawanAdminActivity extends AppCompatActivity {
             }
         });
 
-        tvDashboard = findViewById(R.id.tvDashboard);
-
-        tvDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(KaryawanAdminActivity.this, DashboardAdminActivity.class);
-                startActivity(intent);
-            }
-        });
         tvUser = findViewById(R.id.tvUser);
-
         tvUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(KaryawanAdminActivity.this, UserAdminActivity.class);
-                startActivity(intent);
+                showLoaderAndStartActivity(UserAdminActivity.class);
             }
         });
+
+        tvDashboard = findViewById(R.id.tvDashboard);
+        tvDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoaderAndStartActivity(DashboardAdminActivity.class);
+            }
+        });
+
+
         tvTukarPoint = findViewById(R.id.tvTukarPoint);
         tvTukarPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(KaryawanAdminActivity.this, TukarPointAdminActivity.class);
-                startActivity(intent);
+                showLoaderAndStartActivity(TukarPointAdminActivity.class);
             }
         });
+
         tvTukarHadiah = findViewById(R.id.tvTukarHadiah);
         tvTukarHadiah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(KaryawanAdminActivity.this, TukarHadiahAdminActivity.class);
-                startActivity(intent);
+                showLoaderAndStartActivity(TukarHadiahAdminActivity.class);
             }
         });
 
@@ -92,15 +113,12 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         tvAdministrator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(KaryawanAdminActivity.this, AdministratorAdminActivity.class);
-                startActivity(intent);
+                showLoaderAndStartActivity(AdministratorAdminActivity.class);
             }
         });
 
         btnTambahKaryawan = findViewById(R.id.btnTambahKaryawan);
         tableLayout = findViewById(R.id.tableLayoutKaryawan);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("karyawan");
-
         mDialog = new Dialog(this);
 
         btnTambahKaryawan.setOnClickListener(new View.OnClickListener() {
@@ -114,114 +132,134 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                 btnSubmitTambahKaryawan.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText etNomorKtpKaryawan = mDialog.findViewById(R.id.etNomorKtpKaryawan);
-                        EditText etNomorIDKaryawan = mDialog.findViewById(R.id.etNomorIDKaryawan);
-                        EditText etNamaKaryawan = mDialog.findViewById(R.id.etNamaKaryawan);
-                        EditText etEmailKaryawan = mDialog.findViewById(R.id.etEmailKaryawan);
-                        EditText etTelponKaryawan = mDialog.findViewById(R.id.etTelponKaryawan);
-                        EditText etTanggalLahirKaryawan = mDialog.findViewById(R.id.etTanggalLahirKaryawan);
-
-                        String nomorKTPKaryawan = etNomorKtpKaryawan.getText().toString().trim();
-                        String nomorIDKaryawan = etNomorIDKaryawan.getText().toString().trim();
-                        String namaKaryawan = etNamaKaryawan.getText().toString().trim();
-                        String emailKaryawan = etEmailKaryawan.getText().toString().trim();
-                        String telponKaryawan = etTelponKaryawan.getText().toString().trim();
-                        String tanggalLahirKaryawan = etTanggalLahirKaryawan.getText().toString().trim();
-
-
-                        DatabaseReference userRef = mDatabase.push();
-                        userRef.child("nomorKTPKaryawan").setValue(nomorKTPKaryawan);
-                        userRef.child("nomorIDKaryawan").setValue(nomorIDKaryawan);
-                        userRef.child("namaKaryawan").setValue(namaKaryawan);
-                        userRef.child("emailKaryawan").setValue(emailKaryawan);
-                        userRef.child("telponKaryawan").setValue(telponKaryawan);
-                        userRef.child("tanggalLahirKaryawan").setValue(tanggalLahirKaryawan);
-
-                        mDialog.dismiss();
                     }
                 });
             }
         });
 
-        mDatabase.addChildEventListener(new ChildEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("karyawan");
+        databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                // Retrieve user data
-                String nomorKTPKaryawan = dataSnapshot.child("nomorKTPKaryawan").getValue(String.class);
-                String nomorIDKaryawan = dataSnapshot.child("nomorIDKaryawan").getValue(String.class);
-                String namaKaryawan = dataSnapshot.child("namaKaryawan").getValue(String.class);
-                String emailKaryawan = dataSnapshot.child("emailKaryawan").getValue(String.class);
-                String telponKaryawan = dataSnapshot.child("telponKaryawan").getValue(String.class);
-                String tanggalLahirKaryawan = dataSnapshot.child("tanggalLahirKaryawan").getValue(String.class);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Menghapus baris yang ada di tabel
+                tableLayout.removeAllViews();
 
+                // Menambahkan header tabel
+                addTableHeader();
 
-                // Create a new table row
-                TableRow tableRow = new TableRow(KaryawanAdminActivity.this);
-                tableRow.setLayoutParams(new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.MATCH_PARENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT
-                ));
+                // Menyimpan data pengguna dalam list untuk dibalik urutannya
+                List<Karyawan> karyawanList = new ArrayList<>();
 
-                // Add data to the table row
+                // Menambahkan data user ke tabel
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Karyawan karyawan = dataSnapshot.getValue(Karyawan.class);
+                    if (karyawan != null) {
+                        addKaryawanRow(karyawan);
+                    }
+                }
 
-                TextView textViewNamaKaryawan = new TextView(KaryawanAdminActivity.this);
-                textViewNamaKaryawan.setText(namaKaryawan);
-                textViewNamaKaryawan.setLayoutParams(new TableRow.LayoutParams(
-                        0, TableRow.LayoutParams.WRAP_CONTENT, 1f
-                ));
-                textViewNamaKaryawan.setPadding(8, 0, 0, 0); // Set padding here
-                tableRow.addView(textViewNamaKaryawan);
+                // Membalik urutan list untuk menampilkan secara descending
+                Collections.reverse(karyawanList);
 
-                TextView textViewEmailKaryawan = new TextView(KaryawanAdminActivity.this);
-                textViewEmailKaryawan.setText(emailKaryawan);
-                textViewEmailKaryawan.setLayoutParams(new TableRow.LayoutParams(
-                        0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f
-                ));
-                textViewEmailKaryawan.setPadding(8, 0, 0, 0); // Set padding here
-                tableRow.addView(textViewEmailKaryawan);
+                // Menambahkan data user yang sudah diurutkan ke tabel
+                for (Karyawan karyawan : karyawanList) {
+                    addKaryawanRow(karyawan);
+                }
 
-                TextView textViewTelponKaryawan = new TextView(KaryawanAdminActivity.this);
-                textViewTelponKaryawan.setText(telponKaryawan);
-                textViewTelponKaryawan.setLayoutParams(new TableRow.LayoutParams(
-                        0, TableRow.LayoutParams.WRAP_CONTENT, 1f
-                ));
-                textViewTelponKaryawan.setPadding(8, 0, 0, 0); // Set padding here
-                tableRow.addView(textViewTelponKaryawan);
-
-                TextView textViewTanggalLahirKaryawan = new TextView(KaryawanAdminActivity.this);
-                textViewTanggalLahirKaryawan.setText(tanggalLahirKaryawan);
-                textViewTanggalLahirKaryawan.setLayoutParams(new TableRow.LayoutParams(
-                        0, TableRow.LayoutParams.WRAP_CONTENT, 1f
-                ));
-                textViewTanggalLahirKaryawan.setPadding(8, 0, 0, 0); // Set padding here
-                tableRow.addView(textViewTanggalLahirKaryawan);
-
-                // Add the table row to the table layout
-                tableLayout.addView(tableRow);
-            }
-
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                // Handle changes in user data if needed
+                // Menyembunyikan ProgressBar dan menampilkan tabel setelah data diambil
+                progressBar.setVisibility(View.GONE);
+                tableLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // Handle removal of user data if needed
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                // Handle movement of user data if needed
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle any errors in retrieving the data
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(KaryawanAdminActivity.this, "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
+    private void addTableHeader() {
+        TableRow headerRow = new TableRow(this);
+        String[] headers = {"Nama Karyawan", "Tanggal Bergabung", "Email", "No Telepon", "Tanggal Lahir"};
+        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f}; // Anda dapat mengatur bobot sesuai kebutuhan
+
+        for (int i = 0; i < headers.length; i++) {
+            TextView textView = new TextView(this);
+            textView.setText(headers[i]);
+            textView.setTextColor(getResources().getColor(R.color.white));
+            textView.setTextSize(12);
+            textView.setGravity(Gravity.CENTER);
+            textView.setPadding(5, 5, 5, 5);
+
+            // Mengatur layout_weight untuk TextView
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    0, // width 0 agar weight bekerja
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    weights[i] // layout_weight
+            );
+            textView.setLayoutParams(params);
+
+            headerRow.addView(textView);
+        }
+        headerRow.setBackgroundColor(getResources().getColor(R.color.brownAdmin));
+        tableLayout.addView(headerRow);
+    }
+    private void addKaryawanRow(Karyawan karyawan) {
+        TableRow row = new TableRow(this);
+        String[] karyawanData = {
+                karyawan.getNama(),
+                formatTanggalBergabung(karyawan.getTanggalBergabung()), // Memformat tanggal bergabung
+                karyawan.getEmail(),
+                karyawan.getTelpon(),
+                formatTanggalLahir(karyawan.getTanggalLahir()), // Memformat tanggal lahir
+        };
+
+        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f}; // Bobot yang diinginkan untuk setiap kolom
+
+        for (int i = 0; i < karyawanData.length; i++) {
+            TextView textView = new TextView(this);
+            textView.setText(karyawanData[i]);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(12);
+            textView.setPadding(5, 3, 5, 3);
+
+            // Mengatur layout_weight untuk TextView
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    0, // width 0 agar weight bekerja
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    weights[i] // layout_weight
+            );
+            textView.setLayoutParams(params);
+
+            row.addView(textView);
+        }
+        tableLayout.addView(row);
+    }
+
+    // Metode untuk memformat tanggal bergabung dari "yyyy-mm-dd" menjadi "dd-mm-yyyy"
+    private String formatTanggalBergabung(String tanggalBergabung) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        try {
+            Date date = inputFormat.parse(tanggalBergabung);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return tanggalBergabung; // Mengembalikan string asli jika terjadi kesalahan parsing
+        }
+    }
+    // Metode untuk memformat tanggal lahir dari "ddmmyyyy" menjadi "dd-mm-yyyy"
+    private String formatTanggalLahir(String tanggalLahir) {
+        if (tanggalLahir != null && tanggalLahir.length() == 8) {
+            String day = tanggalLahir.substring(0, 2);
+            String month = tanggalLahir.substring(2, 4);
+            String year = tanggalLahir.substring(4, 8);
+            return day + "-" + month + "-" + year;
+        } else {
+            return tanggalLahir; // Mengembalikan string asli jika format tidak sesuai
+        }
+    }
+
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
@@ -238,5 +276,15 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         });
         popupMenu.show();
     }
-
+    private void showLoaderAndStartActivity(final Class<?> targetActivity) {
+        progressBar.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(KaryawanAdminActivity.this, targetActivity);
+                startActivity(intent);
+                progressBar.setVisibility(View.GONE);
+            }
+        }, 1000);
+    }
 }

@@ -121,7 +121,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="760dp"
+        android:layout_width="810dp"
         android:layout_height="60dp"
         android:layout_marginLeft="200dp"
         android:backgroundTint="#F8F9FA"
@@ -200,7 +200,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="50dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="500"
             android:textColor="@color/brownAdmin"
             android:textSize="25sp" />
 
@@ -238,7 +237,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="50dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="500"
             android:textColor="@color/brownAdmin"
             android:textSize="25sp" />
 
@@ -255,36 +253,12 @@
         android:textColor="#C09A75"
         android:textSize="24sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="305dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="User"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/tvPointJumlahUser2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="305dp"
-        android:background="@color/white"
-        android:fontFamily="@font/roboto_bold"
-        android:text="100"
-        android:textAlignment="center"
-        android:textColor="#C09A75"
-        android:textSize="15sp" />
-
     <Button
         android:id="@+id/btnExport"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="840dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginLeft="850dp"
+        android:layout_marginTop="260dp"
         android:backgroundTint="@color/brownAdmin"
         android:drawableStart="@drawable/ic_export"
         android:drawablePadding="5dp"
@@ -295,10 +269,10 @@
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="700dp"
+        android:layout_width="713dp"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="250dp"
+        android:layout_marginLeft="232dp"
         android:layout_marginRight="25dp"
         android:layout_below="@+id/btnExport">
 
@@ -314,6 +288,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:text="Nama User"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -323,6 +298,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:text="Tanggal Bergabung"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -332,7 +308,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
+                android:textAlignment="center"
                 android:text="Email"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -342,7 +319,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="0.8"
+                android:layout_weight="1.5"
+                android:textAlignment="center"
                 android:text="No Telfon"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -352,7 +330,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="0.8"
+                android:layout_weight="1.5"
+                android:textAlignment="center"
                 android:text="Tanggal Lahir"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -362,7 +341,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="0.5"
+                android:layout_weight="1.5"
+                android:textAlignment="center"
                 android:text="Jumlah Point"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -370,5 +350,13 @@
         </TableRow>
 
     </TableLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
 
 </RelativeLayout>

@@ -49,7 +49,7 @@
                 android:id="@+id/btnExport"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="540dp"
+                android:layout_marginLeft="585dp"
                 android:layout_marginTop="5dp"
                 android:backgroundTint="@color/brownAdmin"
                 android:drawableStart="@drawable/ic_export"
