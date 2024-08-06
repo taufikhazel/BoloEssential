@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="650dp"
+            android:backgroundTint="#ECECEC"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvTambahHadiah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="280dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Tambah Hadiah"
+                android:textColor="@color/brownAdmin"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="150dp">
+
+                <ImageView
+                    android:id="@+id/ivFotoKaryawan"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/baseline_upload_24"
+                    android:scaleType="centerCrop" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="300dp"
+                android:layout_marginBottom="150dp">
+
+                <TextView
+                    android:id="@+id/tvNomorKtpKaryawan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="180dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Point"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etNomorKtpKaryawan"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="number"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="240dp"
+                android:layout_marginBottom="200dp">
+
+                <TextView
+                    android:id="@+id/tvNomorIDKaryawan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="100dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Nama Menu"
+                    android:textSize="14sp"
+                    tools:ignore="NotSibling" />
+
+                <EditText
+                    android:id="@+id/etNomorIDKaryawan"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="number"
+                    android:paddingLeft="10dp" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnTambahHadiah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="180dp"
+                android:background="@color/brownAdmin"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Tambah"
+                android:layout_marginRight="70dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnBatalHadiah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="180dp"
+                android:background="@color/brownAdmin"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Batal"
+                android:layout_marginLeft="70dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</ScrollView>

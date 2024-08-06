@@ -48,7 +48,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TableLayout tableLayout;
 
-    private TextView tvPointKaryawan, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen;
+    private TextView tvPointKaryawan, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen, tvHadiah;
 
     private RelativeLayout logout;
     private DatabaseReference mDatabase;
@@ -118,6 +118,14 @@ public class KaryawanAdminActivity extends AppCompatActivity {
             }
         });
 
+        tvHadiah = findViewById(R.id.tvHadiah);
+        tvHadiah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoaderAndStartActivity(HadiahAdminActivity.class);
+            }
+        });
+
         btnTambahKaryawan = findViewById(R.id.btnTambahKaryawan);
         tableLayout = findViewById(R.id.tableLayoutKaryawan);
         mDialog = new Dialog(this);
@@ -135,6 +143,9 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                     public void onClick(View v) {
                     }
                 });
+
+
+
             }
         });
 
@@ -290,6 +301,6 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 1000);
+        }, 500);
     }
 }

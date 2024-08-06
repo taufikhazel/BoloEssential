@@ -38,7 +38,7 @@ import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenAc
 import loyality.member.cafe.boloessentials.model.User;
 
 public class DashboardAdminActivity extends AppCompatActivity {
-    private TextView tvUser, tvAbsen, tvTukarHadiah, tvTukarPoint, tvAdministrator, tvDashboard;
+    private TextView tvUser, tvAbsen, tvTukarHadiah, tvTukarPoint, tvAdministrator, tvDashboard, tvHadiah;
     private Button btnExport;
     private RelativeLayout logout;
     private TableLayout tableLayout;
@@ -165,6 +165,14 @@ public class DashboardAdminActivity extends AppCompatActivity {
                 showLoaderAndStartActivity(AdministratorAdminActivity.class);
             }
         });
+
+        tvHadiah = findViewById(R.id.tvHadiah);
+        tvHadiah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoaderAndStartActivity(HadiahAdminActivity.class);
+            }
+        });
     }
 
     private void addTableHeader() {
@@ -277,6 +285,6 @@ public class DashboardAdminActivity extends AppCompatActivity {
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 1000); // Waktu delay 1 detik atau sesuai kebutuhan
+        }, 500); // Waktu delay 1 detik atau sesuai kebutuhan
     }
 }

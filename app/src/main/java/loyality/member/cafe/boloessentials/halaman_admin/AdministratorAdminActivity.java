@@ -47,7 +47,7 @@ public class AdministratorAdminActivity extends AppCompatActivity {
     private Dialog mDialog;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
-    private TextView tvPointAdmin, tvAbsen, tvTukarHadiah, tvTukarPoint, tvDashboard, tvUser, tvAdministrator;
+    private TextView tvPointAdmin, tvAbsen, tvTukarHadiah, tvTukarPoint, tvDashboard, tvUser, tvAdministrator, tvHadiah;
     private RelativeLayout logout;
 
     @Override
@@ -112,6 +112,14 @@ public class AdministratorAdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showLoaderAndStartActivity(UserAdminActivity.class);
+            }
+        });
+
+        tvHadiah = findViewById(R.id.tvHadiah);
+        tvHadiah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoaderAndStartActivity(HadiahAdminActivity.class);
             }
         });
 
@@ -202,7 +210,7 @@ public class AdministratorAdminActivity extends AppCompatActivity {
     private void addTableHeader() {
         TableRow headerRow = new TableRow(this);
         String[] headers = {"Nama Admin", "Email Admin", "Nomor ID", "No Telepon"};
-        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f};
+        float[] weights = {1f, 2f, 0.8f, 1f};
 
         for (int i = 0; i < headers.length; i++) {
             TextView textView = new TextView(this);
@@ -233,7 +241,7 @@ public class AdministratorAdminActivity extends AppCompatActivity {
                 admin.getTelpon()
         };
 
-        float[] weights = {1.3f, 0.7f, 2f, 1f};
+        float[] weights = {1f, 2f, 0.8f, 1f};
 
         for (int i = 0; i < adminData.length; i++) {
             TextView textView = new TextView(this);
@@ -277,7 +285,7 @@ public class AdministratorAdminActivity extends AppCompatActivity {
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 1000);
+        }, 500);
     }
 }
 

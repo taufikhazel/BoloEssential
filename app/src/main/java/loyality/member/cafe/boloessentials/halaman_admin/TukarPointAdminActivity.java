@@ -22,7 +22,7 @@ import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenActivity;
 
 public class TukarPointAdminActivity extends AppCompatActivity {
-    private TextView tvUser, tvAbsen, tvTukarHadiah, tvAdministrator, tvDashboard, tvTukarPoint;
+    private TextView tvUser, tvAbsen, tvTukarHadiah, tvAdministrator, tvDashboard, tvTukarPoint, tvHadiah;
     private RelativeLayout logout;
     private ProgressBar progressBar;
     private Button btnBerhasil, btnBaru, btnPending;
@@ -113,6 +113,14 @@ public class TukarPointAdminActivity extends AppCompatActivity {
                 showLoaderAndStartActivity(AdministratorAdminActivity.class);
             }
         });
+
+        tvHadiah = findViewById(R.id.tvHadiah);
+        tvHadiah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoaderAndStartActivity(HadiahAdminActivity.class);
+            }
+        });
     }
 
     private void showPopupMenu(View view) {
@@ -146,6 +154,6 @@ public class TukarPointAdminActivity extends AppCompatActivity {
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 1000);
+        }, 500);
     }
 }

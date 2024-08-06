@@ -7,6 +7,7 @@
         <item android:id="@+id/navTukarHadiah" android:title="Tukar Hadiah" android:icon="@drawable/ic_tukarhadiah" />
         <item android:id="@+id/navAdministrator" android:title="Administrator" android:icon="@drawable/ic_admin" />
         <item android:id="@+id/navAbsen" android:title="Absen" android:icon="@drawable/ic_absen" />
+        <item android:id="@+id/navHadiah" android:title="Hadiah" android:icon="@drawable/ic_absen" />
     </group>
 
     <group>

@@ -46,7 +46,7 @@ public class UserAdminActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
-    private TextView tvPointUser, tvAbsen, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser;
+    private TextView tvPointUser, tvAbsen, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvHadiah;
     private RelativeLayout logout;
 
     @Override
@@ -108,6 +108,14 @@ public class UserAdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showLoaderAndStartActivity(AdministratorAdminActivity.class);
+            }
+        });
+
+        tvHadiah = findViewById(R.id.tvHadiah);
+        tvHadiah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoaderAndStartActivity(HadiahAdminActivity.class);
             }
         });
 
@@ -305,6 +313,6 @@ public class UserAdminActivity extends AppCompatActivity {
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 1000);
+        }, 500);
     }
 }

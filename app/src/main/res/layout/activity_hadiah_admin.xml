@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".halaman_admin.TukarHadiahAdminActivity">
+    tools:context=".halaman_admin.HadiahAdminActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
         android:layout_height="480dp"
         android:backgroundTint="#F8F9FA"
-        app:cardElevation="10dp"
         android:layout_marginBottom="20dp"
+        app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true">
 
@@ -171,6 +171,7 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
+
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -178,9 +179,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="240dp"
         android:layout_marginTop="90dp"
-        android:id="@+id/tvTukarHadiah2"
         android:fontFamily="@font/roboto_bold"
-        android:text="Tukar Hadiah"
+        android:text="Hadiah"
+        android:id="@+id/hadiah"
         android:textAlignment="center"
         android:textColor="#C09A75"
         android:textSize="24sp" />
@@ -190,12 +191,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="240dp"
-        android:text="Baru"
-        android:layout_below="@+id/tvTukarHadiah2"
+        android:text="Drop"
+        android:layout_below="@+id/hadiah"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
         android:textSize="12sp"
-        android:id="@+id/btnBaru"
+        android:id="@+id/btnDrop"
         android:textColor="#A0A0A0"
         android:backgroundTint="#F8F9FA"/>
 
@@ -204,26 +205,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="340dp"
-        android:text="Berhasil"
-        android:layout_below="@+id/tvTukarHadiah2"
+        android:text="Show"
+        android:layout_below="@+id/hadiah"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
         android:textSize="12sp"
-        android:id="@+id/btnBerhasil"
-        android:textColor="#A0A0A0"
-        android:backgroundTint="#F8F9FA"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="440dp"
-        android:text="Pending"
-        android:layout_below="@+id/tvTukarHadiah2"
-        android:textAllCaps="false"
-        app:cornerRadius="20dp"
-        android:textSize="12sp"
-        android:id="@+id/btnPending"
+        android:id="@+id/btnShow"
         android:textColor="#A0A0A0"
         android:backgroundTint="#F8F9FA"/>
 
@@ -231,7 +218,7 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnBaru"
+        android:layout_below="@+id/btnDrop"
         android:layout_marginLeft="220dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp" />
