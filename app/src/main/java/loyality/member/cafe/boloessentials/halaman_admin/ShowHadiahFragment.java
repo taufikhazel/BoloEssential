@@ -1,20 +1,49 @@
 package loyality.member.cafe.boloessentials.halaman_admin;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import loyality.member.cafe.boloessentials.R;
+import loyality.member.cafe.boloessentials.model.Menu;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ShowHadiahFragment extends Fragment {
 
@@ -25,6 +54,11 @@ public class ShowHadiahFragment extends Fragment {
     private String mParam2;
     private Button btnTambahHadiah;
     private Dialog mDialog;
+    private EditText etNamaMenu, etPointMenu;
+    private ImageView FotoMenu;
+    private Uri imageUri;
+    private ProgressBar progressBar;
+    private TableLayout tableLayout;
 
     public ShowHadiahFragment() {
         // Required empty public constructor
@@ -54,11 +88,22 @@ public class ShowHadiahFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show_hadiah, container, false);
 
+        // Initialize table layout
+        tableLayout = view.findViewById(R.id.tableLayout);
+        addTableHeader();
+
+        // Initialize Firebase reference
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Menu");
+
+        // Fetch data from Firebase
+        fetchData(databaseReference);
+
         // Initialize dialog
         mDialog = new Dialog(requireContext());
 
         // Initialize btnTambahHadiah
         btnTambahHadiah = view.findViewById(R.id.btnTambahHadiah);
+
         btnTambahHadiah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,10 +111,222 @@ public class ShowHadiahFragment extends Fragment {
                 if (mDialog.getWindow() != null) {
                     mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 }
+
+                FotoMenu = mDialog.findViewById(R.id.FotoMenu);
+                etNamaMenu = mDialog.findViewById(R.id.etNamaMenu);
+                etPointMenu = mDialog.findViewById(R.id.etPointMenu);
+                Button btnSubmit = mDialog.findViewById(R.id.btnTambahHadiah);
+                progressBar = mDialog.findViewById(R.id.progressBar);
+
+                FotoMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openGallery();
+                    }
+                });
+
+                btnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        submitData();
+                    }
+                });
+
                 mDialog.show();
             }
         });
 
         return view;
     }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 1000);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000 && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            FotoMenu.setImageURI(imageUri);
+            FotoMenu.setBackground(null); // Remove background
+        }
+    }
+
+    private void submitData() {
+        String namaMenu = etNamaMenu.getText().toString();
+        String pointMenu = etPointMenu.getText().toString();
+
+        if (imageUri == null || namaMenu.isEmpty() || pointMenu.isEmpty()) {
+            Toast.makeText(getContext(), "Semua field harus diisi", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString());
+        storageReference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                String downloadUrl = task.getResult().toString();
+
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Menu");
+                                String key = databaseReference.push().getKey();
+
+                                Map<String, Object> menuData = new HashMap<>();
+                                menuData.put("Gambar", downloadUrl);
+                                menuData.put("NamaMenu", namaMenu);
+                                menuData.put("Point", Integer.parseInt(pointMenu));
+                                menuData.put("Show", true);
+
+                                if (key != null) {
+                                    databaseReference.child(key).setValue(menuData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            progressBar.setVisibility(View.GONE);
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(getContext(), "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+                                                mDialog.dismiss();
+                                                fetchData(databaseReference); // Refresh data after successful submission
+                                            } else {
+                                                Toast.makeText(getContext(), "Gagal menambahkan data", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getContext(), "Gagal mendapatkan URL gambar", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Gagal mengupload gambar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void fetchData(DatabaseReference databaseReference) {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tableLayout.removeAllViews();
+                addTableHeader();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Menu menu = dataSnapshot.getValue(Menu.class);
+                    if (menu != null) {
+                        addMenuRow(menu);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addTableHeader() {
+        TableRow headerRow = new TableRow(getContext());
+        String[] headers = {"Nama Menu", "Point", "Gambar", "Aksi"};
+        float[] weights = {1.5f, 1f, 1f, 3f};
+
+        for (int i = 0; i < headers.length; i++) {
+            TextView textView = new TextView(getContext());
+            textView.setText(headers[i]);
+            textView.setTextColor(getResources().getColor(R.color.white));
+            textView.setTextSize(12);
+            textView.setGravity(Gravity.CENTER);
+            textView.setPadding(5, 5, 5, 5);
+
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    0,
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    weights[i]
+            );
+            textView.setLayoutParams(params);
+            headerRow.addView(textView);
+        }
+        headerRow.setBackgroundColor(getResources().getColor(R.color.brownAdmin));
+        tableLayout.addView(headerRow);
+    }
+
+    private void addMenuRow(Menu menu) {
+        TableRow row = new TableRow(getContext());
+        String[] menuData = {
+                menu.getNamaMenu(),
+                String.valueOf(menu.getPoint()),
+                menu.getGambar(),
+                String.valueOf(menu.getShow())
+        };
+
+        float[] weights = {1.5f, 1f, 1f, 3f};
+
+        for (int i = 0; i < menuData.length; i++) {
+            if (i == 2) { // For image preview
+                TextView previewTextView = new TextView(getContext());
+                previewTextView.setText("Preview");
+                previewTextView.setTextColor(getResources().getColor(R.color.brownAdmin)); // Set color to blue or any color you prefer
+                previewTextView.setGravity(Gravity.CENTER);
+                previewTextView.setPadding(5, 5, 5, 5);
+                previewTextView.setTextSize(12);
+                previewTextView.setBackgroundResource(R.drawable.preview_border); // Set border drawable if you have one
+
+                TableRow.LayoutParams params = new TableRow.LayoutParams(
+                        0,
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        weights[i]
+                );
+                previewTextView.setLayoutParams(params);
+                row.addView(previewTextView);
+
+                // Set OnClickListener for TextView
+                final String imageUrl = menuData[i];
+                previewTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showImagePreview(imageUrl);
+                    }
+                });
+            } else {
+                TextView textView = new TextView(getContext());
+                textView.setText(menuData[i]);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(12);
+                textView.setPadding(5, 10, 5, 10);
+
+                TableRow.LayoutParams params = new TableRow.LayoutParams(
+                        0,
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        weights[i]
+                );
+                textView.setLayoutParams(params);
+                row.addView(textView);
+            }
+        }
+        tableLayout.addView(row);
+    }
+
+    private void showImagePreview(String imageUrl) {
+        Dialog previewDialog = new Dialog(requireContext());
+        previewDialog.setContentView(R.layout.modal_preview);
+        if (previewDialog.getWindow() != null) {
+            previewDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        ImageView previewImageView = previewDialog.findViewById(R.id.ivPreview);
+        Picasso.get().load(imageUrl).into(previewImageView);
+
+        previewDialog.show();
+    }
+
 }
