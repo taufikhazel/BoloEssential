@@ -196,7 +196,7 @@
             android:layout_marginLeft="130dp"
             android:fontFamily="@font/roboto_bold"
             android:background="@color/white"
-            android:text="100"
+            android:text=""
             android:id="@+id/tvPointAdmin"
             android:textAlignment="center"
             android:textColor="#C09A75"
@@ -316,6 +316,13 @@
         </TableLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

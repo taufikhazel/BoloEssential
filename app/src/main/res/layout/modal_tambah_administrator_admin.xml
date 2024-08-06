@@ -139,65 +139,11 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="60dp">
-
-                <TextView
-                    android:id="@+id/tvTanggalLahirAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="Tanggal Lahir"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/etTanggalLahirAdmin"
-                    android:layout_width="400dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvTanggalLahirAdmin"
-                    android:background="@drawable/background_id"
-                    android:fontFamily="@font/poppins_regular"
-                    android:inputType="datetime"
-                    android:paddingLeft="10dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="60dp">
-
-                <TextView
-                    android:id="@+id/tvPointUser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="170dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="Point"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/etPointUser"
-                    android:layout_width="400dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvPointUser"
-                    android:background="@drawable/background_id"
-                    android:fontFamily="@font/poppins_regular"
-                    android:inputType="datetime"
-                    android:paddingLeft="10dp" />
-
-            </RelativeLayout>
-
             <Button
                 android:id="@+id/btnSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="220dp"
+                android:layout_marginTop="100dp"
                 android:layout_gravity="center"
                 android:text="Submit"
                 android:fontFamily="@font/poppins_regular"

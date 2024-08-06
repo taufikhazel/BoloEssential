@@ -57,6 +57,7 @@ public class UserAdminActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+
         int textColor = getIntent().getIntExtra("textColorUser", R.color.brownAdmin);
         tvUser = findViewById(R.id.tvUser);
         tvUser.setTextColor(getResources().getColor(textColor));
