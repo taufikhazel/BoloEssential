@@ -9,40 +9,51 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="sensorLandscape"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="33">
         <activity
             android:name=".halaman_admin.UserAdminActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_admin.AdministratorAdminActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_admin.TukarHadiahAdminActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_admin.TukarPointAdminActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_admin.KaryawanAdminActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_admin.DashboardAdminActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_userandworker.TambahPointActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_userandworker.TukarPointActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".halaman_userandworker.LoadingScreenActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +62,8 @@
         </activity>
         <activity
             android:name=".halaman_userandworker.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
