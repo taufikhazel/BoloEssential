@@ -48,7 +48,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TableLayout tableLayout;
 
-    private TextView tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen;
+    private TextView tvPointKaryawan, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen;
 
     private RelativeLayout logout;
     private DatabaseReference mDatabase;
@@ -67,6 +67,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         int textColor = getIntent().getIntExtra("textColorKaryawan", R.color.brownAdmin);
         tvAbsen = findViewById(R.id.tvAbsen);
         tvAbsen.setTextColor(getResources().getColor(textColor));
+        tvPointKaryawan = findViewById(R.id.tvPointKaryawan);
 
         logout = findViewById(R.id.btnLogout);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -149,14 +150,18 @@ public class KaryawanAdminActivity extends AppCompatActivity {
 
                 // Menyimpan data pengguna dalam list untuk dibalik urutannya
                 List<Karyawan> karyawanList = new ArrayList<>();
+                int karyawanCount = 0;
 
                 // Menambahkan data user ke tabel
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Karyawan karyawan = dataSnapshot.getValue(Karyawan.class);
                     if (karyawan != null) {
                         addKaryawanRow(karyawan);
+                        karyawanCount++;
                     }
                 }
+
+                tvPointKaryawan.setText(String.valueOf(karyawanCount));
 
                 // Membalik urutan list untuk menampilkan secara descending
                 Collections.reverse(karyawanList);
