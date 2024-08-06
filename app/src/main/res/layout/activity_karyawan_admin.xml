@@ -80,7 +80,7 @@
                 android:layout_marginTop="30dp"
                 android:drawableStart="@drawable/ic_tukarhadiah"
                 android:textSize="12sp"
-                android:drawablePadding="10dp"
+                android:drawablePadding="13dp"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="left"
                 android:text="Tukar Hadiah"
@@ -93,9 +93,10 @@
                 android:layout_below="@+id/tvTukarHadiah"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_admin"
+                android:drawableStart="@drawable/baseline_checklist_24"
                 android:drawablePadding="10dp"
                 android:textSize="12sp"
+                android:drawableTint="#6C757D"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="left"
                 android:textColor="#6C757D"
@@ -110,7 +111,7 @@
                 android:layout_marginTop="30dp"
                 android:textSize="12sp"
                 android:drawableStart="@drawable/ic_absen"
-                android:drawablePadding="10dp"
+                android:drawablePadding="13dp"
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="#6C757D"
                 android:gravity="left"
@@ -124,13 +125,15 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 android:textSize="12sp"
-                android:drawableStart="@drawable/ic_absen"
-                android:drawablePadding="10dp"
+                android:drawableTint="#6C757D"
+                android:drawableStart="@drawable/baseline_card_giftcard_24"
+                android:drawablePadding="9dp"
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="#6C757D"
                 android:gravity="left"
                 android:text="Hadiah"
                 android:id="@+id/tvHadiah"/>
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
