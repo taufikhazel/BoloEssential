@@ -5,7 +5,7 @@ public class Menu {
     private String NamaMenu;
     private int Point;
     private boolean Show;
-    private String key; // Add this line
+    private int IDMenu; // Add this line
 
     // Constructor without parameters needed for Firebase
     public Menu() {
@@ -53,11 +53,7 @@ public class Menu {
     }
 
     // Getter and Setter for key
-    public String getKey() {
-        return key;
-    }
+    public int getIDMenu(){return IDMenu;}
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+    public void setIDMenu(int IDMenu) {this.IDMenu = IDMenu;}
 }
