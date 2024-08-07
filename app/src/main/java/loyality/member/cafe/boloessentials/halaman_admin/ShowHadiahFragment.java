@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -267,6 +268,7 @@ public class ShowHadiahFragment extends Fragment {
             textView.setText(headers[i]);
             textView.setTextColor(getResources().getColor(R.color.white));
             textView.setTextSize(12);
+            textView.setTypeface(null, Typeface.BOLD);
             textView.setGravity(Gravity.CENTER);
             textView.setPadding(5, 5, 5, 5);
 
@@ -275,7 +277,17 @@ public class ShowHadiahFragment extends Fragment {
                     TableRow.LayoutParams.WRAP_CONTENT,
                     weights[i]
             );
-            textView.setLayoutParams(params);
+
+            // Set margins for header
+            int marginInPixels = (int) (1 * getResources().getDisplayMetrics().density); // Convert dp to pixels
+            TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
+                    0,
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    weights[i]
+            );
+            layoutParams.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
+            textView.setLayoutParams(layoutParams);
+
             headerRow.addView(textView);
         }
         headerRow.setBackgroundColor(getResources().getColor(R.color.brownAdmin));
@@ -297,21 +309,22 @@ public class ShowHadiahFragment extends Fragment {
             if (i == 2) { // For image preview
                 TextView previewTextView = new TextView(getContext());
                 previewTextView.setText("Preview");
-                previewTextView.setTextColor(getResources().getColor(R.color.brownAdmin)); // Set color to blue or any color you prefer
+                previewTextView.setTextColor(getResources().getColor(R.color.brownAdmin));
                 previewTextView.setGravity(Gravity.CENTER);
                 previewTextView.setPadding(5, 5, 5, 5);
                 previewTextView.setTextSize(12);
-                previewTextView.setBackgroundResource(R.drawable.preview_border); // Set border drawable if you have one
+                previewTextView.setBackgroundResource(R.drawable.preview_border);
 
                 TableRow.LayoutParams params = new TableRow.LayoutParams(
                         0,
                         TableRow.LayoutParams.WRAP_CONTENT,
                         weights[i]
                 );
+                int marginInPixels = (int) (7 * getResources().getDisplayMetrics().density);
+                params.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
                 previewTextView.setLayoutParams(params);
                 row.addView(previewTextView);
 
-                // Set OnClickListener for TextView
                 final String imageUrl = menuData[i];
                 previewTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -320,16 +333,23 @@ public class ShowHadiahFragment extends Fragment {
                     }
                 });
             } else if (i == 3) { // For actions
-                Button actionButton = new Button(getContext());
+                TextView actionButton = new TextView(getContext());
                 actionButton.setText("Actions");
-                actionButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                actionButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.brownAdmin));
+                actionButton.setAllCaps(false);
+                actionButton.setTextColor(getResources().getColor(R.color.brownAdmin));
+                actionButton.setGravity(Gravity.CENTER);
+                actionButton.setPadding(5, 5, 5, 5);
+                actionButton.setTextSize(12);
+                actionButton.setBackgroundResource(R.drawable.preview_border);
 
                 TableRow.LayoutParams params = new TableRow.LayoutParams(
                         0,
                         TableRow.LayoutParams.WRAP_CONTENT,
                         weights[i]
                 );
+                int marginInPixels = (int) (7 * getResources().getDisplayMetrics().density);
+                params.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
+
                 actionButton.setLayoutParams(params);
                 row.addView(actionButton);
 
@@ -344,13 +364,15 @@ public class ShowHadiahFragment extends Fragment {
                 textView.setText(menuData[i]);
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextSize(12);
-                textView.setPadding(5, 10, 5, 10);
+                textView.setPadding(5, 5, 5, 5);
 
                 TableRow.LayoutParams params = new TableRow.LayoutParams(
                         0,
                         TableRow.LayoutParams.WRAP_CONTENT,
                         weights[i]
                 );
+                int marginInPixels = (int) (7 * getResources().getDisplayMetrics().density);
+                params.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
                 textView.setLayoutParams(params);
                 row.addView(textView);
             }
@@ -512,8 +534,6 @@ public class ShowHadiahFragment extends Fragment {
 
         updateDialog.show();
     }
-
-
 
     private void openGalleryForUpdate() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

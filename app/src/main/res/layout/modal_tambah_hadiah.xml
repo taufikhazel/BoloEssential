@@ -26,6 +26,7 @@
                 android:layout_marginBottom="280dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Tambah Hadiah"
+                android:textColor="@color/brownAdmin"
                 android:textSize="18sp" />
 
             <RelativeLayout

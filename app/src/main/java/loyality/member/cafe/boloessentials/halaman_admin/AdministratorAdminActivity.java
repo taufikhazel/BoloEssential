@@ -4,6 +4,7 @@ package loyality.member.cafe.boloessentials.halaman_admin;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -218,6 +219,7 @@ public class AdministratorAdminActivity extends AppCompatActivity {
             textView.setTextColor(getResources().getColor(R.color.white));
             textView.setTextSize(12);
             textView.setGravity(Gravity.CENTER);
+            textView.setTypeface(null, Typeface.BOLD);
             textView.setPadding(5, 5, 5, 5);
 
             TableRow.LayoutParams params = new TableRow.LayoutParams(

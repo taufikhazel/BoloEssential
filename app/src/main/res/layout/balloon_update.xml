@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Drop"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:background="@color/brownAdmin" />
 
@@ -19,6 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:background="@color/brownAdmin" />
 
@@ -27,6 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:background="@color/brownAdmin" />
 </LinearLayout>

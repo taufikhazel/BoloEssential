@@ -203,11 +203,11 @@
             android:layout_gravity="start"
             android:layout_marginLeft="20dp"
             android:drawableStart="@drawable/ic_jumlahuser"
+            android:drawableTint="#6C757D"
             android:drawablePadding="10dp"
             android:fontFamily="@font/poppins_regular"
             android:paddingTop="23dp"
             android:text="Jumlah User"
-            android:textColor="@color/black"
             android:textSize="10sp"
             android:textStyle="bold" />
 
@@ -240,11 +240,11 @@
             android:layout_gravity="start"
             android:layout_marginLeft="20dp"
             android:drawableStart="@drawable/ic_jumlahuser"
+            android:drawableTint="#6C757D"
             android:drawablePadding="10dp"
             android:fontFamily="@font/poppins_regular"
             android:paddingTop="23dp"
             android:text="Total Point User"
-            android:textColor="@color/black"
             android:textSize="10sp"
             android:textStyle="bold" />
 

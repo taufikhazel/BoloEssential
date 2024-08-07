@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -186,6 +187,7 @@ public class DashboardAdminActivity extends AppCompatActivity {
             textView.setTextColor(getResources().getColor(R.color.white));
             textView.setTextSize(12);
             textView.setGravity(Gravity.CENTER);
+            textView.setTypeface(null, Typeface.BOLD);
             textView.setPadding(5, 5, 5, 5);
 
             // Mengatur layout_weight untuk TextView
