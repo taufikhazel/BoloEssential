@@ -102,7 +102,11 @@ public class DropHadiahFragment extends Fragment {
 
         // Initialize table layout
         tableLayout = view.findViewById(R.id.tableLayout);
-        addTableHeader();
+
+        // Ensure the context is available
+        if (getContext() != null) {
+            addTableHeader();
+        }
 
         // Initialize Firebase reference
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Menu");
@@ -265,6 +269,10 @@ public class DropHadiahFragment extends Fragment {
 
 
     private void addTableHeader() {
+        if (getContext() == null) {
+            return;
+        }
+
         tableLayout.removeAllViews();
         TableRow headerRow = new TableRow(getContext());
         String[] headers = {"Nama Menu", "Point", "Gambar", "Aksi"};
@@ -302,6 +310,10 @@ public class DropHadiahFragment extends Fragment {
     }
 
     private void addMenuRow(Menu menu) {
+        if (getContext() == null) {
+            return; // Exit the method if context is not available
+        }
+
         TableRow row = new TableRow(getContext());
         String[] menuData = {
                 menu.getNamaMenu(),

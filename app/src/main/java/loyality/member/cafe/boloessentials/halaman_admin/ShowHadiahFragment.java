@@ -86,21 +86,21 @@ public class ShowHadiahFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show_hadiah, container, false);
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         // Initialize table layout
         tableLayout = view.findViewById(R.id.tableLayout);
+
+        // Add table header
         addTableHeader();
 
         // Initialize Firebase reference
@@ -111,27 +111,22 @@ public class ShowHadiahFragment extends Fragment {
 
         // Initialize dialog
         mDialog = new Dialog(requireContext());
-
-        return view;
     }
-
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 1000);
-    }
-
 
     private void fetchData(DatabaseReference databaseReference) {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded()) {
+                    return;
+                }
+
                 tableLayout.removeAllViews();
                 addTableHeader();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Menu menu = dataSnapshot.getValue(Menu.class);
                     if (menu != null && menu.getShow()) {
                         addMenuRow(menu);
-                        // Update the lastIDMenu if the current menu's IDMenu is greater
                         if (menu.getIDMenu() > lastIDMenu) {
                             lastIDMenu = menu.getIDMenu();
                         }
@@ -141,13 +136,19 @@ public class ShowHadiahFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (isAdded()) {
+                    Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-
     private void addTableHeader() {
+        if (getContext() == null) {
+            Toast.makeText(getContext(), "Context is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         tableLayout.removeAllViews();
         TableRow headerRow = new TableRow(getContext());
         String[] headers = {"Nama Menu", "Point", "Gambar", "Aksi"};
@@ -184,7 +185,18 @@ public class ShowHadiahFragment extends Fragment {
         tableLayout.addView(headerRow);
     }
 
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 1000);
+    }
+
     private void addMenuRow(Menu menu) {
+        if (getContext() == null) {
+            Toast.makeText(getContext(), "Context is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         TableRow row = new TableRow(getContext());
         String[] menuData = {
                 menu.getNamaMenu(),
