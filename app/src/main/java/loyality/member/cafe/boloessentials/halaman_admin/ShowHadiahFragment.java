@@ -84,6 +84,13 @@ public class ShowHadiahFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    public void onStart() {
+        super.onStart();
+        // Notify the activity to update UI
+        if (getActivity() instanceof HadiahAdminActivity) {
+            ((HadiahAdminActivity) getActivity()).updateButtonStylesForShowHadiahFragment();
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -281,6 +288,8 @@ public class ShowHadiahFragment extends Fragment {
         }
         tableLayout.addView(row);
     }
+
+
 
     private void showBalloonTooltip(View anchor, Menu menu) {
         View balloonView = getLayoutInflater().inflate(R.layout.balloon_drop, null);

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -120,6 +121,35 @@ public class HadiahAdminActivity extends AppCompatActivity {
             }
         });
 
+        if (savedInstanceState == null) {
+            displayFragment(new DropHadiahFragment());
+        }
+    }
+
+    public void updateButtonStylesForDropHadiahFragment() {
+        int brownAdminColor = getResources().getColor(R.color.brownAdmin);
+        int whiteColor = getResources().getColor(R.color.white);
+        int putihColor = getResources().getColor(R.color.putih);
+        int grayColor = getResources().getColor(R.color.brown); // Assuming gray color for the non-active state
+
+        btnDrop.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+        btnDrop.setTextColor(whiteColor);
+
+        btnShow.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnShow.setTextColor(grayColor);
+    }
+
+    public void updateButtonStylesForShowHadiahFragment() {
+        int putihColor = getResources().getColor(R.color.putih);
+        int grayColor = getResources().getColor(R.color.brown); // Assuming gray color for the non-active state
+        int brownAdminColor = getResources().getColor(R.color.brownAdmin);
+        int whiteColor = getResources().getColor(R.color.white);
+
+        btnShow.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+        btnShow.setTextColor(whiteColor);
+
+        btnDrop.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnDrop.setTextColor(grayColor);
     }
 
     private void showPopupMenu(View view) {

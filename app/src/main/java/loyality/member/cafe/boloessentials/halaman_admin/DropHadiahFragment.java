@@ -86,6 +86,15 @@ public class DropHadiahFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // Notify the activity to update UI
+        if (getActivity() instanceof HadiahAdminActivity) {
+            ((HadiahAdminActivity) getActivity()).updateButtonStylesForDropHadiahFragment();
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
