@@ -1,10 +1,15 @@
 package loyality.member.cafe.boloessentials.halaman_admin;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -19,16 +24,34 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.collection.BuildConfig;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,9 +69,11 @@ public class UserAdminActivity extends AppCompatActivity {
     private Dialog mDialog;
     private DatabaseReference mDatabase;
     private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
     private TableLayout tableLayout;
     private TextView tvPointUser, tvAbsen, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvHadiah;
     private RelativeLayout logout;
+    private static final int REQUEST_WRITE_STORAGE = 112;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +233,8 @@ public class UserAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
+
+        setupExportButton();
     }
 
     private void addTableHeader() {
@@ -316,5 +343,161 @@ public class UserAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, 500);
+    }
+
+    private void setupExportButton() {
+        Button btnExport = findViewById(R.id.btnExport);
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showExportConfirmationDialog();
+            }
+        });
+    }
+
+    private void showExportConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Export")
+                .setMessage("Apakah Anda ingin melakukan export data?")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        exportDataToExcel();
+                    }
+                })
+                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+    }
+    private void exportDataToExcel() {
+        progressDialog = new ProgressDialog(UserAdminActivity.this);
+        progressDialog.setTitle("Exporting Data");
+        progressDialog.setMessage("Please wait while the data is being exported to an Excel file...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<User> userList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        userList.add(user);
+                    }
+                }
+
+                new Thread(() -> {
+                    try {
+                        File file = createExcelFile(userList);
+                        if (file != null) {
+                            saveFileToDownloads(file);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(() -> {
+                            Toast.makeText(UserAdminActivity.this, "Failed to export data", Toast.LENGTH_SHORT).show();
+                        });
+                    } finally {
+                        runOnUiThread(() -> {
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(UserAdminActivity.this, "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    private void saveFileToDownloads(File file) {
+        new Thread(() -> {
+            try {
+                File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                File destFile = new File(downloadsDir, "UsersData.xlsx");
+                try (FileInputStream inStream = new FileInputStream(file);
+                     FileOutputStream outStream = new FileOutputStream(destFile)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inStream.read(buffer)) > 0) {
+                        outStream.write(buffer, 0, length);
+                    }
+                }
+
+                runOnUiThread(() -> {
+                    Toast.makeText(UserAdminActivity.this, "File berhasil disimpan di Downloads", Toast.LENGTH_SHORT).show();
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(UserAdminActivity.this, "Gagal menyimpan file", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+
+    // Helper method to create an Excel file
+    private File createExcelFile(List<User> userList) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Users");
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"Nama User", "Tanggal Bergabung", "Email", "No Telepon", "Tanggal Lahir", "Jumlah Point"};
+        int cellIndex = 0;
+        for (String header : headers) {
+            Cell cell = headerRow.createCell(cellIndex++);
+            cell.setCellValue(header);
+        }
+
+        // Create data rows
+        int rowIndex = 1;
+        for (User user : userList) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(user.getNama());
+            row.createCell(1).setCellValue(formatTanggalBergabung(user.getTanggalBergabung()));
+            row.createCell(2).setCellValue(user.getEmail());
+            row.createCell(3).setCellValue(user.getTelpon());
+            row.createCell(4).setCellValue(formatTanggalLahir(user.getTanggalLahir()));
+            row.createCell(5).setCellValue(user.getPointUser());
+        }
+
+        // Write the output to a file
+        File file = new File(getExternalFilesDir(null), "UsersData.xlsx");
+        try (FileOutputStream fileOut = new FileOutputStream(file)) {
+            workbook.write(fileOut);
+        }
+        workbook.close();
+        return file;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_WRITE_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            } else {
+                // Permission denied
+                Toast.makeText(this, "Permission denied. Unable to save file.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
