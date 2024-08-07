@@ -4,13 +4,14 @@ public class Menu {
     private String Gambar;
     private String NamaMenu;
     private int Point;
-    private boolean Show; // Ubah dari String ke boolean
+    private boolean Show;
+    private String key; // Add this line
 
-    // Constructor tanpa parameter dibutuhkan untuk Firebase
+    // Constructor without parameters needed for Firebase
     public Menu() {
     }
 
-    // Constructor dengan parameter
+    // Constructor with parameters
     public Menu(String Gambar, String NamaMenu, int Point, boolean Show) {
         this.Gambar = Gambar;
         this.NamaMenu = NamaMenu;
@@ -18,7 +19,7 @@ public class Menu {
         this.Show = Show;
     }
 
-    // Getter dan Setter untuk setiap atribut
+    // Getter and Setter for each attribute
     public String getGambar() {
         return Gambar;
     }
@@ -49,5 +50,14 @@ public class Menu {
 
     public void setPoint(int Point) {
         this.Point = Point;
+    }
+
+    // Getter and Setter for key
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }
