@@ -32,20 +32,6 @@
                 android:textColor="#C09A75"
                 android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/btnTambahHadiah"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="585dp"
-                android:layout_marginTop="5dp"
-                android:backgroundTint="@color/brownAdmin"
-                android:drawablePadding="5dp"
-                android:text="Tambah"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:cornerRadius="20dp" />
-
             <TableLayout
                 android:id="@+id/tableLayout"
                 android:layout_width="match_parent"

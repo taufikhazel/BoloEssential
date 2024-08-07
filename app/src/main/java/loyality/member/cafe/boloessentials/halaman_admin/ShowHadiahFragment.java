@@ -65,8 +65,9 @@ public class ShowHadiahFragment extends Fragment {
     private EditText etNamaMenu, etPointMenu;
     private ImageView FotoMenu;
     private Uri imageUri;
-
+    private ImageView FotoMenuUpdate;
     private Uri newImageUri;
+    private Dialog updateDialog;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
     private int lastIDMenu = 0;
@@ -93,7 +94,6 @@ public class ShowHadiahFragment extends Fragment {
         }
     }
 
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -112,49 +112,6 @@ public class ShowHadiahFragment extends Fragment {
         // Initialize dialog
         mDialog = new Dialog(requireContext());
 
-        // Initialize btnTambahHadiah
-        btnTambahHadiah = view.findViewById(R.id.btnTambahHadiah);
-
-        btnTambahHadiah.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDialog.setContentView(R.layout.modal_tambah_hadiah);
-                if (mDialog.getWindow() != null) {
-                    mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                }
-
-                FotoMenu = mDialog.findViewById(R.id.FotoMenu);
-                etNamaMenu = mDialog.findViewById(R.id.etNamaMenu);
-                etPointMenu = mDialog.findViewById(R.id.etPointMenu);
-                Button btnSubmit = mDialog.findViewById(R.id.btnTambahHadiah);
-                Button btnBatal = mDialog.findViewById(R.id.btnBatalHadiah);
-                progressBar = mDialog.findViewById(R.id.progressBar);
-
-                FotoMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        openGallery();
-                    }
-                });
-
-                btnSubmit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        submitData();
-                    }
-                });
-
-                btnBatal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDialog.dismiss();
-                    }
-                });
-
-                mDialog.show();
-            }
-        });
-
         return view;
     }
 
@@ -163,74 +120,6 @@ public class ShowHadiahFragment extends Fragment {
         startActivityForResult(intent, 1000);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000 && resultCode == RESULT_OK && data != null) {
-            imageUri = data.getData();
-            FotoMenu.setImageURI(imageUri);
-            FotoMenu.setBackground(null); // Remove background
-        }
-    }
-
-    private void submitData() {
-        String namaMenu = etNamaMenu.getText().toString();
-        String pointMenu = etPointMenu.getText().toString();
-
-        if (imageUri == null || namaMenu.isEmpty() || pointMenu.isEmpty()) {
-            Toast.makeText(getContext(), "Semua field harus diisi", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        progressBar.setVisibility(View.VISIBLE);
-
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString());
-        storageReference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()) {
-                    storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                String downloadUrl = task.getResult().toString();
-
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Menu");
-                                lastIDMenu++; // Increment the lastIDMenu for the new entry
-
-                                Map<String, Object> menuData = new HashMap<>();
-                                menuData.put("Gambar", downloadUrl);
-                                menuData.put("NamaMenu", namaMenu);
-                                menuData.put("Point", Integer.parseInt(pointMenu));
-                                menuData.put("Show", true);
-                                menuData.put("IDMenu", lastIDMenu);
-
-                                databaseReference.child(String.valueOf(lastIDMenu)).setValue(menuData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        progressBar.setVisibility(View.GONE);
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getContext(), "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-                                            mDialog.dismiss();
-                                            fetchData(databaseReference); // Refresh data after successful submission
-                                        } else {
-                                            Toast.makeText(getContext(), "Gagal menambahkan data", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            } else {
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Gagal mendapatkan URL gambar", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "Gagal mengupload gambar", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     private void fetchData(DatabaseReference databaseReference) {
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -240,7 +129,7 @@ public class ShowHadiahFragment extends Fragment {
                 addTableHeader();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Menu menu = dataSnapshot.getValue(Menu.class);
-                    if (menu != null) {
+                    if (menu != null && menu.getShow()) {
                         addMenuRow(menu);
                         // Update the lastIDMenu if the current menu's IDMenu is greater
                         if (menu.getIDMenu() > lastIDMenu) {
@@ -256,6 +145,7 @@ public class ShowHadiahFragment extends Fragment {
             }
         });
     }
+
 
     private void addTableHeader() {
         tableLayout.removeAllViews();
@@ -381,7 +271,7 @@ public class ShowHadiahFragment extends Fragment {
     }
 
     private void showBalloonTooltip(View anchor, Menu menu) {
-        View balloonView = getLayoutInflater().inflate(R.layout.balloon_update, null);
+        View balloonView = getLayoutInflater().inflate(R.layout.balloon_drop, null);
 
         Balloon balloon = new Balloon.Builder(requireContext())
                 .setArrowSize(10)
@@ -397,13 +287,20 @@ public class ShowHadiahFragment extends Fragment {
 
         Button btnDrop = balloonView.findViewById(R.id.btnDrop);
         Button btnUpdate = balloonView.findViewById(R.id.btnUpdate);
-        Button btnDelete = balloonView.findViewById(R.id.btnDelete);
 
         btnDrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dropMenu(menu);
-                balloon.dismiss();
+                new AlertDialog.Builder(getContext())
+                        .setMessage("Apakah Anda yakin ingin tidak menampilkan menu ini?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dropMenu(menu);
+                            }
+                        })
+                        .setNegativeButton("Tidak", null)
+                        .show();
             }
         });
 
@@ -411,23 +308,6 @@ public class ShowHadiahFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 updateMenu(menu);
-                balloon.dismiss();
-            }
-        });
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setMessage("Apakah Anda yakin ingin menghapus menu ini?")
-                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                deleteMenu(menu);
-                            }
-                        })
-                        .setNegativeButton("Tidak", null)
-                        .show();
                 balloon.dismiss();
             }
         });
@@ -449,7 +329,7 @@ public class ShowHadiahFragment extends Fragment {
     }
 
     private void updateMenu(Menu menu) {
-        Dialog updateDialog = new Dialog(requireContext());
+        updateDialog = new Dialog(requireContext());
         updateDialog.setContentView(R.layout.modal_update_hadiah);
         if (updateDialog.getWindow() != null) {
             updateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -457,17 +337,17 @@ public class ShowHadiahFragment extends Fragment {
 
         EditText etUpdateNamaMenu = updateDialog.findViewById(R.id.etNamaMenuUpdate);
         EditText etUpdatePointMenu = updateDialog.findViewById(R.id.etPointMenuUpdate);
-        ImageView ivUpdateFotoMenu = updateDialog.findViewById(R.id.FotoMenuUpdate);
+        FotoMenuUpdate = updateDialog.findViewById(R.id.FotoMenuUpdate);
         Button btnUpdateSubmit = updateDialog.findViewById(R.id.btnSelesaiUpdateHadiah);
         Button btnUpdateCancel = updateDialog.findViewById(R.id.btnBatalUpdateHadiah);
         ProgressBar progressBarUpdate = updateDialog.findViewById(R.id.progressBar);
 
         etUpdateNamaMenu.setText(menu.getNamaMenu());
         etUpdatePointMenu.setText(String.valueOf(menu.getPoint()));
-        ivUpdateFotoMenu.setBackground(null);
-        Picasso.get().load(menu.getGambar()).into(ivUpdateFotoMenu);
+        FotoMenuUpdate.setBackground(null);
+        Picasso.get().load(menu.getGambar()).into(FotoMenuUpdate);
 
-        ivUpdateFotoMenu.setOnClickListener(new View.OnClickListener() {
+        FotoMenuUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openGalleryForUpdate();
@@ -562,25 +442,29 @@ public class ShowHadiahFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Menu berhasil didrop", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Menu berhasil di Drop", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "Gagal mendrop menu", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Menu gagal di show", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void deleteMenu(Menu menu) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Menu").child(String.valueOf(menu.getIDMenu()));
-        databaseReference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Menu berhasil dihapus", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Gagal menghapus menu", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            if (requestCode == 1000) {
+                imageUri = selectedImageUri;
+                FotoMenu.setImageURI(imageUri);
+                FotoMenu.setBackground(null); // Remove background
+            } else if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
+                newImageUri = data.getData();
+                if (FotoMenuUpdate != null) {
+                    FotoMenuUpdate.setImageURI(newImageUri);
                 }
             }
-        });
+        }
     }
 }
