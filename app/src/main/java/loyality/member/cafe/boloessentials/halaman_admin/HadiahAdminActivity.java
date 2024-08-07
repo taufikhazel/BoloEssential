@@ -120,7 +120,6 @@ public class HadiahAdminActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void showPopupMenu(View view) {
