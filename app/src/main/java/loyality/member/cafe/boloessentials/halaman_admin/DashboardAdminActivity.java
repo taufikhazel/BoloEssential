@@ -215,7 +215,7 @@ public class DashboardAdminActivity extends AppCompatActivity {
                 String.valueOf(user.getPointUser())
         };
 
-        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f}; // Bobot yang diinginkan untuk setiap kolom
+        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f};
 
         for (int i = 0; i < userData.length; i++) {
             TextView textView = new TextView(this);
@@ -237,7 +237,6 @@ public class DashboardAdminActivity extends AppCompatActivity {
         tableLayout.addView(row);
     }
 
-    // Metode untuk memformat tanggal bergabung dari "yyyy-mm-dd" menjadi "dd-mm-yyyy"
     private String formatTanggalBergabung(String tanggalBergabung) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -246,11 +245,10 @@ public class DashboardAdminActivity extends AppCompatActivity {
             return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            return tanggalBergabung; // Mengembalikan string asli jika terjadi kesalahan parsing
+            return tanggalBergabung;
         }
     }
 
-    // Metode untuk memformat tanggal lahir dari "ddmmyyyy" menjadi "dd-mm-yyyy"
     private String formatTanggalLahir(String tanggalLahir) {
         if (tanggalLahir != null && tanggalLahir.length() == 8) {
             String day = tanggalLahir.substring(0, 2);
@@ -258,7 +256,7 @@ public class DashboardAdminActivity extends AppCompatActivity {
             String year = tanggalLahir.substring(4, 8);
             return day + "-" + month + "-" + year;
         } else {
-            return tanggalLahir; // Mengembalikan string asli jika format tidak sesuai
+            return tanggalLahir;
         }
     }
 
@@ -277,7 +275,6 @@ public class DashboardAdminActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
-    // Metode untuk menampilkan loader dan memulai aktivitas
     private void showLoaderAndStartActivity(final Class<?> targetActivity) {
         progressBar.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
@@ -287,6 +284,6 @@ public class DashboardAdminActivity extends AppCompatActivity {
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 500); // Waktu delay 1 detik atau sesuai kebutuhan
+        }, 500);
     }
 }

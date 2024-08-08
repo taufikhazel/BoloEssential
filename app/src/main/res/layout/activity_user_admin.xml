@@ -348,6 +348,60 @@
 
         </TableLayout>
 
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="655dp"
+            android:layout_marginTop="320dp"
+            android:background="@drawable/baseline_arrow_circle_right_24"
+            android:backgroundTint="@color/brownAdmin" />
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="535dp"
+            android:layout_marginTop="318dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="12dp"
+            android:textColor="#6C757D"
+            android:backgroundTint="@color/brownAdmin" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="575dp"
+            android:layout_marginTop="318dp"
+            android:text="2"
+            android:textAlignment="center"
+            android:textSize="12dp"
+            android:textColor="#6C757D"
+            android:backgroundTint="@color/brownAdmin" />
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="615dp"
+            android:layout_marginTop="318dp"
+            android:text="3"
+            android:textAlignment="center"
+            android:textSize="12dp"
+            android:textColor="#6C757D"
+            android:backgroundTint="@color/brownAdmin" />
+
+        <Button
+            android:id="@+id/btnPrevious"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="495dp"
+            android:layout_marginTop="320dp"
+            android:background="@drawable/baseline_arrow_circle_left_24"
+            android:backgroundTint="@color/brownAdmin" />
+
     </androidx.cardview.widget.CardView>
 
     <ProgressBar
