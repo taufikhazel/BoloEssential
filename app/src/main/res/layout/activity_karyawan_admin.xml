@@ -187,9 +187,9 @@
         android:textSize="24sp" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="660dp"
+        android:layout_width="730dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="250dp"
+        android:layout_marginLeft="240dp"
         android:layout_marginTop="140dp"
         android:backgroundTint="#F8F9FA"
         app:cardPreventCornerOverlap="true"
@@ -223,7 +223,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="370dp"
+            android:layout_marginLeft="450dp"
             android:text="@string/export"
             android:drawablePadding="5dp"
             android:textAllCaps="false"
@@ -237,7 +237,7 @@
         <Button
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="490dp"
+            android:layout_marginLeft="560dp"
             android:layout_marginTop="15dp"
             android:text="Tambah Karyawan"
             android:drawablePadding="5dp"

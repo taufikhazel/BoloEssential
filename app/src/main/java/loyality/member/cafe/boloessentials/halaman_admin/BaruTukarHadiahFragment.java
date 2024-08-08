@@ -12,10 +12,17 @@ import loyality.member.cafe.boloessentials.R;
 
 public class BaruTukarHadiahFragment extends Fragment {
 
+    public BaruTukarHadiahFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_baru_tukar_hadiah, container, false);
     }
+
+
+
 }

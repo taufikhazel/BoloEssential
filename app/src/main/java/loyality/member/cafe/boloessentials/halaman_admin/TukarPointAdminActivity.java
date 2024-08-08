@@ -1,11 +1,13 @@
 package loyality.member.cafe.boloessentials.halaman_admin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -44,24 +46,29 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         btnPending = findViewById(R.id.btnPending);
         btnBerhasil = findViewById(R.id.btnBerhasil);
 
+        if (savedInstanceState == null) {
+            displayFragment(new BaruTukarPointFragment(), "baru");
+        }
+
+        // Set up button click listeners
         btnBaru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayFragment(new BaruTukarPointFragment());
+                displayFragment(new BaruTukarHadiahFragment(), "baru");
             }
         });
 
         btnPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayFragment(new PendingTukarPointFragment());
+                displayFragment(new PendingTukarHadiahFragment(), "pending");
             }
         });
 
         btnBerhasil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayFragment(new BerhasilTukarPointFragment());
+                displayFragment(new BerhasilTukarHadiahFragment(), "berhasil");
             }
         });
 
@@ -138,11 +145,14 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         });
         popupMenu.show();
     }
-    private void displayFragment(Fragment fragment) {
+    private void displayFragment(Fragment fragment, String fragmentName) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
+
+        // Update button styles
+        updateButtonStylesForFragment(fragmentName);
     }
 
     private void showLoaderAndStartActivity(final Class<?> targetActivity) {
@@ -155,5 +165,46 @@ public class TukarPointAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, 500);
+    }
+
+    private void updateButtonStylesForFragment(String activeFragment) {
+        int brownAdminColor = ContextCompat.getColor(this, R.color.brownAdmin);
+        int whiteColor = ContextCompat.getColor(this, R.color.white);
+        int grayColor = ContextCompat.getColor(this, R.color.brownAdmin); // Pastikan grayColor sesuai dengan warna yang diinginkan
+
+        switch (activeFragment) {
+            case "baru":
+                btnBaru.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+                btnBaru.setTextColor(whiteColor);
+
+                btnPending.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+                btnPending.setTextColor(grayColor);
+
+                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+                btnBerhasil.setTextColor(grayColor);
+                break;
+
+            case "pending":
+                btnBaru.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+                btnBaru.setTextColor(grayColor);
+
+                btnPending.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+                btnPending.setTextColor(whiteColor);
+
+                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+                btnBerhasil.setTextColor(grayColor);
+                break;
+
+            case "berhasil":
+                btnBaru.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+                btnBaru.setTextColor(grayColor);
+
+                btnPending.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+                btnPending.setTextColor(grayColor);
+
+                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+                btnBerhasil.setTextColor(whiteColor);
+                break;
+        }
     }
 }
