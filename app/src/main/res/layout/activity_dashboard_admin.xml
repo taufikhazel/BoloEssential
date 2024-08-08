@@ -385,11 +385,11 @@
         android:layout_height="40dp"
         android:layout_marginLeft="785dp"
         android:layout_marginTop="478dp"
-        android:text="1"
+        android:text=""
         android:textAlignment="center"
         android:textSize="12dp"
         android:textColor="#6C757D"
-        android:backgroundTint="@color/brownAdmin" />
+        android:backgroundTint="@color/gray" />
 
     <Button
         android:id="@+id/btn2"
@@ -397,11 +397,11 @@
         android:layout_height="40dp"
         android:layout_marginLeft="825dp"
         android:layout_marginTop="478dp"
-        android:text="2"
+        android:text=""
         android:textAlignment="center"
         android:textSize="12dp"
         android:textColor="#6C757D"
-        android:backgroundTint="@color/brownAdmin" />
+        android:backgroundTint="@color/gray" />
 
 
     <Button
@@ -410,11 +410,11 @@
         android:layout_height="40dp"
         android:layout_marginLeft="865dp"
         android:layout_marginTop="478dp"
-        android:text="3"
+        android:text=""
         android:textAlignment="center"
         android:textSize="12dp"
         android:textColor="#6C757D"
-        android:backgroundTint="@color/brownAdmin" />
+        android:backgroundTint="@color/gray" />
 
     <Button
         android:id="@+id/btnPrevious"

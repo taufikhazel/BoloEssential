@@ -247,7 +247,7 @@
             android:id="@+id/btnTambahUser"
             android:textSize="12sp"
             android:textColor="@color/white"
-            android:drawableStart="@drawable/ic_export"
+            android:drawableStart="@drawable/ic_tambah"
             android:backgroundTint="@color/brownAdmin"/>
 
         <TableLayout

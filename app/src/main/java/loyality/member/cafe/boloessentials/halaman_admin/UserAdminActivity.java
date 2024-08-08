@@ -356,25 +356,67 @@ public class UserAdminActivity extends AppCompatActivity {
     }
 
     private void showExportConfirmationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Konfirmasi Export")
-                .setMessage("Apakah Anda ingin melakukan export data?")
-                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        exportDataToExcel();
-                    }
-                })
-                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create()
-                .show();
+        // Dialog untuk konfirmasi export
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Konfirmasi Export");
+        builder.setMessage("Apakah Anda ingin melakukan export data?");
+
+        // Jika user klik "Ya"
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showFileNameInputDialog();
+            }
+        });
+
+        // Jika user klik "Tidak"
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        // Tampilkan dialog konfirmasi
+        builder.create().show();
     }
-    private void exportDataToExcel() {
+
+    private void showFileNameInputDialog() {
+        // Membuat dialog input untuk meminta nama file dari user
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Nama File");
+
+        // EditText untuk user input
+        final EditText input = new EditText(this);
+        input.setHint("Masukkan nama file");
+        builder.setView(input);
+
+        // Jika user klik "Simpan"
+        builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String fileName = input.getText().toString().trim();
+                if (!fileName.isEmpty()) {
+                    exportDataToExcel(fileName);
+                } else {
+                    Toast.makeText(UserAdminActivity.this, "Nama file tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Jika user klik "Batal"
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Tampilkan dialog input nama file
+        builder.create().show();
+    }
+
+    private void exportDataToExcel(String fileName) {
         progressDialog = new ProgressDialog(UserAdminActivity.this);
         progressDialog.setTitle("Exporting Data");
         progressDialog.setMessage("Please wait while the data is being exported to an Excel file...");
@@ -397,7 +439,7 @@ public class UserAdminActivity extends AppCompatActivity {
                     try {
                         File file = createExcelFile(userList);
                         if (file != null) {
-                            saveFileToDownloads(file);
+                            saveFileToDownloads(file, fileName);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -426,11 +468,11 @@ public class UserAdminActivity extends AppCompatActivity {
         });
     }
 
-    private void saveFileToDownloads(File file) {
+    private void saveFileToDownloads(File file, String fileName) {
         new Thread(() -> {
             try {
                 File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                File destFile = new File(downloadsDir, "UsersData.xlsx");
+                File destFile = new File(downloadsDir, fileName + ".xlsx"); // Menggunakan nama file dari user
                 try (FileInputStream inStream = new FileInputStream(file);
                      FileOutputStream outStream = new FileOutputStream(destFile)) {
                     byte[] buffer = new byte[1024];
@@ -451,6 +493,7 @@ public class UserAdminActivity extends AppCompatActivity {
             }
         }).start();
     }
+
 
     // Helper method to create an Excel file
     private File createExcelFile(List<User> userList) throws IOException {
