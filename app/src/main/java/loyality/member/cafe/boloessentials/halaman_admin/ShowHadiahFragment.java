@@ -44,12 +44,15 @@ import com.skydoves.balloon.BalloonAnimation;
 import com.skydoves.balloon.BalloonSizeSpec;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.model.Menu;
+import loyality.member.cafe.boloessentials.model.User;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -60,7 +63,7 @@ public class ShowHadiahFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    private Button btnTambahHadiah;
+    private Button  btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private Dialog mDialog;
     private EditText etNamaMenu, etPointMenu;
     private ImageView FotoMenu;
@@ -71,6 +74,11 @@ public class ShowHadiahFragment extends Fragment {
     private ProgressBar progressBar;
     private TableLayout tableLayout;
     private int lastIDMenu = 0;
+    private int currentPage = 1;
+    private int totalPageCount;
+    private static final int ITEMS_PER_PAGE = 5;
+    private List<Menu> menuList = new ArrayList<>();
+
 
     public ShowHadiahFragment() {
         // Required empty public constructor
@@ -97,12 +105,42 @@ public class ShowHadiahFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show_hadiah, container, false);
 
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        btnPrevPage = view.findViewById(R.id.btnPrevious);
+        btnNextPage = view.findViewById(R.id.btnNext);
+
+        btn1 = view.findViewById(R.id.btn1);
+        btn2 = view.findViewById(R.id.btn2);
+        btn3 = view.findViewById(R.id.btn3);
+
+        btnPrevPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
+        btnNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage < totalPageCount) {
+                    currentPage++;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
 
         // Initialize table layout
         tableLayout = view.findViewById(R.id.tableLayout);
@@ -121,24 +159,29 @@ public class ShowHadiahFragment extends Fragment {
     }
 
     private void fetchData(DatabaseReference databaseReference) {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!isAdded()) {
                     return;
                 }
 
-                tableLayout.removeAllViews();
-                addTableHeader();
+                menuList.clear(); // Hapus data sebelumnya
+                int menuCount = 0 ;
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Menu menu = dataSnapshot.getValue(Menu.class);
                     if (menu != null && menu.getShow()) {
-                        addMenuRow(menu);
+                        menuList.add(menu); // Tambahkan item ke menuList
                         if (menu.getIDMenu() > lastIDMenu) {
                             lastIDMenu = menu.getIDMenu();
                         }
+                        menuCount++;
                     }
                 }
+                totalPageCount = (int) Math.ceil((double) menuList.size() / ITEMS_PER_PAGE); // Hitung total halaman
+                displayPageData(); // Tampilkan data untuk halaman saat ini
+                updatePaginationButtons(); // Update tombol pagination
             }
 
             @Override
@@ -148,6 +191,20 @@ public class ShowHadiahFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void displayPageData() {
+        // Hapus semua baris kecuali header
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+
+        int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, menuList.size());
+
+        for (int i = startIndex; i < endIndex; i++) {
+            addMenuRow(menuList.get(i)); // Tambahkan baris menu untuk setiap item
+        }
+
+        updatePaginationButtons();
     }
 
     private void addTableHeader() {
@@ -288,8 +345,6 @@ public class ShowHadiahFragment extends Fragment {
         }
         tableLayout.addView(row);
     }
-
-
 
     private void showBalloonTooltip(View anchor, Menu menu) {
         View balloonView = getLayoutInflater().inflate(R.layout.balloon_drop, null);
@@ -464,6 +519,7 @@ public class ShowHadiahFragment extends Fragment {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Menu berhasil di Drop", Toast.LENGTH_SHORT).show();
+                    fetchData(FirebaseDatabase.getInstance().getReference("Menu")); // Refresh data
                 } else {
                     Toast.makeText(getContext(), "Menu gagal di show", Toast.LENGTH_SHORT).show();
                 }
@@ -486,6 +542,46 @@ public class ShowHadiahFragment extends Fragment {
                     FotoMenuUpdate.setImageURI(newImageUri);
                 }
             }
+        }
+    }
+    private void updatePaginationButtons() {
+        // Reset semua tombol ke warna default
+        btn1.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn2.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn3.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+
+        btn1.setTextColor(getResources().getColor(R.color.black));
+        btn2.setTextColor(getResources().getColor(R.color.black));
+        btn3.setTextColor(getResources().getColor(R.color.black));
+
+        // Menandai tombol berdasarkan halaman
+        if (totalPageCount == 1) {
+            btn1.setText("1");
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 2) {
+            btn1.setText("1");
+            btn2.setText("2");
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else {
+            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
+            btn2.setText(String.valueOf(currentPage));
+            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.VISIBLE);
+        }
+
+        // Menandai tombol aktif dengan warna brownAdmin
+        if (currentPage == Integer.parseInt(btn1.getText().toString())) {
+            btn1.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn1.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn2.getText().toString())) {
+            btn2.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn2.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn3.getText().toString())) {
+            btn3.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn3.setTextColor(getResources().getColor(R.color.white));
         }
     }
 }

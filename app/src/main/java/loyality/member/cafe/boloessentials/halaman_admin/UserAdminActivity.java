@@ -65,7 +65,7 @@ import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenAc
 import loyality.member.cafe.boloessentials.model.User;
 
 public class UserAdminActivity extends AppCompatActivity {
-    private Button btntambahUser;
+    private Button btntambahUser, btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private Dialog mDialog;
     private DatabaseReference mDatabase;
     private ProgressBar progressBar;
@@ -74,6 +74,10 @@ public class UserAdminActivity extends AppCompatActivity {
     private TextView tvPointUser, tvAbsen, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvHadiah;
     private RelativeLayout logout;
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private int currentPage = 1;
+    private int totalPageCount;
+    private static final int ITEMS_PER_PAGE = 9;
+    private List<User> userList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,13 @@ public class UserAdminActivity extends AppCompatActivity {
         int textColor = getIntent().getIntExtra("textColorUser", R.color.brownAdmin);
         tvUser = findViewById(R.id.tvUser);
         tvUser.setTextColor(getResources().getColor(textColor));
+
+        btnPrevPage = findViewById(R.id.btnPrevious);
+        btnNextPage = findViewById(R.id.btnNext);
+
+        btn1 = findViewById(R.id.btn1);
+        btn2 = findViewById(R.id.btn2);
+        btn3 = findViewById(R.id.btn3);
 
         tvPointUser = findViewById(R.id.tvPointUser);
         logout = findViewById(R.id.btnLogout);
@@ -199,13 +210,35 @@ public class UserAdminActivity extends AppCompatActivity {
 
         tableLayout.setVisibility(View.GONE);
 
+        btnPrevPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
+        btnNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage < totalPageCount) {
+                    currentPage++;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
         databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tableLayout.removeAllViews();
                 addTableHeader();
 
-                List<User> userList = new ArrayList<>();
+                userList.clear();
                 int userCount = 0;
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -216,12 +249,14 @@ public class UserAdminActivity extends AppCompatActivity {
                     }
                 }
 
-                Collections.reverse(userList);
                 tvPointUser.setText(String.valueOf(userCount));
 
-                for (User user : userList) {
-                    addUserRow(user);
-                }
+                Collections.reverse(userList);
+                totalPageCount = (int) Math.ceil((double) userList.size() / ITEMS_PER_PAGE);
+
+                currentPage = 1;
+                displayPageData();
+                updatePaginationButtons();
 
                 progressBar.setVisibility(View.GONE);
                 tableLayout.setVisibility(View.VISIBLE);
@@ -235,6 +270,19 @@ public class UserAdminActivity extends AppCompatActivity {
         });
 
         setupExportButton();
+    }
+
+    private void displayPageData() {
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+
+        int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, userList.size());
+
+        for (int i = startIndex; i < endIndex; i++) {
+            addUserRow(userList.get(i));
+        }
+
+        updatePaginationButtons();
     }
 
     private void addTableHeader() {
@@ -316,6 +364,48 @@ public class UserAdminActivity extends AppCompatActivity {
             return tanggalLahir;
         }
     }
+
+    private void updatePaginationButtons() {
+        // Reset semua tombol ke warna default
+        btn1.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn2.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn3.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+
+        btn1.setTextColor(getResources().getColor(R.color.black));
+        btn2.setTextColor(getResources().getColor(R.color.black));
+        btn3.setTextColor(getResources().getColor(R.color.black));
+
+        // Menandai tombol berdasarkan halaman
+        if (totalPageCount == 1) {
+            btn1.setText("1");
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 2) {
+            btn1.setText("1");
+            btn2.setText("2");
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else {
+            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
+            btn2.setText(String.valueOf(currentPage));
+            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.VISIBLE);
+        }
+
+        // Menandai tombol aktif dengan warna brownAdmin
+        if (currentPage == Integer.parseInt(btn1.getText().toString())) {
+            btn1.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn1.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn2.getText().toString())) {
+            btn2.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn2.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn3.getText().toString())) {
+            btn3.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn3.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);

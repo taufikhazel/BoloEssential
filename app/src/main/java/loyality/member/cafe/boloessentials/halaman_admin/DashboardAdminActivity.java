@@ -63,9 +63,10 @@ public class DashboardAdminActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private TextView tvPointJumlahUser;
     private TextView tvPointTotalPointUser;
+    private Button btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private int currentPage = 1;
     private int totalPageCount;
-    private static final int ITEMS_PER_PAGE = 7;
+    private static final int ITEMS_PER_PAGE = 6;
     private List<User> userList = new ArrayList<>();
 
     private static final int REQUEST_WRITE_STORAGE = 112;
@@ -81,56 +82,72 @@ public class DashboardAdminActivity extends AppCompatActivity {
         tvDashboard = findViewById(R.id.tvDashboard);
         tvDashboard.setTextColor(getResources().getColor(textColor));
 
-        // Menghubungkan TextView dengan layout
         tvPointJumlahUser = findViewById(R.id.tvPointJumlahUser);
         tvPointTotalPointUser = findViewById(R.id.tvPointTotalPointUser);
 
         btnExport = findViewById(R.id.btnExport);
         tableLayout = findViewById(R.id.tableLayout);
+        btnPrevPage = findViewById(R.id.btnPrevious);
+        btnNextPage = findViewById(R.id.btnNext);
 
-        // Menyembunyikan tabel saat memuat data
+        btn1 = findViewById(R.id.btn1);
+        btn2 = findViewById(R.id.btn2);
+        btn3 = findViewById(R.id.btn3);
+
         tableLayout.setVisibility(View.GONE);
 
-        // Mengambil data dari Firebase dan mengurutkan berdasarkan tanggal bergabung
+        btnPrevPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
+        btnNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage < totalPageCount) {
+                    currentPage++;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
         databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Menghapus baris yang ada di tabel
                 tableLayout.removeAllViews();
-
-                // Menambahkan header tabel
                 addTableHeader();
 
-                // Menyimpan data pengguna dalam list untuk dibalik urutannya
-                List<User> userList = new ArrayList<>();
-
-                // Mengumpulkan data user ke dalam list
+                userList.clear();
                 int userCount = 0;
                 int totalPoints = 0;
 
-                // Menambahkan data user ke tabel
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
                     if (user != null) {
-                        addUserRow(user);
+                        userList.add(user);
                         userCount++;
                         totalPoints += user.getPointUser();
                     }
                 }
 
-                // Update TextView dengan jumlah pengguna dan total point
                 tvPointJumlahUser.setText(String.valueOf(userCount));
                 tvPointTotalPointUser.setText(String.valueOf(totalPoints));
-                // Membalik urutan list untuk menampilkan secara descending
+
                 Collections.reverse(userList);
+                totalPageCount = (int) Math.ceil((double) userList.size() / ITEMS_PER_PAGE);
 
-                // Menambahkan data user yang sudah diurutkan ke tabel
-                for (User user : userList) {
-                    addUserRow(user);
-                }
+                currentPage = 1;
+                displayPageData();
+                updatePaginationButtons();
 
-                // Menyembunyikan ProgressBar dan menampilkan tabel setelah data diambil
                 progressBar.setVisibility(View.GONE);
                 tableLayout.setVisibility(View.VISIBLE);
             }
@@ -201,10 +218,24 @@ public class DashboardAdminActivity extends AppCompatActivity {
         setupExportButton();
     }
 
+    private void displayPageData() {
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+
+        int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, userList.size());
+
+        for (int i = startIndex; i < endIndex; i++) {
+            addUserRow(userList.get(i));
+        }
+
+        updatePaginationButtons();
+    }
+
+
     private void addTableHeader() {
         TableRow headerRow = new TableRow(this);
         String[] headers = {"Nama User", "Tanggal Bergabung", "Email", "No Telepon", "Tanggal Lahir", "Jumlah Point"};
-        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f}; // Anda dapat mengatur bobot sesuai kebutuhan
+        float[] weights = {1.3f, 0.7f, 2f, 1f, 1f, 0.6f};
 
         for (int i = 0; i < headers.length; i++) {
             TextView textView = new TextView(this);
@@ -215,11 +246,10 @@ public class DashboardAdminActivity extends AppCompatActivity {
             textView.setTypeface(null, Typeface.BOLD);
             textView.setPadding(5, 5, 5, 5);
 
-            // Mengatur layout_weight untuk TextView
             TableRow.LayoutParams params = new TableRow.LayoutParams(
-                    0, // width 0 agar weight bekerja
+                    0,
                     TableRow.LayoutParams.WRAP_CONTENT,
-                    weights[i] // layout_weight
+                    weights[i]
             );
             textView.setLayoutParams(params);
 
@@ -233,10 +263,10 @@ public class DashboardAdminActivity extends AppCompatActivity {
         TableRow row = new TableRow(this);
         String[] userData = {
                 user.getNama(),
-                formatTanggalBergabung(user.getTanggalBergabung()), // Memformat tanggal bergabung
+                formatTanggalBergabung(user.getTanggalBergabung()),
                 user.getEmail(),
                 user.getTelpon(),
-                formatTanggalLahir(user.getTanggalLahir()), // Memformat tanggal lahir
+                formatTanggalLahir(user.getTanggalLahir()),
                 String.valueOf(user.getPointUser())
         };
 
@@ -247,18 +277,18 @@ public class DashboardAdminActivity extends AppCompatActivity {
             textView.setText(userData[i]);
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(12);
-            textView.setPadding(5, 3, 5, 3);
+            textView.setPadding(5, 5, 5, 5);
 
-            // Mengatur layout_weight untuk TextView
             TableRow.LayoutParams params = new TableRow.LayoutParams(
-                    0, // width 0 agar weight bekerja
+                    0,
                     TableRow.LayoutParams.WRAP_CONTENT,
-                    weights[i] // layout_weight
+                    weights[i]
             );
             textView.setLayoutParams(params);
 
             row.addView(textView);
         }
+        row.setBackgroundColor(getResources().getColor(R.color.white));
         tableLayout.addView(row);
     }
 
@@ -282,6 +312,47 @@ public class DashboardAdminActivity extends AppCompatActivity {
             return day + "-" + month + "-" + year;
         } else {
             return tanggalLahir;
+        }
+    }
+
+    private void updatePaginationButtons() {
+        // Reset semua tombol ke warna default
+        btn1.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn2.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn3.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+
+        btn1.setTextColor(getResources().getColor(R.color.black));
+        btn2.setTextColor(getResources().getColor(R.color.black));
+        btn3.setTextColor(getResources().getColor(R.color.black));
+
+        // Menandai tombol berdasarkan halaman
+        if (totalPageCount == 1) {
+            btn1.setText("1");
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 2) {
+            btn1.setText("1");
+            btn2.setText("2");
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else {
+            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
+            btn2.setText(String.valueOf(currentPage));
+            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.VISIBLE);
+        }
+
+        // Menandai tombol aktif dengan warna brownAdmin
+        if (currentPage == Integer.parseInt(btn1.getText().toString())) {
+            btn1.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn1.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn2.getText().toString())) {
+            btn2.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn2.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn3.getText().toString())) {
+            btn3.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn3.setTextColor(getResources().getColor(R.color.white));
         }
     }
 

@@ -44,12 +44,16 @@ import loyality.member.cafe.boloessentials.model.Admin;
 import loyality.member.cafe.boloessentials.model.User;
 
 public class AdministratorAdminActivity extends AppCompatActivity {
-    private Button btnTambahAdministrator;
+    private Button btnTambahAdministrator, btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private Dialog mDialog;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
     private TextView tvPointAdmin, tvAbsen, tvTukarHadiah, tvTukarPoint, tvDashboard, tvUser, tvAdministrator, tvHadiah;
     private RelativeLayout logout;
+    private int currentPage = 1;
+    private int totalPageCount;
+    private static final int ITEMS_PER_PAGE = 9;
+    private List<Admin> adminList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,13 @@ public class AdministratorAdminActivity extends AppCompatActivity {
         tvAdministrator = findViewById(R.id.tvAdministrator);
         tvAdministrator.setTextColor(getResources().getColor(textColor));
         tvPointAdmin = findViewById(R.id.tvPointAdmin);
+
+        btnPrevPage = findViewById(R.id.btnPrevious);
+        btnNextPage = findViewById(R.id.btnNext);
+
+        btn1 = findViewById(R.id.btn1);
+        btn2 = findViewById(R.id.btn2);
+        btn3 = findViewById(R.id.btn3);
 
         logout = findViewById(R.id.btnLogout);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -173,13 +184,35 @@ public class AdministratorAdminActivity extends AppCompatActivity {
         });
         tableLayout.setVisibility(View.GONE);
 
+        btnPrevPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
+        btnNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage < totalPageCount) {
+                    currentPage++;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
         databaseReference.orderByChild("nama").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tableLayout.removeAllViews();
                 addTableHeader();
 
-                List<Admin> adminList = new ArrayList<>();
+                adminList.clear();
                 int adminCount = 0;
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -192,9 +225,11 @@ public class AdministratorAdminActivity extends AppCompatActivity {
 
                 tvPointAdmin.setText(String.valueOf(adminCount));
 
-                for (Admin admin : adminList) {
-                    addAdminRow(admin);
-                }
+                totalPageCount = (int) Math.ceil((double) adminList.size() / ITEMS_PER_PAGE);
+
+                currentPage = 1;
+                displayPageData();
+                updatePaginationButtons();
 
                 progressBar.setVisibility(View.GONE);
                 tableLayout.setVisibility(View.VISIBLE);
@@ -206,6 +241,19 @@ public class AdministratorAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void displayPageData() {
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+
+        int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, adminList.size());
+
+        for (int i = startIndex; i < endIndex; i++) {
+            addAdminRow(adminList.get(i));
+        }
+
+        updatePaginationButtons();
     }
 
     private void addTableHeader() {
@@ -262,6 +310,48 @@ public class AdministratorAdminActivity extends AppCompatActivity {
         }
         tableLayout.addView(row);
     }
+
+    private void updatePaginationButtons() {
+        // Reset semua tombol ke warna default
+        btn1.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn2.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn3.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+
+        btn1.setTextColor(getResources().getColor(R.color.black));
+        btn2.setTextColor(getResources().getColor(R.color.black));
+        btn3.setTextColor(getResources().getColor(R.color.black));
+
+        // Menandai tombol berdasarkan halaman
+        if (totalPageCount == 1) {
+            btn1.setText("1");
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 2) {
+            btn1.setText("1");
+            btn2.setText("2");
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else {
+            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
+            btn2.setText(String.valueOf(currentPage));
+            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.VISIBLE);
+        }
+
+        // Menandai tombol aktif dengan warna brownAdmin
+        if (currentPage == Integer.parseInt(btn1.getText().toString())) {
+            btn1.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn1.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn2.getText().toString())) {
+            btn2.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn2.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn3.getText().toString())) {
+            btn3.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn3.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
