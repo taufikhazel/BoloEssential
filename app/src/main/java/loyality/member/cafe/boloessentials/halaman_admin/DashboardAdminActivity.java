@@ -94,6 +94,32 @@ public class DashboardAdminActivity extends AppCompatActivity {
         btn2 = findViewById(R.id.btn2);
         btn3 = findViewById(R.id.btn3);
 
+        // Tambahkan OnClickListener untuk tombol pagination di dalam onCreate
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentPage = Integer.parseInt(btn1.getText().toString());
+                displayPageData();
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentPage = Integer.parseInt(btn2.getText().toString());
+                displayPageData();
+            }
+        });
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentPage = Integer.parseInt(btn3.getText().toString());
+                displayPageData();
+            }
+        });
+
+
         tableLayout.setVisibility(View.GONE);
 
         btnPrevPage.setOnClickListener(new View.OnClickListener() {
