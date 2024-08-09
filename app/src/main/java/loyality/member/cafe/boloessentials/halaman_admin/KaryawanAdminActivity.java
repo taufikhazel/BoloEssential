@@ -1,5 +1,7 @@
 package loyality.member.cafe.boloessentials.halaman_admin;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -32,6 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -266,7 +270,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
 
         // Menambahkan kolom untuk aksi
         TextView actionButton = new TextView(this);
-        actionButton.setText("Preview");
+        actionButton.setText("Absen");
         actionButton.setTextColor(getResources().getColor(R.color.brownAdmin));
         actionButton.setGravity(Gravity.CENTER);
         actionButton.setPadding(5, 5, 5, 5);
@@ -283,7 +287,6 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         actionButton.setLayoutParams(actionParams);
         row.addView(actionButton);
 
-        // Menetapkan aksi klik pada tombol Preview
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -297,12 +300,14 @@ public class KaryawanAdminActivity extends AppCompatActivity {
 
     private void showKaryawanPreview(Karyawan karyawan) {
         // Inflate custom layout for dialog
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.modal_absen_karyawan, null);
-        // Build and show the dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    }
+        Dialog previewDialog = new Dialog(this);
+        previewDialog.setContentView(R.layout.modal_karyawan_admin);
+        if (previewDialog.getWindow() != null) {
+            previewDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
 
+        previewDialog.show();
+    }
 
 
     // Metode untuk memformat tanggal bergabung dari "yyyy-mm-dd" menjadi "dd-mm-yyyy"
@@ -314,10 +319,10 @@ public class KaryawanAdminActivity extends AppCompatActivity {
             return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            return tanggalBergabung; // Mengembalikan string asli jika terjadi kesalahan parsing
+            return tanggalBergabung;
         }
     }
-    // Metode untuk memformat tanggal lahir dari "ddmmyyyy" menjadi "dd-mm-yyyy"
+
     private String formatTanggalLahir(String tanggalLahir) {
         if (tanggalLahir != null && tanggalLahir.length() == 8) {
             String day = tanggalLahir.substring(0, 2);
@@ -328,7 +333,6 @@ public class KaryawanAdminActivity extends AppCompatActivity {
             return tanggalLahir; // Mengembalikan string asli jika format tidak sesuai
         }
     }
-
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);

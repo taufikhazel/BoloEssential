@@ -115,7 +115,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="#6C757D"
                 android:gravity="left"
-                android:text="Absen"
+                android:text="Karyawan"
                 android:id="@+id/tvAbsen"/>
 
             <TextView
@@ -181,7 +181,7 @@
         android:layout_marginLeft="240dp"
         android:layout_marginTop="90dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Absen"
+        android:text="Karyawan"
         android:textAlignment="center"
         android:textColor="#C09A75"
         android:textSize="24sp" />
@@ -201,7 +201,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/roboto_bold"
-            android:text="Absen"
+            android:text="Karyawan"
             android:textAlignment="center"
             android:textColor="#C09A75"
             android:textSize="15sp" />
@@ -210,7 +210,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="100dp"
             android:fontFamily="@font/roboto_bold"
             android:text=""
             android:id="@+id/tvPointKaryawan"

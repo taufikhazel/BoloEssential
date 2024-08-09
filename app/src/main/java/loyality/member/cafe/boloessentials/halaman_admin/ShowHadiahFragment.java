@@ -166,7 +166,7 @@ public class ShowHadiahFragment extends Fragment {
                     return;
                 }
 
-                menuList.clear(); // Hapus data sebelumnya
+                menuList.clear();
                 int menuCount = 0 ;
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {

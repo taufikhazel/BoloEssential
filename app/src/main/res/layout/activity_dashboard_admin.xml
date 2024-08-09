@@ -115,7 +115,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="#6C757D"
                 android:gravity="left"
-                android:text="Absen"
+                android:text="Karyawan"
                 android:id="@+id/tvAbsen"/>
 
             <TextView
