@@ -268,7 +268,6 @@ public class UserAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
-
         setupExportButton();
     }
 

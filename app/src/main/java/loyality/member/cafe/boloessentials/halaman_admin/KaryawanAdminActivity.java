@@ -4,11 +4,15 @@ import static androidx.core.content.ContentProviderCompat.requireContext;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +41,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,20 +62,22 @@ import java.util.Locale;
 import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenActivity;
 import loyality.member.cafe.boloessentials.model.Karyawan;
-import loyality.member.cafe.boloessentials.model.User;
 
 public class KaryawanAdminActivity extends AppCompatActivity {
-    private Button btnTambahKaryawan;
+    private Button btnTambahKaryawan,btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private Dialog mDialog;
-
     private Dialog Dialog;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
-
     private TextView tvPointKaryawan, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen, tvHadiah;
-
     private RelativeLayout logout;
     private DatabaseReference mDatabase;
+    private static final int REQUEST_WRITE_STORAGE = 112;
+    private int currentPage = 1;
+    private ProgressDialog progressDialog;
+    private int totalPageCount;
+    private static final int ITEMS_PER_PAGE = 9;
+    private List<Karyawan> karyawanList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +93,14 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         int textColor = getIntent().getIntExtra("textColorKaryawan", R.color.brownAdmin);
         tvAbsen = findViewById(R.id.tvAbsen);
         tvAbsen.setTextColor(getResources().getColor(textColor));
+
+        btnPrevPage = findViewById(R.id.btnPrevious);
+        btnNextPage = findViewById(R.id.btnNext);
+
+        btn1 = findViewById(R.id.btn1);
+        btn2 = findViewById(R.id.btn2);
+        btn3 = findViewById(R.id.btn3);
+
         tvPointKaryawan = findViewById(R.id.tvPointKaryawan);
 
         logout = findViewById(R.id.btnLogout);
@@ -159,25 +183,45 @@ public class KaryawanAdminActivity extends AppCompatActivity {
             }
         });
 
+        btnPrevPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
+        btnNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage < totalPageCount) {
+                    currentPage++;
+                    displayPageData();
+                    updatePaginationButtons();
+                }
+            }
+        });
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("karyawan");
         databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Menghapus baris yang ada di tabel
                 tableLayout.removeAllViews();
-
                 // Menambahkan header tabel
                 addTableHeader();
 
-                // Menyimpan data pengguna dalam list untuk dibalik urutannya
-                List<Karyawan> karyawanList = new ArrayList<>();
+                karyawanList.clear();
                 int karyawanCount = 0;
 
                 // Menambahkan data user ke tabel
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Karyawan karyawan = dataSnapshot.getValue(Karyawan.class);
                     if (karyawan != null) {
-                        addKaryawanRow(karyawan);
+                        karyawanList.add(karyawan);
                         karyawanCount++;
                     }
                 }
@@ -187,10 +231,11 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                 // Membalik urutan list untuk menampilkan secara descending
                 Collections.reverse(karyawanList);
 
-                // Menambahkan data user yang sudah diurutkan ke tabel
-                for (Karyawan karyawan : karyawanList) {
-                    addKaryawanRow(karyawan);
-                }
+                totalPageCount = (int) Math.ceil((double) karyawanList.size() / ITEMS_PER_PAGE);
+
+                currentPage = 1;
+                displayPageData();
+                updatePaginationButtons();
 
                 // Menyembunyikan ProgressBar dan menampilkan tabel setelah data diambil
                 progressBar.setVisibility(View.GONE);
@@ -203,6 +248,19 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
+        setupExportButton();
+    }
+
+    private void displayPageData() {
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+
+        int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, karyawanList.size());
+
+        for (int i = startIndex; i < endIndex; i++) {
+            addKaryawanRow(karyawanList.get(i));
+        }
+        updatePaginationButtons();
     }
     private void addTableHeader() {
         TableRow headerRow = new TableRow(this);
@@ -334,6 +392,47 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         }
     }
 
+    private void updatePaginationButtons() {
+        // Reset semua tombol ke warna default
+        btn1.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn2.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+        btn3.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+
+        btn1.setTextColor(getResources().getColor(R.color.black));
+        btn2.setTextColor(getResources().getColor(R.color.black));
+        btn3.setTextColor(getResources().getColor(R.color.black));
+
+        // Menandai tombol berdasarkan halaman
+        if (totalPageCount == 1) {
+            btn1.setText("1");
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 2) {
+            btn1.setText("1");
+            btn2.setText("2");
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else {
+            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
+            btn2.setText(String.valueOf(currentPage));
+            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            btn2.setVisibility(View.VISIBLE);
+            btn3.setVisibility(View.VISIBLE);
+        }
+
+        // Menandai tombol aktif dengan warna brownAdmin
+        if (currentPage == Integer.parseInt(btn1.getText().toString())) {
+            btn1.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn1.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn2.getText().toString())) {
+            btn2.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn2.setTextColor(getResources().getColor(R.color.white));
+        } else if (currentPage == Integer.parseInt(btn3.getText().toString())) {
+            btn3.setBackgroundTintList(getResources().getColorStateList(R.color.brownAdmin));
+            btn3.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.inflate(R.menu.menu_dropdown);
@@ -359,5 +458,202 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, 500);
+    }
+    private void setupExportButton() {
+        Button btnExport = findViewById(R.id.btnExport);
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showExportConfirmationDialog();
+            }
+        });
+    }
+
+    private void showExportConfirmationDialog() {
+        // Dialog untuk konfirmasi export
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Konfirmasi Export");
+        builder.setMessage("Apakah Anda ingin melakukan export data?");
+
+        // Jika user klik "Ya"
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showFileNameInputDialog();
+            }
+        });
+
+        // Jika user klik "Tidak"
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        // Tampilkan dialog konfirmasi
+        builder.create().show();
+    }
+
+    private void showFileNameInputDialog() {
+        // Membuat dialog input untuk meminta nama file dari user
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Nama File");
+
+        // EditText untuk user input
+        final EditText input = new EditText(this);
+        input.setHint("Masukkan nama file");
+        builder.setView(input);
+
+        // Jika user klik "Simpan"
+        builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String fileName = input.getText().toString().trim();
+                if (!fileName.isEmpty()) {
+                    exportDataToExcel(fileName);
+                } else {
+                    Toast.makeText(KaryawanAdminActivity.this, "Nama file tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Jika user klik "Batal"
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Tampilkan dialog input nama file
+        builder.create().show();
+    }
+
+    private void exportDataToExcel(String fileName) {
+        progressDialog = new ProgressDialog(KaryawanAdminActivity.this);
+        progressDialog.setTitle("Exporting Data");
+        progressDialog.setMessage("Please wait while the data is being exported to an Excel file...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("karyawan");
+        databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Karyawan> karyawanList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Karyawan karyawan = dataSnapshot.getValue(Karyawan.class);
+                    if (karyawan != null) {
+                        karyawanList.add(karyawan);
+                    }
+                }
+
+                new Thread(() -> {
+                    try {
+                        File file = createExcelFile(karyawanList);
+                        if (file != null) {
+                            saveFileToDownloads(file, fileName);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(() -> {
+                            Toast.makeText(KaryawanAdminActivity.this, "Failed to export data", Toast.LENGTH_SHORT).show();
+                        });
+                    } finally {
+                        runOnUiThread(() -> {
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(KaryawanAdminActivity.this, "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    private void saveFileToDownloads(File file, String fileName) {
+        new Thread(() -> {
+            try {
+                File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                File destFile = new File(downloadsDir, fileName + ".xlsx"); // Menggunakan nama file dari user
+                try (FileInputStream inStream = new FileInputStream(file);
+                     FileOutputStream outStream = new FileOutputStream(destFile)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inStream.read(buffer)) > 0) {
+                        outStream.write(buffer, 0, length);
+                    }
+                }
+
+                runOnUiThread(() -> {
+                    Toast.makeText(KaryawanAdminActivity.this, "File berhasil disimpan di Downloads", Toast.LENGTH_SHORT).show();
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(KaryawanAdminActivity.this, "Gagal menyimpan file", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+
+
+    // Helper method to create an Excel file
+    private File createExcelFile(List<Karyawan> karyawanList) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Karyawan");
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"Nama Karyawan", "Tanggal Bergabung", "Email", "No Telepon", "Tanggal Lahir"};
+        int cellIndex = 0;
+        for (String header : headers) {
+            Cell cell = headerRow.createCell(cellIndex++);
+            cell.setCellValue(header);
+        }
+
+        // Create data rows
+        int rowIndex = 1;
+        for (Karyawan karyawan : karyawanList) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(karyawan.getNama());
+            row.createCell(1).setCellValue(formatTanggalBergabung(karyawan.getTanggalBergabung()));
+            row.createCell(2).setCellValue(karyawan.getEmail());
+            row.createCell(3).setCellValue(karyawan.getTelpon());
+            row.createCell(4).setCellValue(formatTanggalLahir(karyawan.getTanggalLahir()));
+        }
+
+        // Write the output to a file
+        File file = new File(getExternalFilesDir(null), "KaryawanData.xlsx");
+        try (FileOutputStream fileOut = new FileOutputStream(file)) {
+            workbook.write(fileOut);
+        }
+        workbook.close();
+        return file;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_WRITE_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            } else {
+                // Permission denied
+                Toast.makeText(this, "Permission denied. Unable to save file.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
