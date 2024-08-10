@@ -43,7 +43,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="190dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Nama Lengkap"
             android:textAlignment="center"
             android:textColor="@color/brown"
             android:textSize="24sp" />
@@ -58,26 +57,13 @@
 
         <TextView
             android:id="@+id/tvPoint"
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="230dp"
+            android:layout_marginLeft="250dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Point"
-            android:textAlignment="center"
             android:textColor="@color/brown"
             android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/nimTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="270dp"
-            android:textAlignment="center"
-            android:fontFamily="@font/roboto_black"
-            android:text="Karyawan"
-            android:textColor="@color/brown"
-            android:textSize="26sp" />
 
     </androidx.cardview.widget.CardView>
 

@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -63,10 +65,58 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnCekPoint.setOnClickListener(v -> {
+            // Set up the modal
             mDialog.setContentView(R.layout.modal_cek_point);
             mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            mDialog.show();
+
+            // Get references to TextViews inside the modal
+            TextView tvPoint = mDialog.findViewById(R.id.tvPoint);
+            TextView tvNama = mDialog.findViewById(R.id.tvNama);
+
+            // Query the "users" database based on UID
+            databaseRef.child("users").orderByChild("nomorID").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // Get the first matched user
+                        DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
+                        Integer pointUser = userSnapshot.child("pointUser").getValue(Integer.class);
+                        String nama = userSnapshot.child("nama").getValue(String.class);
+
+                        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+                        String formattedPointUser = numberFormat.format(pointUser);
+                        // Set the TextViews with the retrieved data
+                        if (pointUser != null) {
+                            tvPoint.setText(String.valueOf(formattedPointUser + " Point")); // Convert integer to string
+                        }
+                        tvNama.setText(nama);
+
+                        // Show the modal
+                        mDialog.show();
+                    } else {
+                        // Handle the case when the UID is not found in the database
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Data Tidak Ditemukan")
+                                .setMessage("UID tidak ditemukan di database pengguna.")
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
+                                .show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle possible errors.
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Error")
+                            .setMessage("Terjadi kesalahan: " + databaseError.getMessage())
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
+                            .show();
+                }
+            });
         });
+
+
+
 
         btnTukarPoint.setOnClickListener(v -> {
             Intent intent2 = new Intent(MainActivity.this, TukarPointActivity.class);

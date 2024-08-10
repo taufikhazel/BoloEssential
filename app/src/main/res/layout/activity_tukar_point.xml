@@ -38,6 +38,20 @@
 
                 </RelativeLayout>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/baseline_circle_24"
+                android:layout_marginTop="350dp"
+                android:layout_marginLeft="350dp"
+                android:id="@+id/Page"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/outline_circle_24"
+                android:layout_marginTop="350dp"
+                android:layout_marginLeft="390dp"
+                android:id="@+id/unPage"/>
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
