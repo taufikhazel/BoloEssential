@@ -310,6 +310,12 @@ public class UserAdminActivity extends AppCompatActivity {
         updatePaginationButtons();
     }
 
+    @Override
+    public void onBackPressed() {
+        // Memicu showPopupMenu saat tombol back ditekan
+        showPopupMenu(logout);
+    }
+
     private void addTableHeader() {
         TableRow headerRow = new TableRow(this);
         String[] headers = {"Nama User", "Tanggal Bergabung", "Email", "No Telepon", "Tanggal Lahir", "Jumlah Point"};

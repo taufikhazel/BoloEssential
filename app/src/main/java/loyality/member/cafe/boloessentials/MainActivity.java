@@ -1,8 +1,10 @@
 package loyality.member.cafe.boloessentials;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TambahPointActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -61,8 +62,35 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, TukarPointActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Buat AlertDialog Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        // Set pesan untuk alert
+        builder.setMessage("Apakah Anda yakin ingin keluar?");
+
+        // Set aksi jika pengguna memilih "Iya"
+        builder.setPositiveButton("Iya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish(); // Tutup aktivitas
+            }
+        });
+
+        // Set aksi jika pengguna memilih "Tidak"
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Tutup dialog dan tetap di aktivitas
+            }
+        });
+
+        // Tampilkan alert dialog
+        builder.show();
     }
 }

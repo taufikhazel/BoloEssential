@@ -382,6 +382,12 @@ public class DashboardAdminActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        // Memicu showPopupMenu saat tombol back ditekan
+        showPopupMenu(logout);
+    }
+
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.inflate(R.menu.menu_dropdown);
@@ -396,6 +402,8 @@ public class DashboardAdminActivity extends AppCompatActivity {
         });
         popupMenu.show();
     }
+
+
 
     private void showLoaderAndStartActivity(final Class<?> targetActivity) {
         progressBar.setVisibility(View.VISIBLE);

@@ -277,6 +277,12 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         setupExportButton();
     }
 
+    @Override
+    public void onBackPressed() {
+        // Memicu showPopupMenu saat tombol back ditekan
+        showPopupMenu(logout);
+    }
+
     private void displayPageData() {
         tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
 

@@ -65,42 +65,51 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, DashboardAdminActivity.class);
             startActivity(intent);
         });
+    }
 
-        // Initialize NFC Reader
-        initializeReader();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeReader();  // Inisialisasi ulang NFC Reader setiap kali LoginActivity aktif
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mReader.close();  // Pastikan NFC Reader ditutup saat LoginActivity dijeda
     }
 
     private void initializeReader() {
-        mReader.setOnStateChangeListener(new Reader.OnStateChangeListener() {
-            @Override
-            public void onStateChange(int slotNum, int prevState, int currState) {
-                if (currState == Reader.CARD_PRESENT) {
-                    Log.d(TAG, "NFC tag detected. Ready to read...");
+        mReader.setOnStateChangeListener((slotNum, prevState, currState) -> {
+            if (currState == Reader.CARD_PRESENT) {
+                Log.d(TAG, "NFC tag detected. Ready to read...");
 
-                    final byte[] command = {(byte) 0xFF, (byte) 0xCA, (byte) 0x00, (byte) 0x00, (byte) 0x00};
-                    final byte[] response = new byte[256];
+                final byte[] command = {(byte) 0xFF, (byte) 0xCA, (byte) 0x00, (byte) 0x00, (byte) 0x00};
+                final byte[] response = new byte[256];
 
-                    try {
-                        int byteCount = mReader.control(slotNum, Reader.IOCTL_CCID_ESCAPE,
-                                command, command.length, response, response.length);
+                try {
+                    int byteCount = mReader.control(slotNum, Reader.IOCTL_CCID_ESCAPE,
+                            command, command.length, response, response.length);
 
-                        // Get UID
-                        StringBuffer uid = new StringBuffer();
-                        for (int i = 0; i < (byteCount - 2); i++) {
-                            uid.append(String.format("%02X", response[i]));
-                        }
-
-                        runOnUiThread(() -> {
-                            Long result = Long.parseLong(uid.toString(), 16);
-                            etID.setText(String.valueOf(result));
-                        });
-
-                    } catch (ReaderException | NumberFormatException e) {
-                        e.printStackTrace();
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), "NFC tag read failed. Please try again.", Toast.LENGTH_LONG).show();
-                        Looper.loop();
+                    // Get UID
+                    StringBuffer uid = new StringBuffer();
+                    for (int i = 0; i < (byteCount - 2); i++) {
+                        uid.append(String.format("%02X", response[i]));
                     }
+
+                    // Log the detected UID
+                    Log.d(TAG, "Detected NFC UID: " + uid.toString());
+
+                    runOnUiThread(() -> {
+                        Long result = Long.parseLong(uid.toString(), 16);
+                        etID.setText(String.valueOf(result));
+                    });
+
+                } catch (ReaderException | NumberFormatException e) {
+                    e.printStackTrace();
+                    Looper.prepare();
+                    Toast.makeText(getApplicationContext(), "NFC tag read failed. Please try again.", Toast.LENGTH_LONG).show();
+                    Looper.loop();
                 }
             }
         });

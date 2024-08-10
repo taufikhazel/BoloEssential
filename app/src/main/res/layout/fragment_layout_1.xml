@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".halaman_userandworker.layout_1">
+
     <LinearLayout
-        android:id="@+id/row_5"
+        android:id="@+id/row_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_height="wrap_content">
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv21"
+            android:id="@+id/cv1"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -19,6 +22,7 @@
             app:cardMaxElevation="12dp"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -32,7 +36,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_21"
+                    android:id="@+id/menuPoints"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -40,28 +44,28 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_21"
+                    android:id="@+id/menuImage"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_21"
+                    android:layout_below="@+id/menuPoints"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_21"
+                    android:id="@+id/menuTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Ultimate Cookies &amp; Cream"
-                    android:layout_below="@+id/image_21"
+                    android:text="Espreso"
+                    android:layout_below="@+id/menuImage"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv22"
+            android:id="@+id/cv2"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -84,7 +88,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_22"
+                    android:id="@+id/point_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -92,28 +96,28 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_22"
+                    android:id="@+id/image_2"
                     android:layout_width="107dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-9dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_22"
+                    android:layout_below="@+id/point_2"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_22"
+                    android:id="@+id/nama_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Choco Sucre"
-                    android:layout_below="@+id/image_22"
+                    android:text="Americano"
+                    android:layout_below="@+id/image_2"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv23"
+            android:id="@+id/cv3"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -136,7 +140,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_23"
+                    android:id="@+id/point_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -144,28 +148,28 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_23"
+                    android:id="@+id/image_3"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_23"
+                    android:layout_below="@+id/point_3"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_23"
+                    android:id="@+id/nama_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Red Velvet"
-                    android:layout_below="@+id/image_23"
+                    android:text="Latte"
+                    android:layout_below="@+id/image_3"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv24"
+            android:id="@+id/cv4"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -188,7 +192,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_24"
+                    android:id="@+id/point_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -196,28 +200,28 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_24"
+                    android:id="@+id/image_4"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_24"
+                    android:layout_below="@+id/point_4"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_24"
+                    android:id="@+id/nama_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Choco Berry"
-                    android:layout_below="@+id/image_24"
+                    android:text="Capuccino"
+                    android:layout_below="@+id/image_4"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv25"
+            android:id="@+id/cv5"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -240,7 +244,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_25"
+                    android:id="@+id/point_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -248,43 +252,45 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_25"
+                    android:id="@+id/image_5"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_25"
+                    android:layout_below="@+id/point_5"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_25"
+                    android:id="@+id/nama_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Taro Drule"
-                    android:layout_below="@+id/image_25"
+                    android:text="Mochacinno"
+                    android:layout_below="@+id/image_5"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/row_6"
+        android:id="@+id/row_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-20dp">
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv26"
+            android:id="@+id/cv6"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
+            android:layout_marginTop="200dp"
             app:cardMaxElevation="12dp"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -298,7 +304,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_26"
+                    android:id="@+id/point_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -306,28 +312,29 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_26"
+                    android:id="@+id/image_6"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_26"
+                    android:layout_below="@+id/point_6"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_26"
+                    android:id="@+id/nama_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Matcha Vert"
-                    android:layout_below="@+id/image_26"
+                    android:text="Flavoured latte"
+                    android:layout_marginBottom="5dp"
+                    android:layout_below="@+id/image_6"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv27"
+            android:id="@+id/cv7"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -336,7 +343,8 @@
             app:cardElevation="10dp"
             app:cardMaxElevation="12dp"
             app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            android:layout_marginTop="200dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -350,7 +358,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_27"
+                    android:id="@+id/point_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -358,28 +366,28 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_27"
+                    android:id="@+id/image_7"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_27"
+                    android:layout_below="@+id/point_7"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_27"
+                    android:id="@+id/nama_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="English Breakfast"
-                    android:layout_below="@+id/image_27"
+                    android:text="Palm Coffe"
+                    android:layout_below="@+id/image_7"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv28"
+            android:id="@+id/cv8"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -388,7 +396,8 @@
             app:cardElevation="10dp"
             app:cardMaxElevation="12dp"
             app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            android:layout_marginTop="200dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -402,7 +411,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_28"
+                    android:id="@+id/point_8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -410,28 +419,29 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_28"
+                    android:id="@+id/image_8"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_28"
+                    android:layout_below="@+id/point_8"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_28"
+                    android:id="@+id/nama_8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Passion Fruit Tea"
-                    android:layout_below="@+id/image_28"
+                    android:layout_marginBottom="5dp"
+                    android:text="Kopi Kampung"
+                    android:layout_below="@+id/image_8"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv29"
+            android:id="@+id/cv9"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -440,10 +450,13 @@
             app:cardElevation="10dp"
             app:cardMaxElevation="12dp"
             app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            android:layout_marginTop="200dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ImageView
                     android:layout_gravity="end"
                     android:layout_width="29dp"
@@ -454,7 +467,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_29"
+                    android:id="@+id/point_9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -462,28 +475,33 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_29"
+                    android:id="@+id/image_9"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_29"
+                    android:layout_below="@+id/point_9"
                     android:layout_centerHorizontal="true"/>
+
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_29"
+                    android:id="@+id/nama_9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Lyche Tea Mint"
-                    android:layout_below="@+id/image_29"
+                    android:layout_marginBottom="5dp"
+                    android:text="Pandanus Coffe"
+                    android:layout_below="@+id/image_9"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
+
             </RelativeLayout>
+
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv30"
+            android:id="@+id/cv10"
             android:background="@color/cardview_background_selector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -492,7 +510,8 @@
             app:cardElevation="10dp"
             app:cardMaxElevation="12dp"
             app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            android:layout_marginTop="200dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -506,7 +525,7 @@
                 <TextView
                     android:textSize="15sp"
                     android:textColor="@color/brown"
-                    android:id="@+id/point_30"
+                    android:id="@+id/point_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
@@ -514,25 +533,27 @@
                     android:text="80 Point"
                     android:fontFamily="@font/roboto_medium"/>
                 <ImageView
-                    android:id="@+id/image_30"
+                    android:id="@+id/image_10"
                     android:layout_width="110dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/kopi2"
-                    android:layout_below="@+id/point_30"
+                    android:layout_below="@+id/point_10"
                     android:layout_centerHorizontal="true"/>
+
                 <TextView
                     android:textSize="20px"
                     android:textColor="@color/brown"
-                    android:id="@+id/nama_30"
+                    android:id="@+id/nama_10"
+                    android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
-                    android:text="Earl Grey Milk Tea"
-                    android:layout_below="@+id/image_30"
+                    android:text="Cannadian Latte"
+                    android:layout_below="@+id/image_10"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/roboto_bold"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

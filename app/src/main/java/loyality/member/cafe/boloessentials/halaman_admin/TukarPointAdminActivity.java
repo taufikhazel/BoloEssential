@@ -155,6 +155,12 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         updateButtonStylesForFragment(fragmentName);
     }
 
+    @Override
+    public void onBackPressed() {
+        // Memicu showPopupMenu saat tombol back ditekan
+        showPopupMenu(logout);
+    }
+
     private void showLoaderAndStartActivity(final Class<?> targetActivity) {
         progressBar.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {

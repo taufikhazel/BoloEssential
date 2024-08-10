@@ -148,6 +148,12 @@ public class TukarHadiahAdminActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        // Memicu showPopupMenu saat tombol back ditekan
+        showPopupMenu(logout);
+    }
+
     private void displayFragment(Fragment fragment, String fragmentName) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
