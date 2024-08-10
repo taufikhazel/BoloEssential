@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_gravity="center">
 
         <androidx.cardview.widget.CardView
             android:layout_width="750dp"
@@ -18,11 +21,11 @@
             app:cardUseCompatPadding="true">
 
             <TextView
-                android:id="@+id/tvTambahAdmin"
+                android:id="@+id/tvTambahAdminstrator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="260dp"
+                android:layout_marginBottom="210dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Tambah Administrator"
                 android:textColor="@color/brownAdmin"
@@ -33,11 +36,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="-19dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="200dp">
 
                 <TextView
-                    android:id="@+id/tvNomorIDAdmin"
+                    android:id="@+id/tvNomorID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -45,15 +48,29 @@
                     android:text="No ID"
                     android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/etNomorIDAdmin"
+                <TextView
+                    android:id="@+id/etNomorID"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvNomorIDAdmin"
+                    android:layout_below="@+id/tvNomorID"
                     android:background="@drawable/background_id"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="number"
+                    android:paddingTop="7dp"
                     android:paddingLeft="10dp" />
+
+                <Button
+                    android:id="@+id/btnTambahID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="320dp"
+                    android:background="@color/brownAdmin"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Tambah ID"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
 
             </RelativeLayout>
 
@@ -61,10 +78,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="150dp">
+                android:layout_marginBottom="100dp">
 
                 <TextView
-                    android:id="@+id/tvNamaAdmin"
+                    android:id="@+id/tvNama"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -73,10 +90,10 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/etNamaAdmin"
+                    android:id="@+id/etNama"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvNamaAdmin"
+                    android:layout_below="@+id/tvNama"
                     android:background="@drawable/background_id"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="textPersonName"
@@ -88,10 +105,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="80dp">
+                android:layout_marginBottom="30dp">
 
                 <TextView
-                    android:id="@+id/tvEmailAdmin"
+                    android:id="@+id/tvEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -100,10 +117,10 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/etEmailAdmin"
+                    android:id="@+id/etEmail"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvEmailAdmin"
+                    android:layout_below="@+id/tvEmail"
                     android:background="@drawable/background_id"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="textEmailAddress"
@@ -115,10 +132,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="-13dp">
+                android:layout_marginTop="40dp">
 
                 <TextView
-                    android:id="@+id/tvTelponAdmin"
+                    android:id="@+id/tvTelpon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -127,15 +144,51 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/etTelponAdmin"
+                    android:id="@+id/etTelpon"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvTelponAdmin"
+                    android:layout_below="@+id/tvTelpon"
                     android:background="@drawable/background_id"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="phone"
                     android:paddingLeft="10dp" />
 
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="110dp">
+
+                <TextView
+                    android:id="@+id/tvTanggalLahir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Tanggal Lahir"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/etTanggalLahir"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTanggalLahir"
+                    android:background="@drawable/background_id"
+                    android:fontFamily="@font/poppins_regular"
+                    android:inputType="datetime"
+                    android:paddingTop="7dp"
+                    android:textSize="14sp"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="370dp"
+                    android:layout_marginTop="60dp"
+                    android:id="@+id/btnDate"
+                    android:background="@drawable/baseline_calendar_month_24" />
 
             </RelativeLayout>
 
@@ -143,7 +196,7 @@
                 android:id="@+id/btnSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="200dp"
                 android:layout_gravity="center"
                 android:text="Submit"
                 android:fontFamily="@font/poppins_regular"
@@ -154,5 +207,6 @@
         </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
+
 
 </ScrollView>

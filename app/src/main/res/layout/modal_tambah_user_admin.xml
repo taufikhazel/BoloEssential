@@ -56,6 +56,7 @@
                     android:background="@drawable/background_id"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="number"
+                    android:paddingTop="7dp"
                     android:paddingLeft="10dp" />
 
                 <Button

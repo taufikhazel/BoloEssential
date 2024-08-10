@@ -78,7 +78,7 @@ import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenAc
 import loyality.member.cafe.boloessentials.model.User;
 
 public class UserAdminActivity extends AppCompatActivity {
-    private Button btnDate, btntambahUser, btnPrevPage, btnNextPage, btn1, btn2, btn3;
+    private Button btntambahUser, btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private Dialog mDialog;
     private Dialog nfcDialog;
     private DatabaseReference mDatabase;
@@ -486,8 +486,6 @@ public class UserAdminActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
 
     private void displayPageData() {
