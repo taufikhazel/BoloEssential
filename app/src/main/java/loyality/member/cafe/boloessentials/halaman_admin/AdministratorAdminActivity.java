@@ -268,11 +268,9 @@ public class AdministratorAdminActivity extends AppCompatActivity {
 
                         // Format tanggal bergabung
                         String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                        int pointUser = 0;
-
                         // Membuat objek User
-                        User user = new User(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir, pointUser);
-                        databaseReference.push().setValue(user).addOnCompleteListener(task -> {
+                        Admin admin = new Admin(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
+                        databaseReference.push().setValue(admin).addOnCompleteListener(task -> {
                             loader.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 Toast.makeText(AdministratorAdminActivity.this, "Administrator berhasil ditambahkan", Toast.LENGTH_SHORT).show();
@@ -496,7 +494,7 @@ public class AdministratorAdminActivity extends AppCompatActivity {
         String[] adminData = {
                 admin.getNama(),
                 admin.getEmail(),
-                admin.getnomorID(),
+                admin.getNomorID(),
                 admin.getTelpon()
         };
 

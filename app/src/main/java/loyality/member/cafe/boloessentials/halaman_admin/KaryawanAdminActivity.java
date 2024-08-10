@@ -295,11 +295,10 @@ public class KaryawanAdminActivity extends AppCompatActivity {
 
                         // Format tanggal bergabung
                         String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                        int pointUser = 0;
 
                         // Membuat objek User
-                        User user = new User(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir, pointUser);
-                        databaseReference.push().setValue(user).addOnCompleteListener(task -> {
+                        Karyawan karyawan = new Karyawan(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
+                        databaseReference.push().setValue(karyawan).addOnCompleteListener(task -> {
                             loader.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 Toast.makeText(KaryawanAdminActivity.this, "Karyawan berhasil ditambahkan", Toast.LENGTH_SHORT).show();

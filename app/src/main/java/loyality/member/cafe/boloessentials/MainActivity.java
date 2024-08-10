@@ -2,7 +2,6 @@ package loyality.member.cafe.boloessentials;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +10,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoginActivity;
 import loyality.member.cafe.boloessentials.halaman_userandworker.TambahPointActivity;
@@ -20,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnAbsen, btnTukarPoint, btnCekPoint, btnTambahPoint, btnLogout;
     private Dialog mDialog;
     private String userType;
+    private String UID;
+    private DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +44,18 @@ public class MainActivity extends AppCompatActivity {
 
         mDialog = new Dialog(this);
 
-        // Ambil tipe pengguna dari Intent
+        // Initialize Firebase Database reference
+        databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        // Ambil tipe pengguna dan UID dari Intent
         Intent intent = getIntent();
         userType = intent.getStringExtra("USER_TYPE");
+        UID = intent.getStringExtra("UID");
 
         // Set visibilitas tombol berdasarkan tipe pengguna
         setupUIBasedOnUserType();
 
-        btnAbsen.setOnClickListener(v -> {
-            mDialog.setContentView(R.layout.modal_absen);
-            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            mDialog.show();
-        });
+        btnAbsen.setOnClickListener(v -> checkAndRecordAbsence());
 
         btnTambahPoint.setOnClickListener(v -> {
             Intent intent1 = new Intent(MainActivity.this, TambahPointActivity.class);
@@ -77,6 +87,97 @@ public class MainActivity extends AppCompatActivity {
             btnAbsen.setVisibility(View.GONE);
         }
     }
+
+    private void checkAndRecordAbsence() {
+        // Get current date and time
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        String currentDate = dateFormat.format(calendar.getTime());
+        String currentTime = timeFormat.format(calendar.getTime());
+
+        // Format hari ke bahasa Indonesia
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", new Locale("id", "ID"));
+        String currentDay = dayFormat.format(calendar.getTime());
+
+        // Find karyawan data by UID
+        databaseRef.child("karyawan").orderByChild("nomorIDKaryawan").equalTo(UID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            DataSnapshot karyawanSnapshot = dataSnapshot.getChildren().iterator().next();
+                            String namaKaryawan = karyawanSnapshot.child("namaKaryawan").getValue(String.class);
+
+                            // Check if user has already checked in twice today
+                            databaseRef.child("absenKaryawan").child(UID).child(currentDate)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            long count = dataSnapshot.getChildrenCount();
+
+                                            if (count >= 2) {
+                                                // User has already checked in twice today
+                                                String lastCheckInTime = dataSnapshot.child("2").child("jam").getValue(String.class);
+                                                String lastCheckInDay = dataSnapshot.child("2").child("hari").getValue(String.class);
+                                                String lastCheckInDate = dataSnapshot.child("2").child("tanggal").getValue(String.class);
+
+                                                new AlertDialog.Builder(MainActivity.this)
+                                                        .setTitle("Absensi")
+                                                        .setMessage(namaKaryawan + " telah absen dua kali pada " + lastCheckInDay + ", " + lastCheckInDate + ", " + lastCheckInTime)
+                                                        .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
+                                                        .show();
+                                            } else {
+                                                // Proceed to record absence
+                                                recordAbsence(currentDate, currentTime, currentDay, namaKaryawan, count + 1);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            // Handle possible errors.
+                                        }
+                                    });
+                        } else {
+                            // UID not found in karyawan database
+                            new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle("Error")
+                                    .setMessage("UID tidak ditemukan di database.")
+                                    .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle possible errors.
+                    }
+                });
+    }
+
+
+
+    private void recordAbsence(String date, String time, String day, String namaKaryawan, long absensiKe) {
+        // Save absence record
+        DatabaseReference absenRef = databaseRef.child("absenKaryawan").child(UID).child(date).child(String.valueOf(absensiKe));
+        absenRef.child("tanggal").setValue(date);
+        absenRef.child("jam").setValue(time);
+        absenRef.child("hari").setValue(day);
+        absenRef.child("absen").setValue(true);
+        absenRef.child("namaKaryawan").setValue(namaKaryawan);
+
+        // Display the absen modal
+        mDialog.setContentView(R.layout.modal_absen);
+        TextView jamAbsen = mDialog.findViewById(R.id.jamAbsen);
+        TextView namaKaryawanView = mDialog.findViewById(R.id.namaKaryawan);
+
+        jamAbsen.setText(date + ", Jam " + time);
+        namaKaryawanView.setText(namaKaryawan);
+
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.show();
+    }
+
 
     @Override
     public void onBackPressed() {

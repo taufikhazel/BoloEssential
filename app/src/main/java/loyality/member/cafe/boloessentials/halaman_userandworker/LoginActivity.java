@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss(); // Dismiss ProgressDialog
                     DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
                     String nama = userSnapshot.child("nama").getValue(String.class);
-                    showSuccessDialog("Selamat Datang ke Bolo Essential " + nama, DashboardAdminActivity.class, "admin");
+                    showSuccessDialog("Selamat Datang ke Bolo Essential, " + nama, DashboardAdminActivity.class, "admin");
                 } else {
                     checkKaryawanOrUsers(id);
                 }
@@ -179,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss(); // Dismiss ProgressDialog
                     DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
                     String namaKaryawan = userSnapshot.child("namaKaryawan").getValue(String.class);
-                    showSuccessDialog("Selamat Datang ke Bolo Essential " + namaKaryawan, MainActivity.class, "karyawan");
+                    showSuccessDialog("Selamat Datang ke Bolo Essential, " + namaKaryawan, MainActivity.class, "karyawan");
                 } else {
                     databaseRef.child("users").orderByChild("nomorID").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
                                 progressDialog.dismiss(); // Dismiss ProgressDialog
                                 DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
                                 String nama = userSnapshot.child("nama").getValue(String.class);
-                                showSuccessDialog("Selamat Datang ke Bolo Essential " + nama, MainActivity.class, "users");
+                                showSuccessDialog("Selamat Datang ke Bolo Essential, " + nama, MainActivity.class, "users");
                             } else {
                                 progressDialog.dismiss(); // Dismiss ProgressDialog
                                 Toast.makeText(LoginActivity.this, "ID not found", Toast.LENGTH_SHORT).show();
@@ -219,6 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     Intent intent = new Intent(LoginActivity.this, nextActivity);
                     intent.putExtra("USER_TYPE", userType); // Kirim tipe pengguna ke MainActivity
+                    intent.putExtra("UID", etID.getText().toString()); // Kirim UID ke MainActivity
                     startActivity(intent);
                     finish();
                 })
