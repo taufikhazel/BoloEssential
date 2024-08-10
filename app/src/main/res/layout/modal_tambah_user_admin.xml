@@ -48,7 +48,7 @@
                     android:text="No ID"
                     android:textSize="14sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/etNomorID"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
@@ -57,6 +57,19 @@
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="number"
                     android:paddingLeft="10dp" />
+
+                <Button
+                    android:id="@+id/btnTambahID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="320dp"
+                    android:background="@color/brownAdmin"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Tambah ID"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
 
             </RelativeLayout>
 
@@ -156,7 +169,7 @@
                     android:text="Tanggal Lahir"
                     android:textSize="14sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/etTanggalLahir"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
@@ -164,7 +177,17 @@
                     android:background="@drawable/background_id"
                     android:fontFamily="@font/poppins_regular"
                     android:inputType="datetime"
+                    android:paddingTop="7dp"
+                    android:textSize="14sp"
                     android:paddingLeft="10dp" />
+
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="370dp"
+                    android:layout_marginTop="60dp"
+                    android:id="@+id/btnDate"
+                    android:background="@drawable/baseline_calendar_month_24" />
 
             </RelativeLayout>
 

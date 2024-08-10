@@ -62,4 +62,18 @@
         android:layout_marginTop="20dp">
     </Button>
 
+    <Button
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_buttonmainapp"
+        android:text="Logout"
+        android:textColor="#C09B75"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/roboto_black"
+        android:id="@+id/btnLogout"
+        android:layout_below="@+id/btnTukarPoint"
+        android:layout_marginTop="80dp">
+    </Button>
+
 </RelativeLayout>

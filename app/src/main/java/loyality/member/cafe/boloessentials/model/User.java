@@ -1,6 +1,7 @@
 package loyality.member.cafe.boloessentials.model;
 
 public class User {
+    private String nomorID;
     private String nama;
     private String tanggalBergabung;
     private String email;
@@ -13,7 +14,8 @@ public class User {
     }
 
     // Constructor dengan parameter
-    public User(String nama, String tanggalBergabung, String email, String telpon, String tanggalLahir, int pointUser) {
+    public User(String nomorID, String nama, String tanggalBergabung, String email, String telpon, String tanggalLahir, int pointUser) {
+        this.nomorID = nomorID;
         this.nama = nama;
         this.tanggalBergabung = tanggalBergabung;
         this.email = email;
@@ -23,6 +25,13 @@ public class User {
     }
 
     // Getter dan Setter untuk setiap atribut
+
+    public String getNomorID() {
+        return nomorID;
+    }
+    public void setNomorID(String nomorID) {
+        this.nomorID = nomorID;
+    }
     public String getNama() {
         return nama;
     }

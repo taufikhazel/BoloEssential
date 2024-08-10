@@ -201,10 +201,9 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                 btnSubmitTambahKaryawan.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                     }
                 });
-
-
 
             }
         });

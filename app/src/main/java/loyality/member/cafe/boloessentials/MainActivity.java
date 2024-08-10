@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import loyality.member.cafe.boloessentials.halaman_userandworker.LoginActivity;
 import loyality.member.cafe.boloessentials.halaman_userandworker.TambahPointActivity;
 import loyality.member.cafe.boloessentials.halaman_userandworker.TukarPointActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnAbsen, btnTukarPoint, btnCekPoint, btnTambahPoint;
+    private Button btnAbsen, btnTukarPoint, btnCekPoint, btnTambahPoint, btnLogout;
     private Dialog mDialog;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,42 +30,52 @@ public class MainActivity extends AppCompatActivity {
         btnCekPoint = findViewById(R.id.btnCekPoint);
         btnTambahPoint = findViewById(R.id.btnTambahPoint);
         btnTukarPoint = findViewById(R.id.btnTukarPoint);
+        btnLogout = findViewById(R.id.btnLogout);
 
         mDialog = new Dialog(this);
 
-        btnAbsen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.setContentView(R.layout.modal_absen);
-                mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                mDialog.show();
-            }
+        // Ambil tipe pengguna dari Intent
+        Intent intent = getIntent();
+        userType = intent.getStringExtra("USER_TYPE");
+
+        // Set visibilitas tombol berdasarkan tipe pengguna
+        setupUIBasedOnUserType();
+
+        btnAbsen.setOnClickListener(v -> {
+            mDialog.setContentView(R.layout.modal_absen);
+            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            mDialog.show();
         });
 
-        btnTambahPoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TambahPointActivity.class);
-                startActivity(intent);
-            }
+        btnTambahPoint.setOnClickListener(v -> {
+            Intent intent1 = new Intent(MainActivity.this, TambahPointActivity.class);
+            startActivity(intent1);
         });
 
-        btnCekPoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.setContentView(R.layout.modal_cek_point);
-                mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                mDialog.show();
-            }
+        btnCekPoint.setOnClickListener(v -> {
+            mDialog.setContentView(R.layout.modal_cek_point);
+            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            mDialog.show();
         });
 
-        btnTukarPoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, TukarPointActivity.class);
-                startActivity(intent);
-            }
+        btnTukarPoint.setOnClickListener(v -> {
+            Intent intent2 = new Intent(MainActivity.this, TukarPointActivity.class);
+            startActivity(intent2);
         });
+
+        btnLogout.setOnClickListener(v -> {
+            onBackPressed();
+        });
+    }
+
+    private void setupUIBasedOnUserType() {
+        if ("karyawan".equals(userType)) {
+            btnTukarPoint.setVisibility(View.GONE);
+            btnCekPoint.setVisibility(View.GONE);
+            btnTambahPoint.setVisibility(View.GONE);
+        } else if ("users".equals(userType)) {
+            btnAbsen.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -78,7 +90,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Iya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish(); // Tutup aktivitas
+                // Intent untuk kembali ke LoginActivity
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear back stack
+                startActivity(intent);
+                finish(); // Tutup aktivitas saat ini
             }
         });
 
