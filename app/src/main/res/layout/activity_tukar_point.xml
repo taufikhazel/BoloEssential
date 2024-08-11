@@ -16,43 +16,12 @@
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 
-        <!-- Baris 1 -->
-        <RelativeLayout
-            android:id="@+id/row_1"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-                <!-- Kolom 1 -->
-                <RelativeLayout
-                    android:id="@+id/col_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/viewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="16dp"/>
-
-                </RelativeLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/baseline_circle_24"
-                android:layout_marginTop="350dp"
-                android:layout_marginLeft="350dp"
-                android:id="@+id/Page"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/outline_circle_24"
-                android:layout_marginTop="350dp"
-                android:layout_marginLeft="390dp"
-                android:id="@+id/unPage"/>
-        </RelativeLayout>
+            android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"/>
 
     </androidx.cardview.widget.CardView>
 
@@ -68,4 +37,25 @@
         android:textAllCaps="false"
         android:layout_marginTop="460dp"/>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="460dp"
+        app:cardCornerRadius="60dp"
+        android:layout_marginLeft="870dp">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/currentPage"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/baseline_circle_24"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/anotherPage"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/outline_circle_24"/>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -30,12 +31,13 @@ import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_admin.DashboardAdminActivity;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText etID;
+    private TextView etID;
     private Button btnAkses;
     private TextView tvClick;
 
     private UsbManager mManager;
     private Reader mReader;
+    private ImageButton refresh;
     private PendingIntent mPermissionIntent;
 
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
@@ -52,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         btnAkses = findViewById(R.id.btnAkses);
         tvClick = findViewById(R.id.tvClick);
 
+        refresh = findViewById(R.id.refresh);
         mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         mReader = new Reader(mManager);
 
@@ -68,6 +71,11 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Mohon Tunggu Sebentar...");
         progressDialog.setCancelable(false);
+
+        refresh.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, LoadingScreenActivity.class);
+            startActivity(intent);
+        });
 
         btnAkses.setOnClickListener(view -> {
             String id = etID.getText().toString();
