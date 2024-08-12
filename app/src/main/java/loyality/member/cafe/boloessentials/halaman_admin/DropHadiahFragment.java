@@ -72,7 +72,7 @@ public class DropHadiahFragment extends Fragment {
     private Dialog updateDialog;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
-    private int lastIDMenu = 0;
+    private int lastIDMenu;
     private int currentPage = 1;
     private int totalPageCount;
     private static final int ITEMS_PER_PAGE = 5;
@@ -117,12 +117,10 @@ public class DropHadiahFragment extends Fragment {
 
         btnPrevPage = view.findViewById(R.id.btnPrevious);
         btnNextPage = view.findViewById(R.id.btnNext);
-
         btn1 = view.findViewById(R.id.btn1);
         btn2 = view.findViewById(R.id.btn2);
         btn3 = view.findViewById(R.id.btn3);
 
-        // Tambahkan OnClickListener untuk tombol pagination di dalam onCreate
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +145,6 @@ public class DropHadiahFragment extends Fragment {
             }
         });
 
-
         btnPrevPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,13 +167,7 @@ public class DropHadiahFragment extends Fragment {
             }
         });
 
-        // Initialize table layout
         tableLayout = view.findViewById(R.id.tableLayout);
-
-        // Ensure the context is available
-        if (getContext() != null) {
-            addTableHeader();
-        }
 
         // Initialize Firebase reference
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Menu");
@@ -187,7 +178,6 @@ public class DropHadiahFragment extends Fragment {
         // Initialize dialog
         mDialog = new Dialog(requireContext());
 
-        // Initialize btnTambahHadiah
         btnTambahHadiah = view.findViewById(R.id.btnTambahHadiah);
 
         btnTambahHadiah.setOnClickListener(new View.OnClickListener() {
@@ -233,28 +223,58 @@ public class DropHadiahFragment extends Fragment {
         return view;
     }
 
-    private void dropMenu(Menu menu) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Menu").child(String.valueOf(menu.getIDMenu()));
-        databaseReference.child("Show").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Menu berhasil di show", Toast.LENGTH_SHORT).show();
-                    fetchData(FirebaseDatabase.getInstance().getReference("Menu")); // Refresh data
-                } else {
-                    Toast.makeText(getContext(), "Menu gagal di show", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 1000);
     }
 
+    private void fetchLastIDMenu(DatabaseReference databaseReference) {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lastIDMenu = (int) dataSnapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Gagal menghitung data: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchData(DatabaseReference databaseReference) {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded()) {
+                    return;
+                }
+
+                menuList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Menu menu = dataSnapshot.getValue(Menu.class);
+                    if (menu != null && !menu.getShow()) {
+                        menuList.add(menu);
+                        if (menu.getIDMenu() > lastIDMenu) {
+                            lastIDMenu = menu.getIDMenu();
+                        }
+                    }
+                }
+                totalPageCount = (int) Math.ceil((double) menuList.size() / ITEMS_PER_PAGE); // Hitung total halaman
+                displayPageData(); // Tampilkan data untuk halaman saat ini
+                updatePaginationButtons(); // Update tombol pagination
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void submitData() {
+        fetchLastIDMenu(FirebaseDatabase.getInstance().getReference("Menu")); // Memperbarui lastIDMenu sebelum submit
+
         String namaMenu = etNamaMenu.getText().toString();
         String pointMenu = etPointMenu.getText().toString();
 
@@ -291,58 +311,37 @@ public class DropHadiahFragment extends Fragment {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         progressBar.setVisibility(View.GONE);
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(getContext(), "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Hadiah berhasil ditambahkan", Toast.LENGTH_SHORT).show();
                                             mDialog.dismiss();
-                                            fetchData(databaseReference); // Refresh data after successful submission
                                         } else {
-                                            Toast.makeText(getContext(), "Gagal menambahkan data", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Gagal menambahkan hadiah", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
                             } else {
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Gagal mendapatkan URL gambar", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Failed to get download URL", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "Gagal mengupload gambar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-    private void fetchData(DatabaseReference databaseReference) {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+    private void dropMenu(Menu menu) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Menu").child(String.valueOf(menu.getIDMenu()));
+        databaseReference.child("Show").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!isAdded()) {
-                    return;
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Menu berhasil di show", Toast.LENGTH_SHORT).show();
+                    fetchData(FirebaseDatabase.getInstance().getReference("Menu")); // Refresh data
+                } else {
+                    Toast.makeText(getContext(), "Menu gagal di show", Toast.LENGTH_SHORT).show();
                 }
-
-                menuList.clear();
-                int menuCount = 0 ;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Menu menu = dataSnapshot.getValue(Menu.class);
-                    if (menu != null && !menu.getShow()) {
-//                        addMenuRow(menu);
-                        menuList.add(menu);
-                        // Update the lastIDMenu if the current menu's IDMenu is greater
-                        if (menu.getIDMenu() > lastIDMenu) {
-                            lastIDMenu = menu.getIDMenu();
-                        }
-                        menuCount++;
-                    }
-                }
-                totalPageCount = (int) Math.ceil((double) menuList.size() / ITEMS_PER_PAGE); // Hitung total halaman
-                displayPageData(); // Tampilkan data untuk halaman saat ini
-                updatePaginationButtons(); // Update tombol pagination
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -717,8 +716,13 @@ public class DropHadiahFragment extends Fragment {
         btn2.setTextColor(getResources().getColor(R.color.black));
         btn3.setTextColor(getResources().getColor(R.color.black));
 
-        // Menandai tombol berdasarkan halaman
-        if (totalPageCount == 1) {
+        if (totalPageCount == 0) {
+            btnNextPage.setVisibility((View.INVISIBLE));
+            btnPrevPage.setVisibility((View.INVISIBLE));
+            btn1.setVisibility(View.INVISIBLE);
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 1) {
             btn1.setText("1");
             btn2.setVisibility(View.INVISIBLE);
             btn3.setVisibility(View.INVISIBLE);
@@ -728,9 +732,21 @@ public class DropHadiahFragment extends Fragment {
             btn2.setVisibility(View.VISIBLE);
             btn3.setVisibility(View.INVISIBLE);
         } else {
-            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
-            btn2.setText(String.valueOf(currentPage));
-            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            // Mengatur teks tombol berdasarkan halaman saat ini
+            if (currentPage == 1) {
+                btn1.setText("1");
+                btn2.setText("2");
+                btn3.setText("3");
+            } else if (currentPage == totalPageCount) {
+                btn1.setText(String.valueOf(totalPageCount - 2));
+                btn2.setText(String.valueOf(totalPageCount - 1));
+                btn3.setText(String.valueOf(totalPageCount));
+            } else {
+                btn1.setText(String.valueOf(currentPage - 1));
+                btn2.setText(String.valueOf(currentPage));
+                btn3.setText(String.valueOf(currentPage + 1));
+            }
+
             btn2.setVisibility(View.VISIBLE);
             btn3.setVisibility(View.VISIBLE);
         }
@@ -747,4 +763,5 @@ public class DropHadiahFragment extends Fragment {
             btn3.setTextColor(getResources().getColor(R.color.white));
         }
     }
+
 }

@@ -69,11 +69,9 @@ public class MainActivity extends AppCompatActivity {
             mDialog.setContentView(R.layout.modal_cek_point);
             mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            // Get references to TextViews inside the modal
             TextView tvPoint = mDialog.findViewById(R.id.tvPoint);
             TextView tvNama = mDialog.findViewById(R.id.tvNama);
 
-            // Query the "users" database based on UID
             databaseRef.child("users").orderByChild("nomorID").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                         // Show the modal
                         mDialog.show();
                     } else {
-                        // Handle the case when the UID is not found in the database
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Data Tidak Ditemukan")
                                 .setMessage("UID tidak ditemukan di database pengguna.")

@@ -351,8 +351,13 @@ public class DashboardAdminActivity extends AppCompatActivity {
         btn2.setTextColor(getResources().getColor(R.color.black));
         btn3.setTextColor(getResources().getColor(R.color.black));
 
-        // Menandai tombol berdasarkan halaman
-        if (totalPageCount == 1) {
+        if (totalPageCount == 0) {
+            btnNextPage.setVisibility((View.INVISIBLE));
+            btnPrevPage.setVisibility((View.INVISIBLE));
+            btn1.setVisibility(View.INVISIBLE);
+            btn2.setVisibility(View.INVISIBLE);
+            btn3.setVisibility(View.INVISIBLE);
+        } else if (totalPageCount == 1) {
             btn1.setText("1");
             btn2.setVisibility(View.INVISIBLE);
             btn3.setVisibility(View.INVISIBLE);
@@ -362,9 +367,21 @@ public class DashboardAdminActivity extends AppCompatActivity {
             btn2.setVisibility(View.VISIBLE);
             btn3.setVisibility(View.INVISIBLE);
         } else {
-            btn1.setText(String.valueOf(Math.max(currentPage - 1, 1)));
-            btn2.setText(String.valueOf(currentPage));
-            btn3.setText(String.valueOf(Math.min(currentPage + 1, totalPageCount)));
+            // Mengatur teks tombol berdasarkan halaman saat ini
+            if (currentPage == 1) {
+                btn1.setText("1");
+                btn2.setText("2");
+                btn3.setText("3");
+            } else if (currentPage == totalPageCount) {
+                btn1.setText(String.valueOf(totalPageCount - 2));
+                btn2.setText(String.valueOf(totalPageCount - 1));
+                btn3.setText(String.valueOf(totalPageCount));
+            } else {
+                btn1.setText(String.valueOf(currentPage - 1));
+                btn2.setText(String.valueOf(currentPage));
+                btn3.setText(String.valueOf(currentPage + 1));
+            }
+
             btn2.setVisibility(View.VISIBLE);
             btn3.setVisibility(View.VISIBLE);
         }
