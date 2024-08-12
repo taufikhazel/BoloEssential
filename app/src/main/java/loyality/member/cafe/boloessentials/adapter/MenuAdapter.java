@@ -38,11 +38,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         Menu menu = menuList.get(position);
 
-        // Set the name, points, and image using data from the Menu model
         holder.menuTitle.setText(menu.getNamaMenu());
         holder.menuPoints.setText(menu.getPoint() + " Point");
 
-        // Load image using Picasso
         Picasso.get()
                 .load(menu.getGambar())
                 .into(holder.menuImage);

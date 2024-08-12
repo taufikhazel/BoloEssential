@@ -2,8 +2,7 @@ package loyality.member.cafe.boloessentials.halaman_userandworker;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,30 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import loyality.member.cafe.boloessentials.R;
-import loyality.member.cafe.boloessentials.adapter.MenuAdapter;
+import loyality.member.cafe.boloessentials.adapter.MenuPagerAdapter;
 import loyality.member.cafe.boloessentials.model.Menu;
 
 public class TukarPointActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private MenuAdapter menuAdapter;
+    private ViewPager2 viewPagerMenu;
+    private MenuPagerAdapter menuPagerAdapter;
     private List<Menu> menuList;
     private DatabaseReference databaseReference;
+    private int itemsPerPage = 10; // 10 items per page
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tukar_point);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 5)); // 5 kolom
-
+        viewPagerMenu = findViewById(R.id.viewPagerMenu);
         menuList = new ArrayList<>();
-        menuAdapter = new MenuAdapter(this, menuList);
-        recyclerView.setAdapter(menuAdapter);
+        menuPagerAdapter = new MenuPagerAdapter(this, menuList, itemsPerPage);
+        viewPagerMenu.setAdapter(menuPagerAdapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Menu");
 
+        // Mendengarkan perubahan data di Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -49,12 +48,11 @@ public class TukarPointActivity extends AppCompatActivity {
                         menuList.add(menu);
                     }
                 }
-                menuAdapter.notifyDataSetChanged();
+                menuPagerAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
             }
         });
     }
