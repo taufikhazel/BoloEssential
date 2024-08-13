@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnTambahPoint.setOnClickListener(v -> {
             Intent intent1 = new Intent(MainActivity.this, TambahPointActivity.class);
+            intent1.putExtra("UID", UID);
             startActivity(intent1);
         });
 
