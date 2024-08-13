@@ -27,7 +27,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Tukar Point"
+                android:text="Tambah Point"
                 android:textAlignment="center"
                 android:textColor="#C09A75"
                 android:textSize="15sp" />
@@ -79,7 +79,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:paddingLeft="5dp"
-                        android:text="Nama"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -89,7 +88,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1.5"
-                        android:text="Email"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -99,7 +97,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:text="Tanggal Request"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -109,7 +106,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:text="ID Transaksi"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -119,7 +115,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="0.5"
-                        android:text="Total"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -129,17 +124,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:text="No Telepon"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:text="Aksi"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />

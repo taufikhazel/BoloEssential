@@ -27,7 +27,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Tukar Point"
+                android:text="Tambah Point"
                 android:textAlignment="center"
                 android:textColor="#C09A75"
                 android:textSize="15sp" />

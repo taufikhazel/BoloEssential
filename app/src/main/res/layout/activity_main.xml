@@ -52,7 +52,7 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:background="@drawable/background_buttonmainapp"
-        android:text="Tukar Point"
+        android:text="Tambah Point"
         android:textColor="#C09B75"
         android:textSize="20dp"
         android:layout_centerHorizontal="true"
