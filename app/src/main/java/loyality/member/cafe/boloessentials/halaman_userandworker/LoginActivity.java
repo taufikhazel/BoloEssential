@@ -186,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     progressDialog.dismiss(); // Dismiss ProgressDialog
                     DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
-                    String namaKaryawan = userSnapshot.child("namaKaryawan").getValue(String.class);
+                    String namaKaryawan = userSnapshot.child("nama").getValue(String.class);
                     showSuccessDialog("Selamat Datang ke Bolo Essential, " + namaKaryawan, MainActivity.class, "karyawan");
                 } else {
                     databaseRef.child("users").orderByChild("nomorID").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {

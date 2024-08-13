@@ -49,6 +49,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -70,9 +71,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenActivity;
+import loyality.member.cafe.boloessentials.model.Absen;
 import loyality.member.cafe.boloessentials.model.Karyawan;
 import loyality.member.cafe.boloessentials.model.User;
 
@@ -82,7 +85,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
     private Dialog nfcDialog;
     private ProgressBar progressBar;
     private TableLayout tableLayout;
-    private TextView tvPointKaryawan, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen, tvHadiah;
+    private TextView tvNamaKaryawan, tvPointKaryawan, tvDashboard, tvTukarPoint, tvTukarHadiah, tvAdministrator, tvUser, tvAbsen, tvHadiah;
     private RelativeLayout logout;
     private DatabaseReference mDatabase;
     private static final int REQUEST_WRITE_STORAGE = 112;
@@ -279,36 +282,36 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         // Mengambil nilai dari EditText
-                        String nomorID = etNomorID.getText().toString().trim();
+                        String nomorIDKaryawan = etNomorID.getText().toString().trim();
                         String nama = etNama.getText().toString().trim();
                         String email = etEmail.getText().toString().trim();
                         String telpon = etTelpon.getText().toString().trim();
                         String tanggalLahir = etTanggalLahir.getText().toString().trim();
 
                         // Cek apakah semua field diisi
-                        if (nomorID.isEmpty() || nama.isEmpty() || email.isEmpty() || telpon.isEmpty() || tanggalLahir.isEmpty()) {
+                        if (nomorIDKaryawan.isEmpty() || nama.isEmpty() || email.isEmpty() || telpon.isEmpty() || tanggalLahir.isEmpty()) {
                             Toast.makeText(KaryawanAdminActivity.this, "Semua field harus diisi", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        // Cek apakah nomorID sudah ada di database
+                        // Cek apakah nomorIDKaryawan sudah ada di database
                         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("karyawan");
-                        userRef.orderByChild("nomorIDKaryawan").equalTo(nomorID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        userRef.orderByChild("nomorIDKaryawanKaryawan").equalTo(nomorIDKaryawan).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    // Jika nomorID sudah ada, tampilkan alert dan reset field
+                                    // Jika nomorIDKaryawan sudah ada, tampilkan alert dan reset field
                                     Toast.makeText(KaryawanAdminActivity.this, "ID sudah digunakan, gunakan id lain", Toast.LENGTH_SHORT).show();
-                                    etNomorID.setText(""); // Mengosongkan field nomorID
+                                    etNomorID.setText(""); // Mengosongkan field nomorIDKaryawan
                                 } else {
-                                    // Jika nomorID belum ada, lanjutkan dengan penambahan karyawan
+                                    // Jika nomorIDKaryawan belum ada, lanjutkan dengan penambahan karyawan
                                     loader.setVisibility(View.VISIBLE);
 
                                     // Format tanggal bergabung
                                     String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
                                     // Membuat objek Karyawan
-                                    Karyawan karyawan = new Karyawan(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
+                                    Karyawan karyawan = new Karyawan(nomorIDKaryawan, nama, tanggalBergabung, email, telpon, tanggalLahir);
                                     databaseReference.push().setValue(karyawan).addOnCompleteListener(task -> {
                                         loader.setVisibility(View.GONE);
                                         if (task.isSuccessful()) {
@@ -622,16 +625,201 @@ public class KaryawanAdminActivity extends AppCompatActivity {
     }
 
     private void showKaryawanPreview(Karyawan karyawan) {
-        // Inflate custom layout for dialog
         Dialog previewDialog = new Dialog(this);
         previewDialog.setContentView(R.layout.modal_karyawan_admin);
         if (previewDialog.getWindow() != null) {
             previewDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
+        // Bind the views
+        TextView tvNamaKaryawan = previewDialog.findViewById(R.id.tvNamaKaryawan);
+        TableLayout tableLayout = previewDialog.findViewById(R.id.tableLayoutKaryawan);
+
+        // Set the employee's name
+        tvNamaKaryawan.setText(karyawan.getNama());
+
+        // Dynamically create the table header
+        createTableHeader(tableLayout);
+
+        // Query Firebase database for attendance records of the selected employee
+        DatabaseReference absenKaryawanRef = FirebaseDatabase.getInstance().getReference("absenKaryawan");
+        absenKaryawanRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Navigate through each level of the database
+                for (DataSnapshot daySnapshot : dataSnapshot.getChildren()) { // Day level
+                    for (DataSnapshot monthSnapshot : daySnapshot.getChildren()) { // Month level
+                        for (DataSnapshot yearSnapshot : monthSnapshot.getChildren()) { // Year level
+                            for (DataSnapshot absensiKeSnapshot : yearSnapshot.getChildren()) { // AbsensiKe level
+                                // Check if there are further levels under AbsensiKe
+                                if (absensiKeSnapshot.hasChildren()) {
+                                    // Process each child under AbsensiKe
+                                    for (DataSnapshot childSnapshot : absensiKeSnapshot.getChildren()) {
+                                        String childKey = childSnapshot.getKey(); // Get the key of the child
+                                        Object value = childSnapshot.getValue();
+
+                                        if (value instanceof Map) {
+                                            Map<String, Object> absenMap = (Map<String, Object>) value;
+                                            if (absenMap != null) {
+                                                // Create Absen object
+                                                Absen absen = new Absen(absenMap);
+                                                // Use the key and value as needed
+                                                Log.d("DataCheck", "childKey: " + childKey); // Log the key of the child
+                                                addRowToTable(tableLayout, previewDialog, absen, childKey);
+                                            } else {
+                                                Log.e("DataError", "Received null map for child: " + childKey);
+                                            }
+                                        } else if (value instanceof List) {
+                                            List<Map<String, Object>> absenList = (List<Map<String, Object>>) value;
+                                            for (Map<String, Object> absenMap : absenList) {
+                                                if (absenMap != null) {
+                                                    Absen absen = new Absen(absenMap);
+                                                    addRowToTable(tableLayout, previewDialog, absen, childKey);
+                                                } else {
+                                                    Log.e("DataError", "Received null map in list for child: " + childKey);
+                                                }
+                                            }
+                                        } else {
+                                            Log.e("DataError", "Unexpected data type for child: " + childKey);
+                                        }
+                                    }
+                                } else {
+                                    // Process AbsensiKe directly if no further levels
+                                    Object value = absensiKeSnapshot.getValue();
+
+                                    if (value instanceof Map) {
+                                        Map<String, Object> absenMap = (Map<String, Object>) value;
+                                        if (absenMap != null) {
+                                            String absensiKe = absensiKeSnapshot.getKey(); // Get the key for AbsensiKe
+                                            Log.d("DataCheck", "absensiKe: " + absensiKe); // Log the value of absensiKe
+                                            Absen absen = new Absen(absenMap);
+                                            addRowToTable(tableLayout, previewDialog, absen, absensiKe);
+                                        } else {
+                                            Log.e("DataError", "Received null map for absensiKe: " + absensiKeSnapshot.getKey());
+                                        }
+                                    } else if (value instanceof List) {
+                                        List<Map<String, Object>> absenList = (List<Map<String, Object>>) value;
+                                        String absensiKe = absensiKeSnapshot.getKey(); // Get the key for AbsensiKe
+                                        Log.d("DataCheck", "absensiKe: " + absensiKe); // Log the value of absensiKe
+                                        for (Map<String, Object> absenMap : absenList) {
+                                            if (absenMap != null) {
+                                                Absen absen = new Absen(absenMap);
+                                                addRowToTable(tableLayout, previewDialog, absen, absensiKe);
+                                            } else {
+                                                Log.e("DataError", "Received null map in list for absensiKe: " + absensiKe);
+                                            }
+                                        }
+                                    } else {
+                                        Log.e("DataError", "Unexpected data type for absensiKe: " + absensiKeSnapshot.getKey());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors.
+            }
+        });
+
         previewDialog.show();
     }
 
+    private void addRowToTable(TableLayout tableLayout, Dialog previewDialog, Absen absen, String absensiKe) {
+        TableRow row = new TableRow(previewDialog.getContext());
+        row.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Column 1: Hari
+        TextView hariText = new TextView(previewDialog.getContext());
+        hariText.setText(absen.getHari());
+        hariText.setGravity(Gravity.CENTER);
+        hariText.setTextSize(12);
+        hariText.setLayoutParams(createColumnLayoutParams(1, 0)); // Use the createColumnLayoutParams method
+        row.addView(hariText);
+
+        // Column 2: Tanggal
+        TextView tanggalText = new TextView(previewDialog.getContext());
+        tanggalText.setText(absen.getTanggal());
+        tanggalText.setGravity(Gravity.CENTER);
+        tanggalText.setTextSize(12);
+        tanggalText.setLayoutParams(createColumnLayoutParams(1, 0)); // Use the createColumnLayoutParams method
+        row.addView(tanggalText);
+
+        // Column 3: Jam
+        TextView jamText = new TextView(previewDialog.getContext());
+        jamText.setText(absen.getJam());
+        jamText.setGravity(Gravity.CENTER);
+        jamText.setTextSize(12);
+        jamText.setLayoutParams(createColumnLayoutParams(0.5f, 0)); // Use the createColumnLayoutParams method
+        row.addView(jamText);
+
+        // Column 4: Absen Status based on absensiKe
+        TextView statusText = new TextView(previewDialog.getContext());
+        String status = "Absen ke " + absensiKe;
+        statusText.setText(status);
+        statusText.setGravity(Gravity.CENTER);
+        statusText.setTextSize(12);
+        statusText.setLayoutParams(createColumnLayoutParams(1, 20)); // Use the createColumnLayoutParams method
+        row.addView(statusText);
+
+        // Add the row to the table
+        tableLayout.addView(row);
+    }
+
+    private TableRow.LayoutParams createColumnLayoutParams(float weight, int marginLeft) {
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                0, // width 0 so that weight works
+                TableRow.LayoutParams.WRAP_CONTENT,
+                weight // layout_weight
+        );
+        if (marginLeft > 0) {
+            params.setMargins(marginLeft, 0, 0, 0);
+        }
+        return params;
+    }
+
+    private void createTableHeader(TableLayout tableLayout) {
+        TableRow headerRow = new TableRow(this);
+        headerRow.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        headerRow.setBackgroundColor(getResources().getColor(R.color.brownAdmin));
+        headerRow.setPadding(5, 5, 5, 5);
+
+        String[] headers = {"Hari", "Tanggal", "Jam", "Keterangan"};
+        float[] weights = {1, 1, 0.5f, 1}; // Same weights as in the XML
+
+        for (int i = 0; i < headers.length; i++) {
+            TextView textView = new TextView(this);
+            textView.setText(headers[i]);
+            textView.setTextColor(getResources().getColor(R.color.white));
+            textView.setTextSize(12);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTypeface(Typeface.DEFAULT_BOLD);
+            textView.setPadding(5, 0, 5, 0);
+
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    0, // width 0 so that weight works
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    weights[i] // layout_weight
+            );
+            if (i != 0) {
+                params.setMargins(20, 0, 0, 0); // Margin as defined in the XML
+            }
+            textView.setLayoutParams(params);
+            headerRow.addView(textView);
+        }
+
+        tableLayout.addView(headerRow);
+    }
 
     // Metode untuk memformat tanggal bergabung dari "yyyy-mm-dd" menjadi "dd-mm-yyyy"
     private String formatTanggalBergabung(String tanggalBergabung) {

@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             DataSnapshot karyawanSnapshot = dataSnapshot.getChildren().iterator().next();
-                            String namaKaryawan = karyawanSnapshot.child("namaKaryawan").getValue(String.class);
+                            String namaKaryawan = karyawanSnapshot.child("nama").getValue(String.class);
 
                             // Check if user has already checked in twice today
                             databaseRef.child("absenKaryawan").child(UID).child(currentDate)
@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                                             long count = dataSnapshot.getChildrenCount();
 
                                             if (count >= 2) {
-                                                // User has already checked in twice today
                                                 String lastCheckInTime = dataSnapshot.child("2").child("jam").getValue(String.class);
                                                 String lastCheckInDay = dataSnapshot.child("2").child("hari").getValue(String.class);
                                                 String lastCheckInDate = dataSnapshot.child("2").child("tanggal").getValue(String.class);
@@ -202,8 +201,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 
     private void recordAbsence(String date, String time, String day, String namaKaryawan, long absensiKe) {
         // Save absence record

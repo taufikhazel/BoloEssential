@@ -23,7 +23,7 @@ public class TukarPointActivity extends AppCompatActivity {
     private MenuPagerAdapter menuPagerAdapter;
     private List<Menu> menuList;
     private DatabaseReference databaseReference;
-    private int itemsPerPage = 10; // 10 items per page
+    private int itemsPerPage = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
