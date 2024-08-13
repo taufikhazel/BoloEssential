@@ -46,29 +46,26 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         btnPending = findViewById(R.id.btnPending);
         btnBerhasil = findViewById(R.id.btnBerhasil);
 
-        if (savedInstanceState == null) {
-            displayFragment(new BaruTukarPointFragment(), "baru");
-        }
 
         // Set up button click listeners
         btnBaru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayFragment(new BaruTukarHadiahFragment(), "baru");
+                displayFragment(new BaruTukarPointFragment());
             }
         });
 
         btnPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayFragment(new PendingTukarHadiahFragment(), "pending");
+                displayFragment(new PendingTukarPointFragment());
             }
         });
 
         btnBerhasil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayFragment(new BerhasilTukarHadiahFragment(), "berhasil");
+                displayFragment(new BerhasilTukarPointFragment());
             }
         });
 
@@ -128,6 +125,10 @@ public class TukarPointAdminActivity extends AppCompatActivity {
                 showLoaderAndStartActivity(HadiahAdminActivity.class);
             }
         });
+
+        if (savedInstanceState == null) {
+            displayFragment(new BaruTukarPointFragment());
+        }
     }
 
     private void showPopupMenu(View view) {
@@ -144,14 +145,14 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         });
         popupMenu.show();
     }
-    private void displayFragment(Fragment fragment, String fragmentName) {
+    private void displayFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
 
-        // Update button styles
-        updateButtonStylesForFragment(fragmentName);
+//        // Update button styles
+//        updateButtonStylesForFragment(fragmentName);
     }
 
     @Override
@@ -172,44 +173,92 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         }, 500);
     }
 
-    private void updateButtonStylesForFragment(String activeFragment) {
-        int brownAdminColor = ContextCompat.getColor(this, R.color.brownAdmin);
-        int whiteColor = ContextCompat.getColor(this, R.color.white);
-        int grayColor = ContextCompat.getColor(this, R.color.brownAdmin); // Pastikan grayColor sesuai dengan warna yang diinginkan
+//    private void updateButtonStylesForFragment(String activeFragment) {
+//        int brownAdminColor = ContextCompat.getColor(this, R.color.brownAdmin);
+//        int whiteColor = ContextCompat.getColor(this, R.color.white);
+//        int grayColor = ContextCompat.getColor(this, R.color.brownAdmin); // Pastikan grayColor sesuai dengan warna yang diinginkan
+//
+//        switch (activeFragment) {
+//            case "baru":
+//                btnBaru.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+//                btnBaru.setTextColor(whiteColor);
+//
+//                btnPending.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+//                btnPending.setTextColor(grayColor);
+//
+//                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+//                btnBerhasil.setTextColor(grayColor);
+//                break;
+//
+//            case "pending":
+//                btnBaru.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+//                btnBaru.setTextColor(grayColor);
+//
+//                btnPending.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+//                btnPending.setTextColor(whiteColor);
+//
+//                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+//                btnBerhasil.setTextColor(grayColor);
+//                break;
+//
+//            case "berhasil":
+//                btnBaru.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+//                btnBaru.setTextColor(grayColor);
+//
+//                btnPending.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
+//                btnPending.setTextColor(grayColor);
+//
+//                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+//                btnBerhasil.setTextColor(whiteColor);
+//                break;
+//        }
+//    }
 
-        switch (activeFragment) {
-            case "baru":
-                btnBaru.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
-                btnBaru.setTextColor(whiteColor);
+    public void updateButtonStylesForBaruTukarPointFragment() {
+        int brownAdminColor = getResources().getColor(R.color.brownAdmin);
+        int whiteColor = getResources().getColor(R.color.white);
+        int putihColor = getResources().getColor(R.color.putih);
+        int grayColor = getResources().getColor(R.color.brown); // Assuming gray color for the non-active state
 
-                btnPending.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
-                btnPending.setTextColor(grayColor);
+        btnBaru.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+        btnBaru.setTextColor(whiteColor);
 
-                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
-                btnBerhasil.setTextColor(grayColor);
-                break;
+        btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnBerhasil.setTextColor(grayColor);
 
-            case "pending":
-                btnBaru.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
-                btnBaru.setTextColor(grayColor);
+        btnPending.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnPending.setTextColor(grayColor);
+    }
 
-                btnPending.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
-                btnPending.setTextColor(whiteColor);
+    public void updateButtonStylesForPendingTukarPointFragment() {
+        int brownAdminColor = getResources().getColor(R.color.brownAdmin);
+        int whiteColor = getResources().getColor(R.color.white);
+        int putihColor = getResources().getColor(R.color.putih);
+        int grayColor = getResources().getColor(R.color.brown); // Assuming gray color for the non-active state
 
-                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
-                btnBerhasil.setTextColor(grayColor);
-                break;
+        btnPending.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+        btnPending.setTextColor(whiteColor);
 
-            case "berhasil":
-                btnBaru.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
-                btnBaru.setTextColor(grayColor);
+        btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnBerhasil.setTextColor(grayColor);
 
-                btnPending.setBackgroundTintList(ColorStateList.valueOf(whiteColor)); // Warna default atau non-aktif
-                btnPending.setTextColor(grayColor);
+        btnBaru.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnBaru.setTextColor(grayColor);
+    }
 
-                btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
-                btnBerhasil.setTextColor(whiteColor);
-                break;
-        }
+    public void updateButtonStylesForBerhasilTukarPointFragment() {
+        int brownAdminColor = getResources().getColor(R.color.brownAdmin);
+        int whiteColor = getResources().getColor(R.color.white);
+        int putihColor = getResources().getColor(R.color.putih);
+        int grayColor = getResources().getColor(R.color.brown); // Assuming gray color for the non-active state
+
+        btnBerhasil.setBackgroundTintList(ColorStateList.valueOf(brownAdminColor));
+        btnBerhasil.setTextColor(whiteColor);
+
+        btnPending.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnPending.setTextColor(grayColor);
+
+        btnBaru.setBackgroundTintList(ColorStateList.valueOf(putihColor));
+        btnBaru.setTextColor(grayColor);
     }
 }

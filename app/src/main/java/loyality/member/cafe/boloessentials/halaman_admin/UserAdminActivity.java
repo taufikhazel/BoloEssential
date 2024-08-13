@@ -289,25 +289,46 @@ public class UserAdminActivity extends AppCompatActivity {
                             return;
                         }
 
-                        loader.setVisibility(View.VISIBLE);
+                        // Cek apakah nomorID sudah ada di database
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+                        userRef.orderByChild("nomorID").equalTo(nomorID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    // Jika nomorID sudah ada, tampilkan alert dan reset field
+                                    Toast.makeText(UserAdminActivity.this, "ID sudah digunakan, gunakan id lain", Toast.LENGTH_SHORT).show();
+                                    etNomorID.setText(""); // Mengosongkan field nomorID
+                                } else {
+                                    // Jika nomorID belum ada, lanjutkan dengan penambahan user
+                                    loader.setVisibility(View.VISIBLE);
 
-                        // Format tanggal bergabung
-                        String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                        int pointUser = 0;
+                                    // Format tanggal bergabung
+                                    String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                                    int pointUser = 0;
 
-                        // Membuat objek User
-                        User user = new User(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir, pointUser);
-                        databaseReference.push().setValue(user).addOnCompleteListener(task -> {
-                            loader.setVisibility(View.GONE);
-                            if (task.isSuccessful()) {
-                                Toast.makeText(UserAdminActivity.this, "User berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-                                mDialog.dismiss();
-                            } else {
-                                Toast.makeText(UserAdminActivity.this, "Gagal menambahkan user", Toast.LENGTH_SHORT).show();
+                                    // Membuat objek User
+                                    User user = new User(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir, pointUser);
+                                    databaseReference.push().setValue(user).addOnCompleteListener(task -> {
+                                        loader.setVisibility(View.GONE);
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(UserAdminActivity.this, "User berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+                                            mDialog.dismiss();
+                                        } else {
+                                            Toast.makeText(UserAdminActivity.this, "Gagal menambahkan user", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle possible errors
+                                Toast.makeText(UserAdminActivity.this, "Gagal memeriksa ID", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 });
+
 
             }
         });

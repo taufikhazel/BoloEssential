@@ -264,19 +264,40 @@ public class AdministratorAdminActivity extends AppCompatActivity {
                             return;
                         }
 
-                        loader.setVisibility(View.VISIBLE);
+                        // Cek apakah nomorID sudah ada di database
+                        DatabaseReference adminRef = FirebaseDatabase.getInstance().getReference("admin");
+                        adminRef.orderByChild("nomorID").equalTo(nomorID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    // Jika nomorID sudah ada, tampilkan alert dan reset field
+                                    Toast.makeText(AdministratorAdminActivity.this, "ID sudah digunakan, gunakan id lain", Toast.LENGTH_SHORT).show();
+                                    etNomorID.setText(""); // Mengosongkan field nomorID
+                                } else {
+                                    // Jika nomorID belum ada, lanjutkan dengan penambahan admin
+                                    loader.setVisibility(View.VISIBLE);
 
-                        // Format tanggal bergabung
-                        String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                        // Membuat objek User
-                        Admin admin = new Admin(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
-                        databaseReference.push().setValue(admin).addOnCompleteListener(task -> {
-                            loader.setVisibility(View.GONE);
-                            if (task.isSuccessful()) {
-                                Toast.makeText(AdministratorAdminActivity.this, "Administrator berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-                                mDialog.dismiss();
-                            } else {
-                                Toast.makeText(AdministratorAdminActivity.this, "Gagal menambahkan user", Toast.LENGTH_SHORT).show();
+                                    // Format tanggal bergabung
+                                    String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+                                    // Membuat objek Admin
+                                    Admin admin = new Admin(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
+                                    databaseReference.push().setValue(admin).addOnCompleteListener(task -> {
+                                        loader.setVisibility(View.GONE);
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(AdministratorAdminActivity.this, "Administrator berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+                                            mDialog.dismiss();
+                                        } else {
+                                            Toast.makeText(AdministratorAdminActivity.this, "Gagal menambahkan administrator", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle possible errors
+                                Toast.makeText(AdministratorAdminActivity.this, "Gagal memeriksa ID", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

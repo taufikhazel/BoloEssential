@@ -291,20 +291,40 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                             return;
                         }
 
-                        loader.setVisibility(View.VISIBLE);
+                        // Cek apakah nomorID sudah ada di database
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("karyawan");
+                        userRef.orderByChild("nomorIDKaryawan").equalTo(nomorID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    // Jika nomorID sudah ada, tampilkan alert dan reset field
+                                    Toast.makeText(KaryawanAdminActivity.this, "ID sudah digunakan, gunakan id lain", Toast.LENGTH_SHORT).show();
+                                    etNomorID.setText(""); // Mengosongkan field nomorID
+                                } else {
+                                    // Jika nomorID belum ada, lanjutkan dengan penambahan karyawan
+                                    loader.setVisibility(View.VISIBLE);
 
-                        // Format tanggal bergabung
-                        String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                                    // Format tanggal bergabung
+                                    String tanggalBergabung = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
-                        // Membuat objek User
-                        Karyawan karyawan = new Karyawan(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
-                        databaseReference.push().setValue(karyawan).addOnCompleteListener(task -> {
-                            loader.setVisibility(View.GONE);
-                            if (task.isSuccessful()) {
-                                Toast.makeText(KaryawanAdminActivity.this, "Karyawan berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-                                mDialog.dismiss();
-                            } else {
-                                Toast.makeText(KaryawanAdminActivity.this, "Gagal menambahkan user", Toast.LENGTH_SHORT).show();
+                                    // Membuat objek Karyawan
+                                    Karyawan karyawan = new Karyawan(nomorID, nama, tanggalBergabung, email, telpon, tanggalLahir);
+                                    databaseReference.push().setValue(karyawan).addOnCompleteListener(task -> {
+                                        loader.setVisibility(View.GONE);
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(KaryawanAdminActivity.this, "Karyawan berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+                                            mDialog.dismiss();
+                                        } else {
+                                            Toast.makeText(KaryawanAdminActivity.this, "Gagal menambahkan karyawan", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle possible errors
+                                Toast.makeText(KaryawanAdminActivity.this, "Gagal memeriksa ID", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

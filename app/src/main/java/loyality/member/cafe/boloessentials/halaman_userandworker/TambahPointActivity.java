@@ -113,7 +113,8 @@ public class TambahPointActivity extends AppCompatActivity {
                                                             tambahPoint.put("nama", nama);
                                                             tambahPoint.put("nomorID", UID);
                                                             tambahPoint.put("point", point);
-                                                            tambahPoint.put("status", "false");
+                                                            tambahPoint.put("status", false);
+                                                            tambahPoint.put("hasil",null);
 
                                                             // Simpan data ke Firebase di tabel "tambahPoint"
                                                             databaseReference.child("tambahPoint").push().setValue(tambahPoint)
