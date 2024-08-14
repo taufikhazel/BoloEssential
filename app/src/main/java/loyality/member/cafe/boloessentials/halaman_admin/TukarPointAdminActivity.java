@@ -151,8 +151,6 @@ public class TukarPointAdminActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragmentContainer, fragment);
         fragmentTransaction.commit();
 
-//        // Update button styles
-//        updateButtonStylesForFragment(fragmentName);
     }
 
     @Override
