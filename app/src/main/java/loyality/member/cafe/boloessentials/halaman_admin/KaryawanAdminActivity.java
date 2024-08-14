@@ -823,7 +823,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
 
     // Metode untuk memformat tanggal bergabung dari "yyyy-mm-dd" menjadi "dd-mm-yyyy"
     private String formatTanggalBergabung(String tanggalBergabung) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         try {
             Date date = inputFormat.parse(tanggalBergabung);
@@ -839,7 +839,7 @@ public class KaryawanAdminActivity extends AppCompatActivity {
             String day = tanggalLahir.substring(0, 2);
             String month = tanggalLahir.substring(2, 4);
             String year = tanggalLahir.substring(4, 8);
-            return day + "-" + month + "-" + year;
+            return day  + month  + year;
         } else {
             return tanggalLahir; // Mengembalikan string asli jika format tidak sesuai
         }
