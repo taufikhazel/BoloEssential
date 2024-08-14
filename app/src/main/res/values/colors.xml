@@ -11,4 +11,5 @@
     <color name="brownAdmin">#C09A75</color>
     <color name="putih">#F8F9FA</color>
     <color name="gray">#D3D3D3</color>
+    <color name="selectedColor">#FFCC00</color>
 </resources>

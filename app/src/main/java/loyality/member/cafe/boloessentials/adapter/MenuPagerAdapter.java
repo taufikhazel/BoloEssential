@@ -1,6 +1,5 @@
 package loyality.member.cafe.boloessentials.adapter;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -27,23 +26,24 @@ public class MenuPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        // Determine the subset of items to show on this page
         int startPosition = position * itemsPerPage;
         int endPosition = Math.min(startPosition + itemsPerPage, menuList.size());
 
         MenuFragment fragment = MenuFragment.newInstance(menuList.subList(startPosition, endPosition));
-        fragmentList.add(fragment);
+        if (fragmentList.size() <= position) {
+            fragmentList.add(fragment);
+        } else {
+            fragmentList.set(position, fragment);
+        }
         return fragment;
     }
 
     @Override
     public int getItemCount() {
-        // Calculate number of pages based on itemsPerPage
         return (int) Math.ceil((double) menuList.size() / itemsPerPage);
     }
 
     public MenuFragment getFragment(int position) {
-        return fragmentList.get(position);
+        return (position < fragmentList.size()) ? fragmentList.get(position) : null;
     }
 }
-

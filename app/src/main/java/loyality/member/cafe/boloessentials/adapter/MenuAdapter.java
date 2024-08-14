@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import loyality.member.cafe.boloessentials.R;
@@ -21,6 +22,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     private Context context;
     private List<Menu> menuList;
+    private List<Menu> selectedMenus = new ArrayList<>(); // List to keep track of selected items
 
     public MenuAdapter(Context context, List<Menu> menuList) {
         this.context = context;
@@ -44,11 +46,27 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         Picasso.get()
                 .load(menu.getGambar())
                 .into(holder.menuImage);
+
+        // Highlight the selected item
+        holder.itemView.setBackgroundColor(selectedMenus.contains(menu) ? context.getResources().getColor(R.color.selectedColor) : context.getResources().getColor(android.R.color.transparent));
+
+        holder.itemView.setOnClickListener(v -> {
+            if (selectedMenus.contains(menu)) {
+                selectedMenus.remove(menu); // Deselect
+            } else {
+                selectedMenus.add(menu); // Select
+            }
+            notifyDataSetChanged(); // Refresh the item view to show selection
+        });
     }
 
     @Override
     public int getItemCount() {
         return menuList.size();
+    }
+
+    public List<Menu> getSelectedMenus() {
+        return selectedMenus;
     }
 
     public static class MenuViewHolder extends RecyclerView.ViewHolder {

@@ -1,13 +1,12 @@
 package loyality.member.cafe.boloessentials.halaman_userandworker;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +22,7 @@ public class MenuFragment extends Fragment {
 
     private static final String ARG_MENU_LIST = "menu_list";
     private List<Menu> menuList;
+    private MenuAdapter menuAdapter;
 
     public static MenuFragment newInstance(List<Menu> menuList) {
         MenuFragment fragment = new MenuFragment();
@@ -43,9 +43,19 @@ public class MenuFragment extends Fragment {
 
         RecyclerView recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
         recyclerViewMenu.setLayoutManager(new GridLayoutManager(getContext(), 5)); // 5 columns per page
-        MenuAdapter menuAdapter = new MenuAdapter(getContext(), menuList);
+
+        // Initialize the adapter with a listener for item clicks
+        menuAdapter = new MenuAdapter(getContext(), menuList);
         recyclerViewMenu.setAdapter(menuAdapter);
 
         return view;
+    }
+
+    // Method to retrieve selected menus
+    public List<Menu> getSelectedMenus() {
+        if (menuAdapter != null) {
+            return menuAdapter.getSelectedMenus();
+        }
+        return new ArrayList<>();
     }
 }

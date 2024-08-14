@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnTukarPoint.setOnClickListener(v -> {
             Intent intent2 = new Intent(MainActivity.this, TukarPointActivity.class);
+            intent2.putExtra("UID", UID);
             startActivity(intent2);
         });
 
