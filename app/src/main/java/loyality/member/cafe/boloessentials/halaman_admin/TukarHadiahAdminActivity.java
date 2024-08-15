@@ -143,8 +143,9 @@ public class TukarHadiahAdminActivity extends AppCompatActivity {
             }
         });
 
-        tvUser = findViewById(R.id.tvUser);
-    }
+        if (savedInstanceState == null) {
+            displayFragment(new BaruTukarHadiahFragment());
+        }    }
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);

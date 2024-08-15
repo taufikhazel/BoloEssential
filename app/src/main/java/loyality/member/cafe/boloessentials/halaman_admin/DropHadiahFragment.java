@@ -175,6 +175,7 @@ public class DropHadiahFragment extends Fragment {
         // Fetch data from Firebase
         fetchData(databaseReference);
 
+        addTableHeader();
         // Initialize dialog
         mDialog = new Dialog(requireContext());
 
@@ -367,8 +368,8 @@ public class DropHadiahFragment extends Fragment {
 
         tableLayout.removeAllViews();
         TableRow headerRow = new TableRow(getContext());
-        String[] headers = {"No","Nama", "Menu", "Point", "Gambar", "Aksi"};
-        float[] weights = {1f, 1.5f, 1f, 1f, 3f};
+        String[] headers = {"Nama Menu", "Point", "Gambar", "Aksi"};
+        float[] weights = {1.5f, 1f, 1f, 3f};
 
         for (int i = 0; i < headers.length; i++) {
             TextView textView = new TextView(getContext());
@@ -414,7 +415,7 @@ public class DropHadiahFragment extends Fragment {
                 String.valueOf(menu.getShow())
         };
 
-        float[] weights = {1f, 1.5f, 1f, 1f, 3f};
+        float[] weights = {1.5f, 1f, 1f, 3f};
 
         for (int i = 0; i < menuData.length; i++) {
             if (i == 2) { // For image preview
