@@ -206,12 +206,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="340dp"
-        android:text="Berhasil"
+        android:text="Pending"
         android:layout_below="@+id/tvTukarHadiah2"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
         android:textSize="12sp"
-        android:id="@+id/btnBerhasil"
+        android:id="@+id/btnPending"
         android:textColor="#A0A0A0"
         android:backgroundTint="#F8F9FA"/>
 
@@ -220,12 +220,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="440dp"
-        android:text="Pending"
+        android:text="Berhasil"
         android:layout_below="@+id/tvTukarHadiah2"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
         android:textSize="12sp"
-        android:id="@+id/btnPending"
+        android:id="@+id/btnBerhasil"
         android:textColor="#A0A0A0"
         android:backgroundTint="#F8F9FA"/>
 

@@ -1,54 +1,66 @@
 package loyality.member.cafe.boloessentials.model;
 
 public class TukarHadiah {
-    private String namaMenu;
-    private String nama;
-    private int point;
-    private Boolean status;
+    private String NamaMenu;
+    private String Nama;
+    private int Point;
+    private Boolean Status;
+    private Boolean Hasil;
     private String nomorID;
+    private int IDTransaksi;
 
     public TukarHadiah() {
     }
 
     // Constructor dengan parameter
-    public TukarHadiah( String nama,String namaMenu, int point, Boolean status, String nomorID) {
-        this.nama = nama;
-        this.namaMenu = namaMenu;
-        this.point = point;
-        this.status = status;
+    public TukarHadiah( String Nama,String NamaMenu, int Point, Boolean Status,Boolean Hasil, String nomorID, int IDTransaksi) {
+        this.Nama = Nama;
+        this.NamaMenu = NamaMenu;
+        this.Point = Point;
+        this.Status = Status;
+        this.Hasil = Hasil;
         this.nomorID = nomorID;
+        this.IDTransaksi = IDTransaksi;
     }
 
     // Getter dan Setter untuk setiap atribut
 
-    public String getmamaMenu() {
-        return namaMenu;
+    public String getNamaMenu() {
+        return NamaMenu;
     }
-    public void setNamaMenu(String ID) {
-        this.namaMenu = namaMenu;
+    public void setNamaMenu(String NamaMenu) {
+        this.NamaMenu = NamaMenu;
     }
     public String getNama() {
-        return nama;
+        return Nama;
     }
 
-    public void setNama(String nama) {
-        this.nama = nama;
+    public void setNama(String Nama) {
+        this.Nama = Nama;
     }
 
     public int getPoint() {
-        return point;
+        return Point;
     }
 
-    public void setPoint(int point) {
-        this.point = point;
+    public void setPoint(int Point) {
+        this.Point = Point;
     }
 
     public Boolean getStatus() {
-        return status;
+        return Status;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setStatus(Boolean Status) {
+        this.Status = Status;
+    }
+
+    public Boolean getHasil() {
+        return Hasil;
+    }
+
+    public void setHasil(Boolean Hasil) {
+        this.Hasil = Hasil;
     }
 
     public String getNomorID() {
@@ -57,5 +69,12 @@ public class TukarHadiah {
 
     public void setNomorID(String nomorID) {
         this.nomorID = nomorID;
+    }
+    public int getIDTransaksi() {
+        return IDTransaksi;
+    }
+
+    public void setIDTransaksi(int IDTransaksi) {
+        this.IDTransaksi = IDTransaksi;
     }
 }

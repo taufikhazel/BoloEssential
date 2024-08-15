@@ -162,32 +162,60 @@ public class TukarPointActivity extends AppCompatActivity {
                                 int updatedPoints = currentPoints - totalSelectedPoints;
                                 userSnapshot.getRef().child("pointUser").setValue(updatedPoints);
 
-                                // Save selected menus to the 'tukarPoint' table
+                                // Retrieve the last ID from the tukarPoint table
                                 DatabaseReference tukarPointRef = FirebaseDatabase.getInstance().getReference("tukarPoint");
-                                for (Menu menu : selectedMenus) {
-                                    DatabaseReference newRef = tukarPointRef.push();
-                                    newRef.child("NamaMenu").setValue(menu.getNamaMenu());
-                                    newRef.child("Point").setValue(menu.getPoint());
-                                    newRef.child("Status").setValue(false);
-                                    newRef.child("Hasil").setValue(false);
-                                    newRef.child("nomorID").setValue(UID);
-                                }
+                                tukarPointRef.orderByChild("IDTransaksi").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        int lastIDTransaksi = 0; // Default value if no ID exists
+                                        if (snapshot.exists()) {
+                                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                                Integer id = ds.child("IDTransaksi").getValue(Integer.class);
+                                                if (id != null) {
+                                                    lastIDTransaksi = id;
+                                                }
+                                            }
+                                        }
+                                        int newIDTransaksi = lastIDTransaksi + 1;
 
-                                Toast.makeText(getApplicationContext(), "Items successfully Exchanged", Toast.LENGTH_SHORT).show();
+                                        // Save selected menus to the 'tukarPoint' table
+                                        for (Menu menu : selectedMenus) {
+                                            DatabaseReference newRef = tukarPointRef.push();
+                                            newRef.child("NamaMenu").setValue(menu.getNamaMenu());
+                                            newRef.child("Point").setValue(menu.getPoint());
+                                            newRef.child("Status").setValue(false);
+                                            newRef.child("Hasil").setValue(false);
+                                            newRef.child("nomorID").setValue(UID);
+                                            newRef.child("IDTransaksi").setValue(newIDTransaksi);
+                                        }
+
+                                        Toast.makeText(getApplicationContext(), "Items successfully Exchanged", Toast.LENGTH_SHORT).show();
+                                        new Handler().postDelayed(progressDialog::dismiss, 1000);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(getApplicationContext(), "Failed to retrieve last ID", Toast.LENGTH_SHORT).show();
+                                        new Handler().postDelayed(progressDialog::dismiss, 1000);
+                                    }
+                                });
+
                             } else {
                                 // Notify the user that they don't have enough points
                                 Toast.makeText(getApplicationContext(), "Anda tidak memiliki cukup point", Toast.LENGTH_SHORT).show();
+                                new Handler().postDelayed(progressDialog::dismiss, 1000);
                             }
                         } else {
                             Toast.makeText(getApplicationContext(), "Failed to retrieve user points", Toast.LENGTH_SHORT).show();
+                            new Handler().postDelayed(progressDialog::dismiss, 1000);
                         }
                         break;
                     }
                 } else {
                     // Handle the case where the user doesn't exist
                     Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(progressDialog::dismiss, 1000);
                 }
-                new Handler().postDelayed(progressDialog::dismiss, 1000);
             }
 
             @Override
@@ -197,5 +225,6 @@ public class TukarPointActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

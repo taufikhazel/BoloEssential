@@ -176,7 +176,7 @@ public class TukarHadiahAdminActivity extends AppCompatActivity {
 
     }
 
-    public void updateButtonStylesForBaruTukarPointFragment() {
+    public void updateButtonStylesForBaruTukarHadiahFragment() {
         int brownAdminColor = getResources().getColor(R.color.brownAdmin);
         int whiteColor = getResources().getColor(R.color.white);
         int putihColor = getResources().getColor(R.color.putih);
@@ -192,7 +192,7 @@ public class TukarHadiahAdminActivity extends AppCompatActivity {
         btnPending.setTextColor(grayColor);
     }
 
-    public void updateButtonStylesForPendingTukarPointFragment() {
+    public void updateButtonStylesForPendingTukarHadiahFragment() {
         int brownAdminColor = getResources().getColor(R.color.brownAdmin);
         int whiteColor = getResources().getColor(R.color.white);
         int putihColor = getResources().getColor(R.color.putih);
@@ -208,7 +208,7 @@ public class TukarHadiahAdminActivity extends AppCompatActivity {
         btnBaru.setTextColor(grayColor);
     }
 
-    public void updateButtonStylesForBerhasilTukarPointFragment() {
+    public void updateButtonStylesForBerhasilTukarHadiahFragment() {
         int brownAdminColor = getResources().getColor(R.color.brownAdmin);
         int whiteColor = getResources().getColor(R.color.white);
         int putihColor = getResources().getColor(R.color.putih);

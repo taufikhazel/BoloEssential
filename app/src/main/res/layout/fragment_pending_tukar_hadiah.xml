@@ -40,7 +40,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:fontFamily="@font/roboto_bold"
-                android:text="100"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/brownAdmin"
                 android:textSize="15sp" />

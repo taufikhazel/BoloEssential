@@ -2,8 +2,10 @@ package loyality.member.cafe.boloessentials.halaman_admin;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.Gravity;
@@ -15,6 +17,13 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +39,46 @@ public class BerhasilTukarHadiahFragment extends Fragment {
     private List<TukarHadiah> tukarHadiahList = new ArrayList<>();
     private Button btnPrevPage, btnNextPage, btn1, btn2, btn3;
     private TableLayout tableLayout;
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
     public BerhasilTukarHadiahFragment() {
         // Required empty public constructor
+    }
+
+    public static BerhasilTukarHadiahFragment newInstance(String param1, String param2) {
+        BerhasilTukarHadiahFragment fragment = new BerhasilTukarHadiahFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Notify the activity to update UI
+        if (getActivity() instanceof TukarHadiahAdminActivity) {
+            ((TukarHadiahAdminActivity) getActivity()).updateButtonStylesForBerhasilTukarHadiahFragment();
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_baru_tukar_hadiah, container, false);
+        View view = inflater.inflate(R.layout.fragment_berhasil_tukar_hadiah, container, false);
 
         btnPrevPage = view.findViewById(R.id.btnPrevious);
         btnNextPage = view.findViewById(R.id.btnNext);
@@ -96,9 +136,46 @@ public class BerhasilTukarHadiahFragment extends Fragment {
 
         tableLayout = view.findViewById(R.id.tableLayout);
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("tukarPoint");
+
         addTableHeader();
 
+        // Fetch data from Firebase
+        fetchData(databaseReference);
+
         return view;
+    }
+
+    private void fetchData(DatabaseReference databaseReference) {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded()) {
+                    return;
+                }
+
+                tukarHadiahList.clear();
+                int tukarHadiahCount = 0;
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    TukarHadiah tukarHadiah = dataSnapshot.getValue(TukarHadiah.class);
+                    if (tukarHadiah != null && tukarHadiah.getHasil()) {
+                        tukarHadiahList.add(tukarHadiah);
+                        tukarHadiahCount++;
+                    }
+                }
+
+                tvPointTukarHadiah.setText(String.valueOf(tukarHadiahCount));
+                totalPageCount = (int) Math.ceil((double) tukarHadiahList.size() / ITEMS_PER_PAGE); // Hitung total halaman
+                displayPageData(); // Tampilkan data untuk halaman saat ini
+                updatePaginationButtons(); // Update tombol pagination
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void displayPageData() {
@@ -122,7 +199,7 @@ public class BerhasilTukarHadiahFragment extends Fragment {
 
         tableLayout.removeAllViews();
         TableRow headerRow = new TableRow(getContext());
-        String[] headers = {"Nama", "Nama Menu", "Point"};
+        String[] headers = {"Nama User", "Nama Menu", "Point"};
         float[] weights = {1.5f, 1.2f, 1f};
 
         for (int i = 0; i < headers.length; i++) {
@@ -155,49 +232,79 @@ public class BerhasilTukarHadiahFragment extends Fragment {
         headerRow.setBackgroundColor(getResources().getColor(R.color.brownAdmin));
         tableLayout.addView(headerRow);
     }
-
     private void addMenuRow(TukarHadiah tukarHadiah) {
         if (getContext() == null) {
             return;
         }
 
-        TableRow row = new TableRow(requireContext());
-        String[] tambahPointData = {
-                tukarHadiah.getNama(),
-                tukarHadiah.getNomorID(),
-                String.valueOf(tukarHadiah.getPoint()),
-        };
+        // Firebase query to match nomorID
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference("users");
+        Query query = usersRef.orderByChild("nomorID").equalTo(tukarHadiah.getNomorID());
 
-        float[] weights = {1.5f, 1.2f, 1f};
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                TableRow row = new TableRow(requireContext());
 
-        for (int i = 0; i < tambahPointData.length; i++) {
-            TextView textView = new TextView(requireContext());
-            textView.setText(tambahPointData[i]);
-            textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(12);
-            textView.setPadding(5, 5, 5, 5);
+                // Retrieve 'nama' from Firebase
+                String nama = "";
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    nama = snapshot.child("nama").getValue(String.class);
+                    break; // Assuming there is only one match
+                }
 
-            TableRow.LayoutParams params = new TableRow.LayoutParams(
-                    0,
-                    TableRow.LayoutParams.WRAP_CONTENT,
-                    weights[i]
-            );
-            int marginInPixels = (int) (5 * getResources().getDisplayMetrics().density);
-            params.setMargins(marginInPixels, -8, marginInPixels, 0);
-            textView.setLayoutParams(params);
-            row.addView(textView);
-        }
+                // Add 'nama' TextView to the row at index 0
+                TextView namaTextView = new TextView(requireContext());
+                namaTextView.setText(nama);
+                namaTextView.setGravity(Gravity.CENTER);
+                namaTextView.setTextSize(12);
+                namaTextView.setPadding(5, 5, 5, 5);
 
+                TableRow.LayoutParams namaParams = new TableRow.LayoutParams(
+                        0,
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        1.5f // Assuming the weight for 'nama' is the first one
+                );
+                int namaMarginInPixels = (int) (5 * getResources().getDisplayMetrics().density);
+                namaParams.setMargins(namaMarginInPixels, -8, namaMarginInPixels, 0);
+                namaTextView.setLayoutParams(namaParams);
+                row.addView(namaTextView);
 
-        // Mengatur layout params
-        TableRow.LayoutParams actionParams = new TableRow.LayoutParams(
-                0,
-                TableRow.LayoutParams.WRAP_CONTENT,
-                weights[1]
-        );
-        tableLayout.addView(row);
+                // Add other TextViews
+                String[] tukarHadiahData = {
+                        tukarHadiah.getNamaMenu(),
+                        String.valueOf(tukarHadiah.getPoint()),
+                };
+
+                float[] weights = {1.5f, 1.2f, 1f, 2.5f}; // Adjust weights as needed
+
+                for (int i = 0; i < tukarHadiahData.length; i++) {
+                    TextView textView = new TextView(requireContext());
+                    textView.setText(tukarHadiahData[i]);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setTextSize(12);
+                    textView.setPadding(5, 5, 5, 5);
+
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(
+                            0,
+                            TableRow.LayoutParams.WRAP_CONTENT,
+                            weights[i + 1] // Shift weights if necessary
+                    );
+                    int marginInPixels = (int) (5 * getResources().getDisplayMetrics().density);
+                    params.setMargins(marginInPixels, -8, marginInPixels, 0);
+                    textView.setLayoutParams(params);
+                    row.addView(textView);
+                }
+                tableLayout.addView(row);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors
+            }
+        });
     }
-
     private void updatePaginationButtons() {
         btn1.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
         btn2.setBackgroundTintList(getResources().getColorStateList(R.color.gray));

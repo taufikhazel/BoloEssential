@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -72,6 +73,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import loyality.member.cafe.boloessentials.R;
 import loyality.member.cafe.boloessentials.halaman_userandworker.LoadingScreenActivity;
@@ -931,73 +933,29 @@ public class KaryawanAdminActivity extends AppCompatActivity {
     }
     private void setupExportButton() {
         Button btnExport = findViewById(R.id.btnExport);
-        btnExport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showExportConfirmationDialog();
-            }
-        });
+        btnExport.setOnClickListener(view -> showFileNameDialog());
     }
 
-    private void showExportConfirmationDialog() {
-        // Dialog untuk konfirmasi export
+    private void showFileNameDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Konfirmasi Export");
-        builder.setMessage("Apakah Anda ingin melakukan export data?");
+        builder.setTitle("Enter File Name");
 
-        // Jika user klik "Ya"
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                showFileNameInputDialog();
-            }
-        });
-
-        // Jika user klik "Tidak"
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        // Tampilkan dialog konfirmasi
-        builder.create().show();
-    }
-
-    private void showFileNameInputDialog() {
-        // Membuat dialog input untuk meminta nama file dari user
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Nama File");
-
-        // EditText untuk user input
         final EditText input = new EditText(this);
-        input.setHint("Masukkan nama file");
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
-        // Jika user klik "Simpan"
-        builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String fileName = input.getText().toString().trim();
-                if (!fileName.isEmpty()) {
-                    exportDataToExcel(fileName);
-                } else {
-                    Toast.makeText(KaryawanAdminActivity.this, "Nama file tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                }
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            String fileName = input.getText().toString().trim();
+            if (!fileName.isEmpty()) {
+                exportDataToExcel(fileName);
+            } else {
+                Toast.makeText(KaryawanAdminActivity.this, "File name cannot be empty", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Jika user klik "Batal"
-        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-        // Tampilkan dialog input nama file
-        builder.create().show();
+        builder.show();
     }
 
     private void exportDataToExcel(String fileName) {
@@ -1007,8 +965,8 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("karyawan");
-        databaseReference.orderByChild("tanggalBergabung").addValueEventListener(new ValueEventListener() {
+        DatabaseReference karyawanRef = FirebaseDatabase.getInstance().getReference("karyawan");
+        karyawanRef.orderByChild("tanggalBergabung").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Karyawan> karyawanList = new ArrayList<>();
@@ -1019,17 +977,70 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                     }
                 }
 
+                // Create a CountDownLatch for the number of employees
+                CountDownLatch latch = new CountDownLatch(karyawanList.size());
+
                 new Thread(() -> {
                     try {
-                        File file = createExcelFile(karyawanList);
-                        if (file != null) {
-                            saveFileToDownloads(file, fileName);
+                        Workbook workbook = new XSSFWorkbook();
+
+                        for (Karyawan karyawan : karyawanList) {
+                            Sheet sheet = workbook.createSheet(karyawan.getNama());
+
+                            // Add Karyawan details
+                            int rowIndex = 0;
+                            sheet.createRow(rowIndex++).createCell(0).setCellValue("Nama                       : " + karyawan.getNama());
+                            sheet.createRow(rowIndex++).createCell(0).setCellValue("Email                      : " + karyawan.getEmail());
+                            sheet.createRow(rowIndex++).createCell(0).setCellValue("No Telp                    : " + karyawan.getTelpon());
+                            sheet.createRow(rowIndex++).createCell(0).setCellValue("Tanggal Lahir              : " + karyawan.getTanggalLahir());
+                            sheet.createRow(rowIndex++).createCell(0).setCellValue("Tanggal Bergabung          : " + karyawan.getTanggalBergabung());
+
+                            // Fetch and add Absen data
+                            DatabaseReference absenRef = FirebaseDatabase.getInstance().getReference("absenKaryawan")
+                                    .child(karyawan.getNomorIDKaryawan());
+
+                            absenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    int rowIndex = sheet.getLastRowNum() + 3;
+
+                                    for (DataSnapshot yearSnapshot : snapshot.getChildren()) {
+                                        for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                            for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) {
+                                                for (DataSnapshot absensiKeSnapshot : daySnapshot.getChildren()) {
+                                                    Absen absen = absensiKeSnapshot.getValue(Absen.class);
+                                                    if (absen != null) {
+                                                        addRowToSheet(sheet, rowIndex++, absen, absensiKeSnapshot.getKey());
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    latch.countDown();  // Signal that this employee's data is done
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    latch.countDown();  // Still count down even if there's an error
+                                }
+                            });
                         }
-                    } catch (IOException e) {
+
+                        // Wait for all data to be processed
+                        latch.await();
+
+                        // Save the workbook to file
+                        File file = new File(getExternalFilesDir(null), fileName + ".xlsx");
+                        try (FileOutputStream fos = new FileOutputStream(file)) {
+                            workbook.write(fos);
+                        }
+                        workbook.close();
+                        saveFileToDownloads(file, fileName);
+
+                    } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
-                        runOnUiThread(() -> {
-                            Toast.makeText(KaryawanAdminActivity.this, "Failed to export data", Toast.LENGTH_SHORT).show();
-                        });
+                        runOnUiThread(() -> Toast.makeText(KaryawanAdminActivity.this, "Failed to export data", Toast.LENGTH_SHORT).show());
                     } finally {
                         runOnUiThread(() -> {
                             if (progressDialog.isShowing()) {
@@ -1052,11 +1063,28 @@ public class KaryawanAdminActivity extends AppCompatActivity {
         });
     }
 
+    private void addRowToSheet(Sheet sheet, int rowIndex, Absen absen, String absensiKe) {
+        Row row = sheet.createRow(rowIndex);
+
+        // Column 1: Hari
+        row.createCell(0).setCellValue(absen.getHari());
+
+        // Column 2: Tanggal
+        row.createCell(1).setCellValue(absen.getTanggal());
+
+        // Column 3: Jam
+        row.createCell(2).setCellValue(absen.getJam());
+
+        // Column 4: Absen Status based on absensiKe
+        String status = "Absen ke " + absensiKe;
+        row.createCell(3).setCellValue(status);
+    }
+
     private void saveFileToDownloads(File file, String fileName) {
         new Thread(() -> {
             try {
                 File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                File destFile = new File(downloadsDir, fileName + ".xlsx"); // Menggunakan nama file dari user
+                File destFile = new File(downloadsDir, fileName + ".xlsx");
                 try (FileInputStream inStream = new FileInputStream(file);
                      FileOutputStream outStream = new FileOutputStream(destFile)) {
                     byte[] buffer = new byte[1024];
@@ -1066,52 +1094,15 @@ public class KaryawanAdminActivity extends AppCompatActivity {
                     }
                 }
 
-                runOnUiThread(() -> {
-                    Toast.makeText(KaryawanAdminActivity.this, "File berhasil disimpan di Downloads", Toast.LENGTH_SHORT).show();
-                });
+                runOnUiThread(() -> Toast.makeText(KaryawanAdminActivity.this, "File berhasil disimpan di Downloads", Toast.LENGTH_SHORT).show());
             } catch (IOException e) {
                 e.printStackTrace();
-                runOnUiThread(() -> {
-                    Toast.makeText(KaryawanAdminActivity.this, "Gagal menyimpan file", Toast.LENGTH_SHORT).show();
-                });
+                runOnUiThread(() -> Toast.makeText(KaryawanAdminActivity.this, "Gagal menyimpan file", Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
 
 
-    // Helper method to create an Excel file
-    private File createExcelFile(List<Karyawan> karyawanList) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Karyawan");
-
-        // Create header row
-        Row headerRow = sheet.createRow(0);
-        String[] headers = {"Nama Karyawan", "Tanggal Bergabung", "Email", "No Telepon", "Tanggal Lahir"};
-        int cellIndex = 0;
-        for (String header : headers) {
-            Cell cell = headerRow.createCell(cellIndex++);
-            cell.setCellValue(header);
-        }
-
-        // Create data rows
-        int rowIndex = 1;
-        for (Karyawan karyawan : karyawanList) {
-            Row row = sheet.createRow(rowIndex++);
-            row.createCell(0).setCellValue(karyawan.getNama());
-            row.createCell(1).setCellValue(formatTanggalBergabung(karyawan.getTanggalBergabung()));
-            row.createCell(2).setCellValue(karyawan.getEmail());
-            row.createCell(3).setCellValue(karyawan.getTelpon());
-            row.createCell(4).setCellValue(formatTanggalLahir(karyawan.getTanggalLahir()));
-        }
-
-        // Write the output to a file
-        File file = new File(getExternalFilesDir(null), "KaryawanData.xlsx");
-        try (FileOutputStream fileOut = new FileOutputStream(file)) {
-            workbook.write(fileOut);
-        }
-        workbook.close();
-        return file;
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
