@@ -166,13 +166,22 @@ public class MainActivity extends AppCompatActivity {
                                             long count = dataSnapshot.getChildrenCount();
 
                                             if (count >= 2) {
-                                                String lastCheckInTime = dataSnapshot.child("2").child("jam").getValue(String.class);
-                                                String lastCheckInDay = dataSnapshot.child("2").child("hari").getValue(String.class);
-                                                String lastCheckInDate = dataSnapshot.child("2").child("tanggal").getValue(String.class);
+                                                // Fetch details for both absences
+                                                StringBuilder messageBuilder = new StringBuilder();
+                                                messageBuilder.append(namaKaryawan).append(" telah absen dua kali pada:\n");
+
+                                                for (int i = 1; i <= 2; i++) {
+                                                    DataSnapshot absensiSnapshot = dataSnapshot.child(String.valueOf(i));
+                                                    String absensiTime = absensiSnapshot.child("jam").getValue(String.class);
+                                                    String absensiDay = absensiSnapshot.child("hari").getValue(String.class);
+                                                    String absensiDate = absensiSnapshot.child("tanggal").getValue(String.class);
+
+                                                    messageBuilder.append("Absen ke ").append(i).append(": ").append(absensiDay).append(", ").append(absensiDate).append(", ").append(absensiTime).append("\n");
+                                                }
 
                                                 new AlertDialog.Builder(MainActivity.this)
                                                         .setTitle("Absensi")
-                                                        .setMessage(namaKaryawan + " telah absen dua kali pada " + lastCheckInDay + ", " + lastCheckInDate + ", " + lastCheckInTime)
+                                                        .setMessage(messageBuilder.toString())
                                                         .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
                                                         .show();
                                             } else {
