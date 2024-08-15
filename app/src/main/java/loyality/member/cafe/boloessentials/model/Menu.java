@@ -9,18 +9,20 @@ public class Menu implements Parcelable {
     private int Point;
     private boolean Show;
     private int IDMenu;
+    private int pointUser;
 
     // Constructor without parameters needed for Firebase
     public Menu() {
     }
 
     // Constructor with parameters
-    public Menu(String Gambar, String NamaMenu, int Point, boolean Show, int IDMenu) {
+    public Menu(String Gambar, String NamaMenu, int Point, boolean Show, int IDMenu, int pointUser) {
         this.Gambar = Gambar;
         this.NamaMenu = NamaMenu;
         this.Point = Point;
         this.Show = Show;
         this.IDMenu = IDMenu;
+        this.pointUser = pointUser;
     }
 
     protected Menu(Parcel in) {
@@ -29,6 +31,7 @@ public class Menu implements Parcelable {
         Point = in.readInt();
         Show = in.readByte() != 0;
         IDMenu = in.readInt();
+        pointUser = in.readInt();
     }
 
     public static final Creator<Menu> CREATOR = new Creator<Menu>() {

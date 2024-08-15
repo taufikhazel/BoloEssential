@@ -21,13 +21,16 @@ import loyality.member.cafe.boloessentials.model.Menu;
 public class MenuFragment extends Fragment {
 
     private static final String ARG_MENU_LIST = "menu_list";
+    private static final String ARG_USER_POINTS = "user_points";
     private List<Menu> menuList;
     private MenuAdapter menuAdapter;
+    private int pointUser;
 
-    public static MenuFragment newInstance(List<Menu> menuList) {
+    public static MenuFragment newInstance(List<Menu> menuList, int pointUser) {
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_MENU_LIST, new ArrayList<>(menuList));
+        args.putInt(ARG_USER_POINTS, pointUser);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,13 +42,14 @@ public class MenuFragment extends Fragment {
 
         if (getArguments() != null) {
             menuList = getArguments().getParcelableArrayList(ARG_MENU_LIST);
+            pointUser = getArguments().getInt(ARG_USER_POINTS);
         }
 
         RecyclerView recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
         recyclerViewMenu.setLayoutManager(new GridLayoutManager(getContext(), 5)); // 5 columns per page
 
         // Initialize the adapter with a listener for item clicks
-        menuAdapter = new MenuAdapter(getContext(), menuList);
+        menuAdapter = new MenuAdapter(getContext(), menuList, pointUser);
         recyclerViewMenu.setAdapter(menuAdapter);
 
         return view;

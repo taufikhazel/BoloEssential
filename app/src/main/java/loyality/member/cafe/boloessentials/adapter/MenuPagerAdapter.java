@@ -15,12 +15,14 @@ public class MenuPagerAdapter extends FragmentStateAdapter {
 
     private List<Menu> menuList;
     private int itemsPerPage;
+    private int pointUser; // Add pointUser as a parameter
     private List<MenuFragment> fragmentList = new ArrayList<>();
 
-    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Menu> menuList, int itemsPerPage) {
+    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Menu> menuList, int itemsPerPage, int pointUser) {
         super(fragmentActivity);
         this.menuList = menuList;
         this.itemsPerPage = itemsPerPage;
+        this.pointUser = pointUser; // Initialize pointUser
     }
 
     @NonNull
@@ -29,7 +31,8 @@ public class MenuPagerAdapter extends FragmentStateAdapter {
         int startPosition = position * itemsPerPage;
         int endPosition = Math.min(startPosition + itemsPerPage, menuList.size());
 
-        MenuFragment fragment = MenuFragment.newInstance(menuList.subList(startPosition, endPosition));
+        // Pass the pointUser to the MenuFragment
+        MenuFragment fragment = MenuFragment.newInstance(menuList.subList(startPosition, endPosition), pointUser);
         if (fragmentList.size() <= position) {
             fragmentList.add(fragment);
         } else {
